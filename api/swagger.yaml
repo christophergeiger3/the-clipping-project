@@ -1,0 +1,189 @@
+tags:
+  - name: users
+    description: users API
+  - name: clips
+    description: clips API
+  - name: analyze
+    description: analyze API
+
+paths:
+  /analyze:
+    post:
+      tags:
+        - analyze
+      summary: Calls `youtube-dl --get-video` to get video and audio URL info
+      parameters:
+        - name: body
+          in: body
+          description: Analyze parameters
+          required: true
+          schema:
+            $ref: '#/definitions/analyze'
+      responses:
+        200:
+          description: 'OK'
+  /clips:
+    post:
+      tags:
+        - clips
+      summary: Create a clip
+      parameters:
+        - name: body
+          in: body
+          description: Clip parameters
+          required: true
+          schema:
+            $ref: '#/definitions/clips'
+      responses:
+        200:
+          description: 'OK'
+  # [GET] users
+  /users:
+    get:
+      tags:
+        - users
+      summary: Find All Users
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    # [POST] users
+    post:
+      tags:
+        - users
+      summary: Add User
+      parameters:
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: '#/definitions/users'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [GET] users/id
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Find User By Id
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [PUT] users/id
+    put:
+      tags:
+        - users
+      summary: Update User By Id
+      parameters:
+        - name: id
+          in: path
+          description: user Id
+          required: true
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: '#/definitions/users'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    # [DELETE] users/id
+    delete:
+      tags:
+        - users
+      summary: Delete User By Id
+      parameters:
+        - name: id
+          in: path
+          description: user Id
+          required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  analyze:
+    type: object
+    required:
+      - url
+    properties:
+      url:
+        type: string
+        description: URL passed to youtube-dl --get-video
+        example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  clips:
+    type: object
+    required:
+      - url
+      - start
+      - end
+      - output
+    properties:
+      url:
+        type: string
+        description: URL to download the clip from
+        example: https://christophergeiger.xyz/sonic.mp4
+      start:
+        type: integer
+        description: Starting point of the clip, in milliseconds
+        example: 5000
+      end:
+        type: integer
+        description: Ending point of the clip, in milliseconds
+        example: 10000
+      output:
+        type: string
+        description: Filename of the clip
+        example: clip.mp4
+  users:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      id:
+        description: user Id
+      email:
+        type: string
+        description: user Email
+      password:
+        type: string
+        description: user Password
+
+schemes:
+  - https
+  - http
