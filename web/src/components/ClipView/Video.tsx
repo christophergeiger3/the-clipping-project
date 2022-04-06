@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import videojs, { VideoJsPlayer } from "video.js";
 import "video.js/dist/video-js.css";
-import { Box, Slider } from "@mui/material";
+import { Grid, Slider } from "@mui/material";
 
 const MIN_CLIP_DURATION = 1;
 
@@ -155,21 +155,21 @@ export default function Video({
 
   return (
     <>
-      <div data-vjs-player>
-        <video ref={videoRef} className="video-js vjs-big-play-centered" />
-      </div>
-      {duration ? (
-        <Box sx={{ width: 800 }}>
-          <Slider
-            getAriaLabel={() => "Video range"}
-            value={startEndTimes}
-            onChange={handleSliderChange}
-            min={0}
-            max={duration}
-            valueLabelDisplay="auto"
-          />
-        </Box>
-      ) : null}
+      <Grid container={true} direction="column">
+        <div data-vjs-player>
+          <video ref={videoRef} className="video-js vjs-big-play-centered" />
+        </div>
+        {duration ? (
+            <Slider
+              getAriaLabel={() => "Video range"}
+              value={startEndTimes}
+              onChange={handleSliderChange}
+              min={0}
+              max={duration}
+              valueLabelDisplay="auto"
+            />
+        ) : null}
+      </Grid>
     </>
   );
 }
