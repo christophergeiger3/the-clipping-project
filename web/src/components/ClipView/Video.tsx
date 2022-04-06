@@ -155,19 +155,19 @@ export default function Video({
 
   return (
     <>
-      <Grid container={true} direction="column">
+      <Grid container={true} pt={2} direction="column">
         <div data-vjs-player>
           <video ref={videoRef} className="video-js vjs-big-play-centered" />
         </div>
         {duration ? (
-            <Slider
-              getAriaLabel={() => "Video range"}
-              value={startEndTimes}
-              onChange={handleSliderChange}
-              min={0}
-              max={duration}
-              valueLabelDisplay="auto"
-            />
+          <Slider
+            getAriaLabel={() => "Video range"}
+            value={startEndTimes}
+            onChange={handleSliderChange}
+            min={0}
+            max={duration}
+            valueLabelDisplay="auto"
+          />
         ) : null}
       </Grid>
     </>
