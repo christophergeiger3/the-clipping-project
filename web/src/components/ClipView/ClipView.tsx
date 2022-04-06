@@ -55,58 +55,45 @@ export default function ClipView() {
 
   return (
     <>
-      <Box>
-        <Grid
-          container={true}
-          rowSpacing={2}
-          direction="row"
-          alignItems="center"
-          justifyContent="space-around"
-        >
-          <Grid item={true} xs={8}>
-            <TextField
-              fullWidth={true}
-              value={url}
-              variant="outlined"
-              label="Video URL"
-              onChange={handleURLChange}
-            />
-          </Grid>
-          <Grid item={true}>
-            <Button variant="contained" onClick={handleSubmitURL}>
-              Submit
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid
-          container={true}
-          rowSpacing={2}
-          direction="row"
-          alignItems="center"
-          justifyContent="space-around"
-        >
-          <Grid item={true} xs={8}>
-            <TextField
-              fullWidth={true}
-              value={filename}
-              variant="outlined"
-              label="Clip filename"
-              onChange={handleFilenameChange}
-            />
-          </Grid>
-          <Grid item={true}>
-            <Button variant="contained" onClick={handleClip}>
-              Clip
-            </Button>
-          </Grid>
-        </Grid>
+      <Video
+        src={videoUrl}
+        startEndTimes={startEndTimes}
+        onUpdateStartEndTimes={setStartEndTimes}
+      />
 
-        <Video
-          src={videoUrl}
-          startEndTimes={startEndTimes}
-          onUpdateStartEndTimes={setStartEndTimes}
-        />
-      </Box>
+      <Grid container={true} spacing={2} pb={1} alignItems="center">
+        <Grid item={true} xs={10}>
+          <TextField
+            fullWidth={true}
+            value={url}
+            variant="outlined"
+            label="Video URL"
+            onChange={handleURLChange}
+          />
+        </Grid>
+        <Grid item={true} xs={2}>
+          <Button variant="contained" onClick={handleSubmitURL}>
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Grid container={true} spacing={2} pb={1} alignItems="center">
+        <Grid item={true} xs={10}>
+          <TextField
+            fullWidth={true}
+            value={filename}
+            variant="outlined"
+            label="Clip filename"
+            onChange={handleFilenameChange}
+          />
+        </Grid>
+        <Grid item={true} xs={2}>
+          <Button variant="contained" onClick={handleClip}>
+            Clip
+          </Button>
+        </Grid>
+      </Grid>
     </>
   );
 }

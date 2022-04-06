@@ -41,7 +41,7 @@ export default function Video({
     return {
       autoplay: true,
       controls: true,
-      responsive: true,
+      // responsive: true,
       fluid: true,
       sources: [{ type: "video/mp4", src }], // TODO: fix me, types hack
     };

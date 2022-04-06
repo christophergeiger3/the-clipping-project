@@ -1,5 +1,7 @@
+import AppWrapper from "./components/AppWrapper";
 import ClipView from "./components/ClipView/ClipView";
 import React from "react";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 
 // TODO:
 // job queue view / submit job to job queue
@@ -9,7 +11,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <ClipView />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <AppWrapper>
+                  <ClipView />
+                </AppWrapper>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </header>
     </div>
   );
