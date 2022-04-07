@@ -5,6 +5,12 @@ import { Grid, Slider } from "@mui/material";
 
 const MIN_CLIP_DURATION = 1;
 
+function convertSecondsToTimestamp(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const secondsLeft = seconds % 60;
+  return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
+}
+
 // TODO:
 // ** display milliseconds as timestamps
 // button to seek to end of clip
@@ -166,6 +172,7 @@ export default function Video({
             onChange={handleSliderChange}
             min={0}
             max={duration}
+            valueLabelFormat={convertSecondsToTimestamp}
             valueLabelDisplay="auto"
           />
         ) : null}
