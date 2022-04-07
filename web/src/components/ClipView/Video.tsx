@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import videojs, { VideoJsPlayer } from "video.js";
 import "video.js/dist/video-js.css";
-import { Grid, Slider } from "@mui/material";
+import { Button, Grid, Slider, Typography } from "@mui/material";
 
 const MIN_CLIP_DURATION = 1;
 
@@ -32,16 +32,40 @@ export default function Video({
   const videoRef = useRef(null);
   const playerRef = useRef<null | VideoJsPlayer>(null);
   const [duration, setDuration] = useState<number>();
-  // const [startEndTimes, _setStartEndTimes] = useState<number[]>([0, 100]);
   const startEndRef = useRef<number[]>(startEndTimes);
   const setStartEndTimes = useCallback(
     ([start, end]) => {
       startEndRef.current = [start, end];
       onUpdateStartEndTimes([start, end]);
-      // _setStartEndTimes([start, end]);
     },
     [onUpdateStartEndTimes]
   );
+
+  const handleIncrementStart = useCallback(() => {
+    const [start, end] = startEndRef.current;
+    setStartEndTimes([Math.max(0, start + MIN_CLIP_DURATION), end]);
+  }, [setStartEndTimes]);
+
+  const handleDecrementStart = useCallback(() => {
+    const [start, end] = startEndRef.current;
+    setStartEndTimes([Math.max(0, start - MIN_CLIP_DURATION), end]);
+  }, [setStartEndTimes]);
+
+  const handleIncrementEnd = useCallback(() => {
+    const [start, end] = startEndRef.current;
+    setStartEndTimes([
+      start,
+      Math.min(end + MIN_CLIP_DURATION, duration || end + MIN_CLIP_DURATION),
+    ]);
+  }, [setStartEndTimes, duration]);
+
+  const handleDecrementEnd = useCallback(() => {
+    const [start, end] = startEndRef.current;
+    setStartEndTimes([
+      start,
+      Math.min(end - MIN_CLIP_DURATION, duration || end - MIN_CLIP_DURATION),
+    ]);
+  }, [setStartEndTimes, duration]);
 
   const options = useMemo(() => {
     return {
@@ -176,6 +200,38 @@ export default function Video({
             valueLabelDisplay="auto"
           />
         ) : null}
+        <Grid pb={2} container={true}>
+          <Typography>Left: </Typography>
+          <Button
+            variant="contained"
+            onClick={handleDecrementStart}
+            color="primary"
+          >
+            -{MIN_CLIP_DURATION} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleIncrementStart}
+            color="primary"
+          >
+            +{MIN_CLIP_DURATION} sec
+          </Button>
+          <Typography>Right: </Typography>
+          <Button
+            variant="contained"
+            onClick={handleDecrementEnd}
+            color="primary"
+          >
+            -{MIN_CLIP_DURATION} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleIncrementEnd}
+            color="primary"
+          >
+            +{MIN_CLIP_DURATION} sec
+          </Button>
+        </Grid>
       </Grid>
     </>
   );
