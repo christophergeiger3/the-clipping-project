@@ -37,7 +37,7 @@ class Clip extends EventEmitter {
       'info',
       '-progress',
       'pipe:3',
-      `${this.output}`,
+      `../web/public/clips/${this.output}`, // TODO: Output path may need to be tweaked
     ];
     logger.info(`ffmpeg ${this.args.join(' ')}`);
   }
