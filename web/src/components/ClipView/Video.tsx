@@ -201,11 +201,12 @@ export default function Video({
           />
         ) : null}
         <Grid pb={2} container={true}>
-          <Typography>Left: </Typography>
+          <Typography sx={{ marginRight: 1 }}>Left: </Typography>
           <Button
             variant="contained"
             onClick={handleDecrementStart}
             color="primary"
+            sx={{ marginRight: 1 }}
           >
             -{MIN_CLIP_DURATION} sec
           </Button>
@@ -213,14 +214,16 @@ export default function Video({
             variant="contained"
             onClick={handleIncrementStart}
             color="primary"
+            sx={{ marginRight: 1 }}
           >
             +{MIN_CLIP_DURATION} sec
           </Button>
-          <Typography>Right: </Typography>
+          <Typography sx={{ marginRight: 1 }}>Right: </Typography>
           <Button
             variant="contained"
             onClick={handleDecrementEnd}
             color="primary"
+            sx={{ marginRight: 1 }}
           >
             -{MIN_CLIP_DURATION} sec
           </Button>
@@ -228,6 +231,7 @@ export default function Video({
             variant="contained"
             onClick={handleIncrementEnd}
             color="primary"
+            sx={{ marginRight: 1 }}
           >
             +{MIN_CLIP_DURATION} sec
           </Button>
