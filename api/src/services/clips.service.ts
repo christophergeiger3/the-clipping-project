@@ -59,23 +59,35 @@ class Clip extends EventEmitter {
     this.child = spawn('ffmpeg', this.args, { stdio: ['ignore', 'pipe', 'pipe', 'pipe'] });
 
     this.child.stdio[3]?.on('data', data => {
-      // const progress = parseProgress(data.toString());
-      this.emit('progress', data.toString());
-      logger.info(`progress: ${data.toString()}`);
+      // includes various progress related info -- we only care about frame number (frame=)
+      // later we can parse other stats for time running, etc.
+      const progressStats = data.toString() as string;
+      const frameNumber = progressStats.match(/frame=\s*(\d+)/);
+      if (frameNumber) {
+        const frame = parseInt(frameNumber[1]);
+        // for now wrongly assume all videos to be 60fps -- later we can parse the actual fps from progressStats
+        const overallFPS = 60;
+        const totalNumFrames = ((this.end - this.start) / 1000) * overallFPS;
+
+        this.emit('progress', { frame });
+        logger.info(`frame: ${frame}, ${Math.round((frame / totalNumFrames) * 100)}%`);
+      }
     });
 
-    this.child.stdio[2]?.on('data', raw => {
-      this.emit('data', raw.toString());
-      logger.info(`data: ${raw.toString()}`);
-    });
+    // this.child.stdio[2]?.on('data', raw => {
+    //   this.emit('data', raw.toString());
+    //   logger.info(`data: ${raw.toString()}`);
+    // });
 
     this.child.on('exit', async code => {
       if (code === 0) {
         this.status = Status.Done;
         this.emit('done');
+        logger.info(`done: ${this.output}`);
       } else {
         this.status = Status.Error;
         this.emit('error');
+        logger.error(`exit, error: ${this.output}`);
       }
       await clipModel.updateOne({ _id: this._id }, { status: this.status });
     });
