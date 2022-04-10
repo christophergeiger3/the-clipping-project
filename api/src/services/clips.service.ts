@@ -37,7 +37,7 @@ class Clip extends EventEmitter {
       'info',
       '-progress',
       'pipe:3',
-      `../web/public/clips/${this.output}`, // TODO: Output path may need to be tweaked
+      `${this.output}`, // TODO: Output path may need to be tweaked
     ];
     logger.info(`ffmpeg ${this.args.join(' ')}`);
   }
@@ -84,10 +84,18 @@ class Clip extends EventEmitter {
 
 class ClipService {
   public async createClip(clipData: CreateClipDto): Promise<ClipResponse> {
-    const clip = new Clip(clipData);
+    const clip = new Clip({
+      ...clipData,
+      output: `clips/${clipData.output}`,
+    });
     clip.process();
     const { _id, url, start, end, output, status } = clip;
     return { _id, url, start, end, output, status };
+  }
+
+  public async getClip(id: string): Promise<ClipResponse> {
+    const clip = await clipModel.findById(id);
+    return clip;
   }
 }
 

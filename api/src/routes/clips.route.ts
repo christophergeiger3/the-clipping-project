@@ -15,6 +15,7 @@ class ClipsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post(`${this.path}`, validationMiddleware(CreateClipDto, 'body'), this.clipsController.index);
+    this.router.get(`${this.path}/:id`, this.clipsController.getClip);
   }
 }
 
