@@ -10,7 +10,7 @@ class ClipsController {
     try {
       const clip: CreateClipDto = req.body;
       const createClipData: ClipResponse = await this.clipService.createClip(clip);
-      res.status(201).json({ data: createClipData, message: 'created' });
+      res.status(202).json({ data: createClipData, message: 'created' });
     } catch (error) {
       next(error);
     }
