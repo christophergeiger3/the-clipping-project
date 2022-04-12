@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { Routes } from '@interfaces/routes.interface';
 import ClipsController from '@/controllers/clips.controller';
 import validationMiddleware from '@/middlewares/validation.middleware';
@@ -16,6 +16,8 @@ class ClipsRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}`, validationMiddleware(CreateClipDto, 'body'), this.clipsController.index);
     this.router.get(`${this.path}/:id`, this.clipsController.getClip);
+    this.router.get(`${this.path}/:id/status`, this.clipsController.getClipPercent);
+    this.router.use(`${this.path}/videos`, express.static('clips'));
   }
 }
 
