@@ -1,5 +1,6 @@
 import AppWrapper from "./components/AppWrapper";
 import ClipView from "./components/ClipView/ClipView";
+import Clip from "./components/Clip";
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 
@@ -13,6 +14,7 @@ function App() {
       <header className="App-header">
         <BrowserRouter>
           <Routes>
+            <Route path="/clips/:id" element={<Clip />} />
             <Route
               path="/"
               element={
