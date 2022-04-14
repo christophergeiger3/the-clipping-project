@@ -12,14 +12,13 @@ function convertSecondsToTimestamp(seconds: number) {
 }
 
 // TODO:
-// ** display milliseconds as timestamps
 // button to seek to end of clip
 // button to seek to start of clip
-// button to jump forward x seconds
 // play/pause button
 // form to seek to a specific time
 // loop video to start on end
 // loading indicator while post request is loading
+// use milliseconds instead of seconds for precision
 export default function Video({
   src,
   startEndTimes,
@@ -95,7 +94,7 @@ export default function Video({
         console.log("player is ready");
         player.on("loadedmetadata", () => {
           console.log("loadedmetadata");
-          const d = player.duration();
+          const d = Math.floor(player.duration()); // TODO: Remove floor and use milliseconds
           setDuration(d);
           setStartEndTimes([0, d]);
         });
