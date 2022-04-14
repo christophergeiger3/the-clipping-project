@@ -1,7 +1,16 @@
-import { Autocomplete, Button, Grid, TextField } from "@mui/material";
+import { Autocomplete, Button, Grid, Snackbar, TextField } from "@mui/material";
 import { useCallback, useState } from "react";
 import Video from "./Video";
 import axios from "axios";
+import * as React from "react";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function ClipView() {
   const [url, setUrl] = useState(
@@ -12,6 +21,20 @@ export default function ClipView() {
   const [startEndTimes, setStartEndTimes] = useState<number[]>([0, 100]);
   const [videoUrl, setVideoUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+  );
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
+
+  const handleOpenSnackbar = useCallback((snackbarText?: string) => {
+    setSnackbarText(snackbarText || "");
+    setSnackbarOpen(true);
+  }, []);
+
+  const handleCloseSnackbar = useCallback(
+    (_event?: React.SyntheticEvent | Event, _reason?: string) => {
+      setSnackbarOpen(false);
+    },
+    []
   );
 
   const handleURLChange = useCallback(
@@ -62,7 +85,14 @@ export default function ClipView() {
       output: `${title}.${extension}`,
     });
     console.log("response:", ret.data);
-  }, [videoUrl, startEndTimes, title, extension]);
+    handleOpenSnackbar(`Clipping to /${ret.data.data.output}`);
+    setTimeout(async () => {
+      const status = await axios.get(
+        `http://localhost:3000/clips/${ret.data.data._id}/status`
+      );
+      console.log("status:", status.data);
+    }, 5000);
+  }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
   return (
     <>
@@ -120,6 +150,16 @@ export default function ClipView() {
           </Button>
         </Grid>
       </Grid>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          {snackbarText}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
