@@ -55,6 +55,8 @@ class Clip extends EventEmitter {
   }
 
   public async process() {
+    let overallFPS: number;
+
     this.status = Status.Processing;
     this.child = spawn('ffmpeg', this.args, { stdio: ['ignore', 'pipe', 'pipe', 'pipe'] });
 
@@ -65,8 +67,6 @@ class Clip extends EventEmitter {
       const frameNumber = progressStats.match(/frame=\s*(\d+)/);
       if (frameNumber) {
         const frame = parseInt(frameNumber[1]);
-        // for now wrongly assume all videos to be 60fps -- later we can parse the actual fps from progressStats
-        const overallFPS = 60;
         const totalNumFrames = ((this.end - this.start) / 1000) * overallFPS;
 
         this.emit('progress', { frame });
@@ -74,10 +74,17 @@ class Clip extends EventEmitter {
       }
     });
 
-    // this.child.stdio[2]?.on('data', raw => {
-    //   this.emit('data', raw.toString());
-    //   logger.info(`data: ${raw.toString()}`);
-    // });
+    this.child.stdio[2]?.on('data', raw => {
+      const data = raw.toString() as string;
+      const fps = data.match(/(\d+) fps/);
+
+      if (fps && !overallFPS) {
+        overallFPS = parseInt(fps[1]);
+        logger.info(`fps: ${overallFPS}`);
+      }
+
+      this.emit('data', data);
+    });
 
     this.child.on('exit', async code => {
       if (code === 0) {
