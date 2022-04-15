@@ -15,6 +15,12 @@ enum Status {
 interface Clip extends ClipResponse {
   child: ChildProcess;
   args: string[];
+  /** The FPS of the full clip */
+  overallFPS?: number;
+  /** Integer (0 - 100) of how much of the clip has been processed in ffmpeg */
+  percentDone: number;
+  /** The current frame being processed */
+  currentFrameNumber: number;
 }
 
 class Clip extends EventEmitter {
@@ -22,7 +28,6 @@ class Clip extends EventEmitter {
     super();
     Object.assign(this, clip);
     this.status = Status.Idle;
-    this.addToDb();
     this.args = [
       '-nostats',
       '-y',
@@ -39,6 +44,8 @@ class Clip extends EventEmitter {
       'pipe:3',
       `${this.output}`, // TODO: Output path may need to be tweaked
     ];
+    this.percentDone = 0;
+    this.currentFrameNumber = 0;
     logger.info(`ffmpeg ${this.args.join(' ')}`);
   }
 
@@ -55,8 +62,6 @@ class Clip extends EventEmitter {
   }
 
   public async process() {
-    let overallFPS: number;
-
     this.status = Status.Processing;
     this.child = spawn('ffmpeg', this.args, { stdio: ['ignore', 'pipe', 'pipe', 'pipe'] });
 
@@ -67,8 +72,10 @@ class Clip extends EventEmitter {
       const frameNumber = progressStats.match(/frame=\s*(\d+)/);
       if (frameNumber) {
         const frame = parseInt(frameNumber[1]);
-        const totalNumFrames = ((this.end - this.start) / 1000) * overallFPS;
+        const totalNumFrames = ((this.end - this.start) / 1000) * this.overallFPS;
 
+        this.currentFrameNumber = frame;
+        this.percentDone = Math.round((frame / totalNumFrames) * 100);
         this.emit('progress', { frame });
         logger.info(`frame: ${frame}, ${Math.round((frame / totalNumFrames) * 100)}%`);
       }
@@ -78,9 +85,9 @@ class Clip extends EventEmitter {
       const data = raw.toString() as string;
       const fps = data.match(/(\d+) fps/);
 
-      if (fps && !overallFPS) {
-        overallFPS = parseInt(fps[1]);
-        logger.info(`fps: ${overallFPS}`);
+      if (fps && !this.overallFPS) {
+        this.overallFPS = parseInt(fps[1]);
+        logger.info(`fps: ${this.overallFPS}`);
       }
 
       this.emit('data', data);
@@ -97,17 +104,30 @@ class Clip extends EventEmitter {
         logger.error(`exit, error: ${this.output}`);
       }
       await clipModel.updateOne({ _id: this._id }, { status: this.status });
+      this.emit('exit');
     });
   }
 }
 
 class ClipService {
+  activeClips: Clip[] = [];
+
   public async createClip(clipData: CreateClipDto): Promise<ClipResponse> {
     const clip = new Clip({
       ...clipData,
       output: `clips/${clipData.output}`,
     });
+
+    await clip.addToDb();
     clip.process();
+    logger.info(`adding clip ${clip._id} to active clips`);
+    this.activeClips.push(clip);
+
+    clip.on('exit', () => {
+      logger.info(`removing clip ${clip._id} from active clips`);
+      this.activeClips = this.activeClips.filter(c => c._id !== clip._id);
+    });
+
     const { _id, url, start, end, output, status } = clip;
     return { _id, url, start, end, output, status };
   }
@@ -115,6 +135,12 @@ class ClipService {
   public async getClip(id: string): Promise<ClipResponse> {
     const clip = await clipModel.findById(id);
     return clip;
+  }
+
+  public async getClipProgress(id: string): Promise<Number | null> {
+    const activeClip = this.activeClips.find(c => c._id == id);
+
+    return activeClip.percentDone ?? null;
   }
 }
 

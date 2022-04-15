@@ -88,10 +88,10 @@ export default function ClipView() {
     handleOpenSnackbar(`Clipping to /${ret.data.data.output}`);
     setTimeout(async () => {
       const status = await axios.get(
-        `http://localhost:3000/clips/${ret.data.data._id}/status`
+        `http://localhost:3000/clips/progress/${ret.data.data._id}`
       );
       console.log("status:", status.data);
-    }, 5000);
+    }, 2000);
   }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
   return (

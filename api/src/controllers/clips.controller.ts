@@ -25,6 +25,16 @@ class ClipsController {
       next(error);
     }
   };
+
+  public getClipProgress = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const progress = await this.clipService.getClipProgress(id);
+      res.status(200).json({ data: progress, message: 'success' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default ClipsController;
