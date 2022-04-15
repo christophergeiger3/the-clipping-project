@@ -1,6 +1,7 @@
 import { CreateClipDto } from '@/dtos/clip.dto';
 import { Clip as ClipResponse } from '@/interfaces/clips.interface';
 import ClipService from '@/services/clips.service';
+import { logger } from '@/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 
 class ClipsController {
@@ -27,10 +28,33 @@ class ClipsController {
   };
 
   public getClipProgress = async (req: Request, res: Response, next: NextFunction) => {
+    // https://dev.to/hritique/send-realtime-data-streams-without-using-socket-io-32l6
+    // Realtime stream via EventSource API
+    const sleepAndGetClipProgress = async (ms: number, id: string) => {
+      return new Promise(resolve =>
+        setTimeout(async () => {
+          resolve(await this.clipService.getClipProgress(id));
+        }, ms),
+      );
+    };
     try {
       const { id } = req.params;
-      const progress = await this.clipService.getClipProgress(id);
-      res.status(200).json({ data: progress, message: 'success' });
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      });
+
+      let progress = await sleepAndGetClipProgress(2000, id);
+      while (progress && progress < 100) {
+        // res.write('event: message\n');
+        logger.info(`data: ${progress}`);
+        res.write(`data: ${progress}\n\n`);
+        progress = await sleepAndGetClipProgress(2000, id);
+      }
+      res.write(`data: end\n\n`);
+      // res.status(200).json({ data: progress, message: 'success' });
+      res.end();
     } catch (error) {
       next(error);
     }

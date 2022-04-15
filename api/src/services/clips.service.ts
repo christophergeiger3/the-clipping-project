@@ -140,7 +140,7 @@ class ClipService {
   public async getClipProgress(id: string): Promise<Number | null> {
     const activeClip = this.activeClips.find(c => c._id == id);
 
-    return activeClip.percentDone ?? null;
+    return activeClip?.percentDone ?? null;
   }
 }
 
