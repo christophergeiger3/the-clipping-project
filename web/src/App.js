@@ -14,6 +14,14 @@ function App() {
       <header className="App-header">
         <BrowserRouter>
           <Routes>
+            <Route
+              path="/clips"
+              element={
+                <AppWrapper>
+                  <pre>clips</pre>
+                </AppWrapper>
+              }
+            />
             <Route path="/clips/:id" element={<Clip />} />
             <Route
               path="/"
