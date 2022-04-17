@@ -4,6 +4,7 @@ import Video from "./Video";
 import axios from "axios";
 import * as React from "react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -22,6 +23,7 @@ export default function ClipView() {
   const [videoUrl, setVideoUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
+  const [isLoadingURL, setIsLoadingURL] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarText, setSnackbarText] = useState("");
 
@@ -54,12 +56,14 @@ export default function ClipView() {
   );
 
   const handleSubmitURL = useCallback(async () => {
-    console.log(`getting video url for: ${url}`);
+    // console.log(`getting video url for: ${url}`);
+    setIsLoadingURL(true);
     const ret = await axios.post(`http://localhost:3000/analyze`, {
       url,
     });
     console.log(ret.data.data);
     setVideoUrl(ret.data.data.urls[0]);
+    setIsLoadingURL(false);
   }, [url]);
 
   const handleTitleChange = useCallback(
@@ -87,10 +91,11 @@ export default function ClipView() {
     console.log("response:", ret.data);
     handleOpenSnackbar(`Clipping to /${ret.data.data.output}`);
     setTimeout(async () => {
-      const status = await axios.get(
-        `http://localhost:3000/clips/progress/${ret.data.data._id}`
-      );
-      console.log("status:", status.data);
+      // const status = await axios.get(
+      //   `http://localhost:3000/clips/progress/${ret.data.data._id}`
+      // );
+      // console.log("status:", status.data);
+      // TODO: get event stream for progress
     }, 2000);
   }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
@@ -113,9 +118,13 @@ export default function ClipView() {
           />
         </Grid>
         <Grid item={true} xs={2}>
-          <Button variant="contained" onClick={handleSubmitURL}>
+          <LoadingButton
+            variant="contained"
+            loading={isLoadingURL}
+            onClick={handleSubmitURL}
+          >
             Submit
-          </Button>
+          </LoadingButton>
         </Grid>
       </Grid>
 
