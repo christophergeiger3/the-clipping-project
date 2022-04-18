@@ -1,5 +1,13 @@
-import { Autocomplete, Button, Grid, Snackbar, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  ButtonGroup,
+  Grid,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import { useCallback, useState } from "react";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Video from "./Video";
 import axios from "axios";
 import * as React from "react";
@@ -99,6 +107,13 @@ export default function ClipView() {
     }, 2000);
   }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
+  const handleCopyDestinationURL = useCallback(() => {
+    navigator.clipboard.writeText(
+      `http://localhost:3000/clips/${title}.${extension}`
+    );
+    handleOpenSnackbar(`Copied destination URL to clipboard`);
+  }, [title, extension, handleOpenSnackbar]);
+
   return (
     <>
       <Video
@@ -154,9 +169,21 @@ export default function ClipView() {
           />
         </Grid>
         <Grid item={true} xs={2}>
-          <Button variant="contained" onClick={handleClip}>
+          <ButtonGroup variant="contained" color="primary">
+            <Button onClick={handleClip}>Clip</Button>
+            <Button
+              onClick={handleCopyDestinationURL}
+              startIcon={<ContentCopyIcon />}
+            />
+          </ButtonGroup>
+          {/* <Button variant="contained" onClick={handleClip}>
             Clip
           </Button>
+          <Button
+            variant="contained"
+            startIcon={<ContentCopyIcon />}
+            onClick={handleCopyDestinationURL}
+          /> */}
         </Grid>
       </Grid>
 
