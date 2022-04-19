@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsUrl, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUrl, Min } from 'class-validator';
 
 export class CreateClipDto {
   @IsUrl()
@@ -14,4 +14,8 @@ export class CreateClipDto {
 
   @IsString()
   public output: string;
+
+  @IsOptional()
+  @IsString()
+  public customFFMPEGCommand?: string;
 }

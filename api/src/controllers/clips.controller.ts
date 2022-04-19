@@ -7,7 +7,7 @@ import { NextFunction, Request, Response } from 'express';
 class ClipsController {
   public clipService = new ClipService();
 
-  public index = async (req: Request, res: Response, next: NextFunction) => {
+  public createClip = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const clip: CreateClipDto = req.body;
       const createClipData: ClipResponse = await this.clipService.createClip(clip);

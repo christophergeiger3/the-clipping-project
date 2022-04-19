@@ -28,7 +28,8 @@ class Clip extends EventEmitter {
     super();
     Object.assign(this, clip);
     this.status = Status.Idle;
-    this.args = [
+
+    this.args = this.customFFMPEGCommand?.split(' ') || [
       '-nostats',
       '-y',
       '-ss',

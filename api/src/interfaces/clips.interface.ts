@@ -5,4 +5,5 @@ export interface Clip {
   end: number;
   output: string;
   status: string;
+  customFFMPEGCommand?: string | undefined;
 }
