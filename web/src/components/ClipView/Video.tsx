@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import videojs, { VideoJsPlayer } from "video.js";
 import "video.js/dist/video-js.css";
 import { Button, Grid, Slider, Typography } from "@mui/material";
+import { SkipNext, SkipPrevious } from "@mui/icons-material";
 
 const MIN_CLIP_DURATION = 1;
 
@@ -64,6 +65,16 @@ export default function Video({
       start,
       Math.min(end - MIN_CLIP_DURATION, duration || end - MIN_CLIP_DURATION),
     ]);
+  }, [setStartEndTimes, duration]);
+
+  const handleSetStartZero = useCallback(() => {
+    const [, end] = startEndRef.current;
+    setStartEndTimes([0, end]);
+  }, [setStartEndTimes]);
+
+  const handleSetEndDuration = useCallback(() => {
+    const [start, end] = startEndRef.current;
+    setStartEndTimes([start, duration || end]);
   }, [setStartEndTimes, duration]);
 
   const options = useMemo(() => {
@@ -203,6 +214,13 @@ export default function Video({
           <Typography sx={{ marginRight: 1 }}>Left: </Typography>
           <Button
             variant="contained"
+            color="primary"
+            onClick={handleSetStartZero}
+            startIcon={<SkipPrevious />}
+            sx={{ marginRight: 1 }}
+          />
+          <Button
+            variant="contained"
             onClick={handleDecrementStart}
             color="primary"
             sx={{ marginRight: 1 }}
@@ -218,6 +236,13 @@ export default function Video({
             +{MIN_CLIP_DURATION} sec
           </Button>
           <Typography sx={{ marginRight: 1 }}>Right: </Typography>
+          <Button
+            variant="contained"
+            onClick={handleSetEndDuration}
+            color="primary"
+            startIcon={<SkipNext />}
+            sx={{ marginRight: 1 }}
+          />
           <Button
             variant="contained"
             onClick={handleDecrementEnd}
