@@ -44,6 +44,7 @@ class ClipsController {
         'Cache-Control': 'no-cache',
         Connection: 'keep-alive',
       });
+      res.flushHeaders(); // flush headers to send them right away
 
       let progress = await sleepAndGetClipProgress(2000, id);
       while (progress && progress < 100) {
