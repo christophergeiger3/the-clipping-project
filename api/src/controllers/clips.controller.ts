@@ -44,16 +44,17 @@ class ClipsController {
         'Cache-Control': 'no-cache',
         Connection: 'keep-alive',
       });
-      res.flushHeaders(); // flush headers to send them right away
+      // res.flushHeaders(); // flush headers to send them right away
 
       let progress = await sleepAndGetClipProgress(2000, id);
       while (progress && progress < 100) {
-        // res.write('event: message\n');
         logger.info(`data: ${progress}`);
-        res.write(`data: ${progress}\n\n`);
+        res.write('event: message\n');
+        res.write(`data: ${JSON.stringify(progress)}`);
+        res.write('\n\n');
         progress = await sleepAndGetClipProgress(2000, id);
       }
-      res.write(`data: end\n\n`);
+      // res.write(`data: end\n\n`);
       // res.status(200).json({ data: progress, message: 'success' });
       res.end();
     } catch (error) {
