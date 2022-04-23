@@ -1,34 +1,59 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // https://dev.to/hritique/send-realtime-data-streams-without-using-socket-io-32l6
-export default function Progress() {
-  const { id } = useParams<{ id: string }>();
+// export default function Progress() {
+//   const { id } = useParams<{ id: string }>();
 
-  // const [data, setData] = useState<any>([]);
+//   // const [data, setData] = useState<any>([]);
 
-  // let eventSource = undefined;
-  // const eve
-  const eventSource = useRef<null | EventSource>(null); // should be useState
+//   // let eventSource = undefined;
+//   // const eve
+//   const eventSource = useRef<null | EventSource>(null); // should be useState
+
+//   useEffect(() => {
+//     if (eventSource.current === null) {
+//       eventSource.current = new EventSource(
+//         `http://localhost:3000/clips/progress/${id}`
+//         // { withCredentials: true }  // TODO: add auth to server
+//       );
+//       eventSource.current.onmessage = (event: MessageEvent) => {
+//         console.log(event.data);
+//       };
+//     }
+
+//     return () => {
+//       if (eventSource.current !== null) {
+//         eventSource.current.close();
+//         // eventSource.current = null;
+//       }
+//     };
+//   }, [id]);
+
+//   return <pre>{"some text"}</pre>;
+// }
+
+const useEventSource = (url: string) => {
+  const [data, updateData] = useState(null);
 
   useEffect(() => {
-    if (eventSource.current === null) {
-      eventSource.current = new EventSource(
-        `http://localhost:3000/clips/progress/${id}`
-        // { withCredentials: true }  // TODO: add auth to server
-      );
-      eventSource.current.onmessage = (event: MessageEvent) => {
-        console.log(event.data);
-      };
-    }
+    const source = new EventSource(url);
 
-    return () => {
-      if (eventSource.current !== null) {
-        eventSource.current.close();
-        // eventSource.current = null;
-      }
+    source.onmessage = function logEvents(event) {
+      updateData(JSON.parse(event.data));
     };
-  }, [id]);
+  }, [url]);
 
-  return <pre>{"some text"}</pre>;
+  return data;
+};
+
+export default function Progress() {
+  const { id } = useParams<{ id: string }>();
+  const data = useEventSource(`http://localhost:3000/clips/progress/${id}`);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }

@@ -44,7 +44,7 @@ class ClipsController {
         'Cache-Control': 'no-cache',
         Connection: 'keep-alive',
       });
-      // res.flushHeaders(); // flush headers to send them right away
+      res.flushHeaders(); // flush headers to send them right away
 
       let progress = await sleepAndGetClipProgress(2000, id);
       while (progress && progress < 100) {
@@ -52,6 +52,7 @@ class ClipsController {
         res.write('event: message\n');
         res.write(`data: ${JSON.stringify(progress)}`);
         res.write('\n\n');
+        res.flush(); // flush to send the data right away
         progress = await sleepAndGetClipProgress(2000, id);
       }
       // res.write(`data: end\n\n`);
