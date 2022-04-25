@@ -30,7 +30,7 @@ class ClipsController {
   public getClipProgress = async (req: Request, res: Response, next: NextFunction) => {
     // https://dev.to/hritique/send-realtime-data-streams-without-using-socket-io-32l6
     // Realtime stream via EventSource API
-    const sleepAndGetClipProgress = async (ms: number, id: string) => {
+    const sleepAndGetClipProgress = async (ms: number, id: string): Promise<Number | null> => {
       return new Promise(resolve =>
         setTimeout(async () => {
           resolve(await this.clipService.getClipProgress(id));
@@ -55,6 +55,10 @@ class ClipsController {
         res.flush(); // flush to send the data right away
         progress = await sleepAndGetClipProgress(2000, id);
       }
+      res.write('event: message\n');
+      res.write(`data: ${JSON.stringify(progress)}`);
+      res.write('\n\n');
+      res.flush(); // flush to send the data right away
       // res.write(`data: end\n\n`);
       // res.status(200).json({ data: progress, message: 'success' });
       res.end();
