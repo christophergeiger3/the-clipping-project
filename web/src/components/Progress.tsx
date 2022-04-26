@@ -1,40 +1,9 @@
+import { LinearProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-// https://dev.to/hritique/send-realtime-data-streams-without-using-socket-io-32l6
-// export default function Progress() {
-//   const { id } = useParams<{ id: string }>();
-
-//   // const [data, setData] = useState<any>([]);
-
-//   // let eventSource = undefined;
-//   // const eve
-//   const eventSource = useRef<null | EventSource>(null); // should be useState
-
-//   useEffect(() => {
-//     if (eventSource.current === null) {
-//       eventSource.current = new EventSource(
-//         `http://localhost:3000/clips/progress/${id}`
-//         // { withCredentials: true }  // TODO: add auth to server
-//       );
-//       eventSource.current.onmessage = (event: MessageEvent) => {
-//         console.log(event.data);
-//       };
-//     }
-
-//     return () => {
-//       if (eventSource.current !== null) {
-//         eventSource.current.close();
-//         // eventSource.current = null;
-//       }
-//     };
-//   }, [id]);
-
-//   return <pre>{"some text"}</pre>;
-// }
-
 const useEventSource = (url: string) => {
-  const [data, updateData] = useState(null);
+  const [data, updateData] = useState<number | null>(null);
 
   useEffect(() => {
     const source = new EventSource(url);
@@ -55,5 +24,10 @@ export default function Progress() {
     return <div>Loading...</div>;
   }
 
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  return (
+    <>
+      <LinearProgress variant="determinate" value={data} />
+      <Typography variant="h6">{data}%</Typography>
+    </>
+  );
 }
