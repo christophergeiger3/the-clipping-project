@@ -1,6 +1,7 @@
 import AppWrapper from "./components/AppWrapper";
 import ClipView from "./components/ClipView/ClipView";
 import Clip from "./components/Clip";
+import Clips from "./components/Clip";
 import Progress from "./components/Progress";
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
@@ -19,11 +20,18 @@ function App() {
               path="/clips"
               element={
                 <AppWrapper>
-                  <pre>clips</pre>
+                  <Clips />
                 </AppWrapper>
               }
             />
-            <Route path="/clips/progress/:id" element={<Progress />} />
+            <Route
+              path="/clips/progress/:id"
+              element={
+                <AppWrapper>
+                  <Progress />
+                </AppWrapper>
+              }
+            />
             <Route path="/clips/:id" element={<Clip />} />
             <Route
               path="/"
