@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const useEventSource = (url: string) => {
-  const [data, updateData] = useState<number | null>(null);
+  const [data, updateData] = useState<number | null>();
 
   useEffect(() => {
     const source = new EventSource(url);
@@ -20,8 +20,13 @@ export default function Progress() {
   const { id } = useParams<{ id: string }>();
   const data = useEventSource(`http://localhost:3000/clips/progress/${id}`);
 
-  if (!data) {
-    return <div>Loading...</div>;
+  // Null response from event source means the clip is not processing
+  if (data === null) {
+    return <Typography>Done.</Typography>;
+  }
+
+  if (data === undefined) {
+    return <Typography>Loading...</Typography>;
   }
 
   return (

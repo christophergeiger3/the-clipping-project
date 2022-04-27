@@ -78,7 +78,7 @@ class Clip extends EventEmitter {
         this.currentFrameNumber = frame;
         this.percentDone = Math.round((frame / totalNumFrames) * 100);
         this.emit('progress', { frame });
-        logger.info(`frame: ${frame}, ${Math.round((frame / totalNumFrames) * 100)}%`);
+        logger.info(`id: ${this._id}, frame: ${frame}, ${Math.round((frame / totalNumFrames) * 100)}%`);
       }
     });
 

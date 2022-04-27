@@ -97,6 +97,7 @@ export default function ClipView() {
       output: `${title}.${extension}`,
     });
     console.log("response:", ret.data);
+    console.log(`http://localhost:3001/clips/progress/${ret.data.data._id}`);
     handleOpenSnackbar(`Clipping to /${ret.data.data.output}`);
   }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
