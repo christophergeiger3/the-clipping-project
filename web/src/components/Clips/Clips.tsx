@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ClipCard from "./ClipCard";
 
-type Clip = {
+export type Clip = {
   _id: string;
   url: string;
   start: number;
@@ -17,7 +18,7 @@ function useClips() {
 
   useEffect(() => {
     async function getClips(): Promise<void> {
-      const clips = (await axios.get("http://localhost:3000/clips"))
+      const clips = (await axios.get("http://localhost:3000/clips")).data
         .data as Clip[];
       setClips(clips);
     }
@@ -29,5 +30,11 @@ function useClips() {
 
 export default function Clips() {
   const clips = useClips();
-  return clips ? <pre>{JSON.stringify(clips, null, 2)}</pre> : null;
+  return clips ? (
+    <>
+      {clips.map((clip) => (
+        <ClipCard key={clip._id} clip={clip} />
+      ))}
+    </>
+  ) : null;
 }
