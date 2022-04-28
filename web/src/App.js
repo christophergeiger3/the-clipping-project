@@ -1,7 +1,7 @@
 import AppWrapper from "./components/AppWrapper";
 import ClipView from "./components/ClipView/ClipView";
 import Clip from "./components/Clip";
-import Clips from "./components/Clip";
+import Clips from "./components/Clips";
 import Progress from "./components/Progress";
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";

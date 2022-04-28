@@ -27,6 +27,16 @@ class ClipsController {
     }
   };
 
+  // TODO: paginate, allow for more specific queries
+  public getClips = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const clips = await this.clipService.getClips();
+      res.status(200).json({ data: clips, message: 'success' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public getClipProgress = async (req: Request, res: Response, next: NextFunction) => {
     // https://dev.to/hritique/send-realtime-data-streams-without-using-socket-io-32l6
     // Realtime stream via EventSource API

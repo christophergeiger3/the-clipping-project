@@ -13,11 +13,12 @@ type Clip = {
 };
 
 function useClips() {
-  const [clips, setClips] = useState<Clip[]>([]);
+  const [clips, setClips] = useState<Clip[]>();
 
   useEffect(() => {
     async function getClips(): Promise<void> {
-      const clips = (await axios.get("http://localhost:3000/clips")).data;
+      const clips = (await axios.get("http://localhost:3000/clips"))
+        .data as Clip[];
       setClips(clips);
     }
     getClips();

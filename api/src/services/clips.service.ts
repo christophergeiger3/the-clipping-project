@@ -138,6 +138,11 @@ class ClipService {
     return clip;
   }
 
+  public async getClips(): Promise<ClipResponse[]> {
+    const clips = await clipModel.find();
+    return clips;
+  }
+
   public async getClipProgress(id: string): Promise<Number | null> {
     const activeClip = this.activeClips.find(c => c._id == id);
 
