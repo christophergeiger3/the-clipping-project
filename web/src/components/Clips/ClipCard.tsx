@@ -20,6 +20,8 @@ export default function ClipCard({ clip }: { clip: Clip }) {
           {clip.start} - {clip.end}
         </Typography>
         <Typography color="text.secondary">{clip.status}</Typography>
+        {/* Temporary, for debugging: */}
+        <Typography>{clip._id}</Typography>
       </CardContent>
     </Card>
   );

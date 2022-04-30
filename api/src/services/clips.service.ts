@@ -138,6 +138,19 @@ class ClipService {
     return clip;
   }
 
+  public async deleteClip(id: string): Promise<ClipResponse | null> {
+    const clip = await clipModel.findByIdAndDelete(id);
+    if (clip) {
+      logger.info(`deleting clip ${clip._id}`);
+      const clipToDelete = this.activeClips.find(c => c._id === clip._id);
+      if (clipToDelete) {
+        clipToDelete.child.kill();
+        this.activeClips = this.activeClips.filter(c => c._id !== clip._id);
+      }
+    }
+    return clip || null;
+  }
+
   public async getClips(): Promise<ClipResponse[]> {
     const clips = await clipModel.find();
     return clips;
