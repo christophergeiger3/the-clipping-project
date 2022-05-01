@@ -143,16 +143,20 @@ class ClipService {
     const clip = await clipModel.findByIdAndDelete(id);
     if (clip) {
       logger.info(`deleting clip ${clip._id}`);
+
+      // Remove from active clips queue
+      const clipToDelete = this.activeClips.find(c => c._id === clip._id);
+      if (clipToDelete) {
+        clipToDelete.child.kill();
+        this.activeClips = this.activeClips.filter(c => c._id !== clip._id);
+      }
+
+      // Delete file from disk
       try {
         unlinkSync(clip.output); // delete the file
       } catch (err) {
         logger.error(`error deleting clip ${clip.output} for clip ${clip._id}`);
         logger.error(err.message);
-      }
-      const clipToDelete = this.activeClips.find(c => c._id === clip._id);
-      if (clipToDelete) {
-        clipToDelete.child.kill();
-        this.activeClips = this.activeClips.filter(c => c._id !== clip._id);
       }
     }
     return clip || null;
