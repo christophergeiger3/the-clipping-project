@@ -4,6 +4,7 @@ import clipModel from '@/models/clips.model';
 import { logger } from '@/utils/logger';
 import { ChildProcess, spawn } from 'child_process';
 import { EventEmitter } from 'events';
+import { unlinkSync } from 'fs';
 
 enum Status {
   Done = 'done',
@@ -142,6 +143,12 @@ class ClipService {
     const clip = await clipModel.findByIdAndDelete(id);
     if (clip) {
       logger.info(`deleting clip ${clip._id}`);
+      try {
+        unlinkSync(clip.output); // delete the file
+      } catch (err) {
+        logger.error(`error deleting clip ${clip.output} for clip ${clip._id}`);
+        logger.error(err.message);
+      }
       const clipToDelete = this.activeClips.find(c => c._id === clip._id);
       if (clipToDelete) {
         clipToDelete.child.kill();
