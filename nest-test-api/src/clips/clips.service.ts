@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
-import { Clip } from './schema/clip.schema';
+import { Clip, ClipDocument } from './schema/clip.schema';
 
 @Injectable()
 export class ClipsService {
