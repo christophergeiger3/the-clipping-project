@@ -87,8 +87,8 @@ export class ClipsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a clip' })
-  @ApiParam({ name: 'id', type: Number })
-  remove(@Param('id') id: string) {
-    return this.clipsService.remove(+id);
+  @ApiParam({ name: 'id', type: String })
+  remove(@Param('id') id: ObjectId) {
+    return this.clipsService.remove(id);
   }
 }

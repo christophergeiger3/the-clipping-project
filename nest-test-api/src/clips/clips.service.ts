@@ -34,7 +34,7 @@ export class ClipsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} clip`;
+  async remove(id: ObjectId): Promise<ClipDocument> {
+    return this.clipModel.findByIdAndDelete(id);
   }
 }
