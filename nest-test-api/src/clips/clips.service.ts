@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
 import { Clip, ClipDocument } from './schema/clip.schema';
@@ -21,8 +21,8 @@ export class ClipsService {
     return clips;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} clip`;
+  async findOne(id: ObjectId): Promise<ClipDocument> {
+    return this.clipModel.findById(id);
   }
 
   update(id: number, updateClipDto: UpdateClipDto) {

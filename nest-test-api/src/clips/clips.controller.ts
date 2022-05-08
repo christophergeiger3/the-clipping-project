@@ -7,7 +7,14 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ObjectId } from 'mongoose';
 import { ClipsService } from './clips.service';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
@@ -44,21 +51,30 @@ export class ClipsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Return a single clip' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully returned',
-    type: CreateClipDto,
+    type: Clip,
   })
-  findOne(@Param('id') id: string) {
-    return this.clipsService.findOne(+id);
+  findOne(@Param('id') id: ObjectId) {
+    return this.clipsService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a clip' })
+  @ApiBody({ type: UpdateClipDto })
   update(@Param('id') id: string, @Body() updateClipDto: UpdateClipDto) {
     return this.clipsService.update(+id, updateClipDto);
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a clip' })
+  @ApiParam({ name: 'id', type: Number })
   remove(@Param('id') id: string) {
     return this.clipsService.remove(+id);
   }
