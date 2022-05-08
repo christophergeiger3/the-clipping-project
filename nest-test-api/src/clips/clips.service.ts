@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
+import { Clip } from './schema/clip.schema';
 
 @Injectable()
 export class ClipsService {
-  create(createClipDto: CreateClipDto) {
-    return 'This action adds a new clip';
+  constructor(
+    @InjectModel(Clip.name) private readonly clipModel: Model<Clip>,
+  ) {}
+
+  async create(createClipDto: CreateClipDto): Promise<Clip> {
+    const createdClip = await this.clipModel.create(createClipDto);
+    return createdClip;
   }
 
-  findAll() {
-    return `This action returns all clips`;
+  async findAll(): Promise<Clip[]> {
+    const clips = await this.clipModel.find();
+    return clips;
   }
 
   findOne(id: number) {
