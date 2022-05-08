@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { ClipsService } from './clips.service';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
@@ -16,11 +17,13 @@ export class ClipsController {
   constructor(private readonly clipsService: ClipsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a clip' })
   create(@Body() createClipDto: CreateClipDto) {
     return this.clipsService.create(createClipDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Return all clips' })
   findAll() {
     return this.clipsService.findAll();
   }
