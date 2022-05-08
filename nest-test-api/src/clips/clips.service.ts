@@ -25,8 +25,13 @@ export class ClipsService {
     return this.clipModel.findById(id);
   }
 
-  update(id: number, updateClipDto: UpdateClipDto) {
-    return `This action updates a #${id} clip`;
+  async update(
+    id: ObjectId,
+    updateClipDto: UpdateClipDto,
+  ): Promise<ClipDocument> {
+    return this.clipModel.findByIdAndUpdate(id, updateClipDto, {
+      new: true,
+    });
   }
 
   remove(id: number) {

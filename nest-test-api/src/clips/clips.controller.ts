@@ -61,15 +61,28 @@ export class ClipsController {
     description: 'The record has been successfully returned',
     type: Clip,
   })
-  findOne(@Param('id') id: ObjectId) {
+  findOne(@Param('id') id: ObjectId): Promise<Clip> {
     return this.clipsService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a clip' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    required: true,
+  })
   @ApiBody({ type: UpdateClipDto })
-  update(@Param('id') id: string, @Body() updateClipDto: UpdateClipDto) {
-    return this.clipsService.update(+id, updateClipDto);
+  @ApiResponse({
+    status: 204,
+    description: 'The record has been successfully updated',
+    type: Clip,
+  })
+  update(
+    @Param('id') id: ObjectId,
+    @Body() updateClipDto: UpdateClipDto,
+  ): Promise<Clip> {
+    return this.clipsService.update(id, updateClipDto);
   }
 
   @Delete(':id')
