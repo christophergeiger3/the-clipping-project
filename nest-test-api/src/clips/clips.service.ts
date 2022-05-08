@@ -1,18 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
 import { Clip, ClipDocument } from './schema/clip.schema';
+import ClipCreatedEvent from './events/clip-created.event';
 
 @Injectable()
 export class ClipsService {
   constructor(
     @InjectModel(Clip.name) private readonly clipModel: Model<Clip>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(createClipDto: CreateClipDto): Promise<Clip> {
     const createdClip = await this.clipModel.create(createClipDto);
+
+    Logger.log('Emitting event');
+    this.eventEmitter.emit('clip.created', new ClipCreatedEvent(createdClip));
+
     return createdClip;
   }
 
