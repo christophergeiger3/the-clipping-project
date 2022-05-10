@@ -12,11 +12,11 @@ export class Clip {
 
   @Prop({ required: true })
   @ApiProperty()
-  start: string;
+  start: number;
 
   @Prop({ required: true })
   @ApiProperty()
-  end: string;
+  end: number;
 
   @Prop({ required: true })
   @ApiProperty()
