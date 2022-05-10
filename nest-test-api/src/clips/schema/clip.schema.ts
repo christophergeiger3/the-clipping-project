@@ -23,7 +23,6 @@ export class Clip {
   output: string;
 
   @Prop()
-  @ApiProperty()
   status: string;
 }
 

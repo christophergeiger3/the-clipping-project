@@ -9,6 +9,9 @@ import ClipCreatedEvent from './events/clip-created.event';
 
 @Injectable()
 export class ClipsService {
+  /** Clips currently being processed (clip.status = 'processing') */
+  activeClips: ClipCreatedEvent[] = [];
+
   constructor(
     @InjectModel(Clip.name) private readonly clipModel: Model<Clip>,
     private eventEmitter: EventEmitter2,
@@ -17,7 +20,9 @@ export class ClipsService {
   async create(createClipDto: CreateClipDto): Promise<Clip> {
     const createdClip = await this.clipModel.create(createClipDto);
 
-    Logger.log('Emitting event');
+    // TODO: Insert analyze endpoint here to grab actual URL from youtube-dl
+
+    Logger.log('Emitting event clip.created');
     this.eventEmitter.emit('clip.created', new ClipCreatedEvent(createdClip));
 
     return createdClip;
@@ -34,9 +39,9 @@ export class ClipsService {
 
   async update(
     id: ObjectId,
-    updateClipDto: UpdateClipDto,
+    update: Partial<ClipDocument>,
   ): Promise<ClipDocument> {
-    return this.clipModel.findByIdAndUpdate(id, updateClipDto, {
+    return this.clipModel.findByIdAndUpdate(id, update, {
       new: true,
     });
   }
