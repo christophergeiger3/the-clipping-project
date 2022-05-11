@@ -8,8 +8,7 @@ sudo systemctl start mongodb.service
 then launch the back-end:
 ```
 cd api
-yarn
-yarn start
+npm run start
 ```
 
 finally launch the front-end:
