@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClipsModule } from './clips/clips.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AnalyzeController } from './analyze/analyze.controller';
+import { AnalyzeService } from './analyze/analyze.service';
 
 @Module({
   imports: [
@@ -11,7 +13,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     EventEmitterModule.forRoot(),
     MongooseModule.forRoot('mongodb://localhost/the-clipping-project'),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, AnalyzeController],
+  providers: [AppService, AnalyzeService],
 })
 export class AppModule {}
