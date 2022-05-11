@@ -8,6 +8,7 @@ sudo systemctl start mongodb.service
 then launch the back-end:
 ```
 cd api
+npm install
 npm run start
 ```
 
