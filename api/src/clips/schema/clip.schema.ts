@@ -24,6 +24,16 @@ export class Clip {
 
   @Prop()
   status: string;
+
+  constructor(clip?: Clip) {
+    if (clip) {
+      this.start = clip.start;
+      this.end = clip.end;
+      this.url = clip.url;
+      this.output = clip.output;
+      this.status = clip.status;
+    }
+  }
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);

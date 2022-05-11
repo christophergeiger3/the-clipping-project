@@ -17,12 +17,7 @@ class ClipCreatedEvent extends Clip {
   currentFrameNumber: number;
 
   constructor(clip: ClipDocument) {
-    super();
-    this.start = clip.start;
-    this.end = clip.end;
-    this.url = clip.url;
-    this.output = clip.output;
-    this.status = clip.status;
+    super(clip);
     // this.customFFMPEGCommand = clip.customFFMPEGCommand;
     this._id = clip._id;
     this.percentDone = 0;
