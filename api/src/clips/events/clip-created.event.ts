@@ -1,4 +1,4 @@
-import { ClipDocument } from './../schema/clip.schema';
+import { ClipDocument } from '../schema/clip.schema';
 import { Injectable } from '@nestjs/common';
 import { ChildProcess } from 'child_process';
 import { ObjectId } from 'mongoose';
