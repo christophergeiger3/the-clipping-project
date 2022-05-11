@@ -1,11 +1,11 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateClipDto } from './dto/create-clip.dto';
-import { UpdateClipDto } from './dto/update-clip.dto';
 import { Clip, ClipDocument } from './schema/clip.schema';
 import ClipCreatedEvent from './events/clip-created.event';
+import { AnalyzeService } from 'src/analyze/analyze.service';
 
 @Injectable()
 export class ClipsService {
@@ -14,6 +14,7 @@ export class ClipsService {
 
   constructor(
     @InjectModel(Clip.name) private readonly clipModel: Model<Clip>,
+    private readonly analyzeService: AnalyzeService,
     private eventEmitter: EventEmitter2,
   ) {}
 
