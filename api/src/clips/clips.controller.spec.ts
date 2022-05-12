@@ -1,14 +1,24 @@
+import { AnalyzeModule } from '../analyze/analyze.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ClipsController } from './clips.controller';
+import { ClipsModule } from './clips.module';
 import { ClipsService } from './clips.service';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { MongooseModule } from '@nestjs/mongoose';
 
 describe('ClipsController', () => {
   let controller: ClipsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ClipsController],
-      providers: [ClipsService],
+      imports: [
+        ClipsModule,
+        AnalyzeModule,
+        EventEmitterModule.forRoot(),
+        // TODO: avoid database connection during testing
+        // TODO: fix improper teardown
+        MongooseModule.forRoot('mongodb://localhost/the-clipping-project-test'),
+      ],
     }).compile();
 
     controller = module.get<ClipsController>(ClipsController);

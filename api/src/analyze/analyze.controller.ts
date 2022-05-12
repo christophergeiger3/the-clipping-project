@@ -1,8 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AnalyzeService } from './analyze.service';
 import { AnalyzeUrlDto } from './dto/analyze-url.dto';
 
+@ApiTags('analyze')
 @Controller('analyze')
 export class AnalyzeController {
   constructor(private readonly analyzeService: AnalyzeService) {}
