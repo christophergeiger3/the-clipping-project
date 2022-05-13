@@ -36,7 +36,7 @@ class ClipCreatedListener {
     clip.child = spawn('ffmpeg', clip.args, {
       stdio: ['ignore', 'pipe', 'pipe', 'pipe'],
     });
-    Logger.log('Spawned child process');
+    Logger.log(`Spawned child process for ${clip.analyzedUrl}`);
 
     clip.child.stdio[3]?.on('data', (data) => {
       // includes various progress related info -- we only care about frame number (frame=)

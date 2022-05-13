@@ -31,11 +31,11 @@ export class CreateClipDto {
   })
   readonly output: string;
 
-  @ApiProperty({
-    description: 'Custom FFMPEG command',
-    example: '-c:v libx264 -c:a aac',
-  })
-  @IsOptional()
-  @IsString()
-  readonly customFFMPEGCommand?: string;
+  // @ApiProperty({
+  //   description: 'Custom FFMPEG command',
+  //   example: '-c:v libx264 -c:a aac',
+  // })
+  // @IsOptional()
+  // @IsString()
+  // readonly customFFMPEGCommand?: string;
 }

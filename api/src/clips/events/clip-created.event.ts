@@ -30,7 +30,7 @@ class ClipCreatedEvent extends Clip {
       '-to',
       `${this.end}ms`,
       '-i',
-      `${this.url}`,
+      `${this.analyzedUrl}`,
       '-hide_banner',
       '-loglevel',
       'info',

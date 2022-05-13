@@ -25,10 +25,14 @@ export class Clip {
   @Prop()
   status: string;
 
+  @Prop()
+  analyzedUrl: string;
+
   constructor(clip?: Clip) {
     if (clip) {
       this.start = clip.start;
       this.end = clip.end;
+      this.analyzedUrl = clip.analyzedUrl;
       this.url = clip.url;
       this.output = clip.output;
       this.status = clip.status;
