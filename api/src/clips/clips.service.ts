@@ -21,7 +21,8 @@ export class ClipsService {
   async create(createClipDto: CreateClipDto): Promise<Clip> {
     const createdClip = await this.clipModel.create(createClipDto);
 
-    // TODO: Insert analyze endpoint here to grab actual URL from youtube-dl
+    // Insert analyze endpoint here to grab actual URL from youtube-dl
+    createdClip.url = (await this.analyzeService.analyze(createdClip.url))[0];
 
     Logger.log('Emitting event clip.created');
     this.eventEmitter.emit('clip.created', new ClipCreatedEvent(createdClip));
