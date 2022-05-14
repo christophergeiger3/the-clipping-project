@@ -12,10 +12,12 @@ describe('AppController', () => {
     }).compile();
   });
 
-  describe('getHello', () => {
-    it('should return "Hello World!"', () => {
+  describe('getStatus', () => {
+    it('should return "The clips API is up and running!"', () => {
       const appController = app.get<AppController>(AppController);
-      expect(appController.getHello()).toBe('Hello World!');
+      expect(appController.getStatus()).toBe(
+        'The clips API is up and running!',
+      );
     });
   });
 });
