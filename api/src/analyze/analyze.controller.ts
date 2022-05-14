@@ -13,7 +13,8 @@ export class AnalyzeController {
   @ApiBody({ type: AnalyzeUrlDto })
   @ApiResponse({
     status: 200,
-    description: 'The records have been successfully returned',
+    description: `Returns an array of URLs, which may correspond to multiple audio/video
+    tracks for the same video. Often there is only a single URL result at index 0.`,
     type: String,
     isArray: true,
   })
