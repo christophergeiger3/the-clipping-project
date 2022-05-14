@@ -7,6 +7,7 @@ import { Clip, ClipDocument } from './schema/clip.schema';
 import ClipCreatedEvent from './events/clip-created.event';
 import { AnalyzeService } from '../analyze/analyze.service';
 import { unlinkSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class ClipsService {
@@ -24,6 +25,8 @@ export class ClipsService {
       ...createClipDto,
       // Call the analyze service here to grab actual URL from youtube-dl
       analyzedUrl: (await this.analyzeService.analyze(createClipDto.url))[0],
+      // Set the output file to land in the videos directory (may need some tweaking eventually)
+      output: join('videos', createClipDto.output),
     });
 
     Logger.log(`Emitting event clip.created for ${createdClip.url}`);
