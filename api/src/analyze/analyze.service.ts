@@ -12,6 +12,7 @@ export class AnalyzeService {
    */
   async analyze(url: string): Promise<string[]> {
     const { stdout, stderr } = await exec(
+      // TODO: consider changing to -f worst for better load times (or better yet add toggle for qualities)
       `youtube-dl -f best --get-url '${url}'`,
     );
 
