@@ -100,6 +100,11 @@ export class ClipsController {
   @Sse(':id/progress')
   @ApiOperation({ summary: 'Stream progress of a clip' })
   @ApiParam({ name: 'id', type: String })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Returns percent from 0 - 100 or -1 if clip not currently active (SSE)',
+  })
   progress(@Param('id') id: ObjectId): Observable<MessageEvent> {
     return interval(ONE_SECOND).pipe(
       map(

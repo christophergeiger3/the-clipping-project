@@ -6,6 +6,7 @@ import { CreateClipDto } from './dto/create-clip.dto';
 import { Clip, ClipDocument } from './schema/clip.schema';
 import ClipCreatedEvent from './events/clip-created.event';
 import { AnalyzeService } from '../analyze/analyze.service';
+import { unlinkSync } from 'fs';
 
 @Injectable()
 export class ClipsService {
@@ -49,31 +50,65 @@ export class ClipsService {
     });
   }
 
-  async remove(id: ObjectId): Promise<ClipDocument> {
-    this.setInactive(id);
-    return this.clipModel.findByIdAndDelete(id);
+  deleteFile(file: string): void {
+    Logger.log(`Deleting file ${file}`);
+    try {
+      unlinkSync(file);
+    } catch (err) {
+      Logger.error(`Error deleting file ${file}`);
+      Logger.error(err);
+    }
   }
 
+  /** Kills clip.child if the clip is active */
+  forceStopClipTranscode(id: ObjectId | string): void {
+    const clip = this.findActiveClipById(id);
+    if (clip) {
+      Logger.log(`Force stopping clip ${id}`);
+      clip.child.kill();
+    }
+  }
+
+  async remove(id: ObjectId): Promise<ClipDocument> {
+    const clip = await this.clipModel.findByIdAndDelete(id);
+    this.forceStopClipTranscode(id);
+    this.setInactive(id);
+    this.deleteFile(clip.output);
+    return clip;
+  }
+
+  /** @returns Index or -1 if clip not found */
+  findActiveClipIndexById(id: ObjectId | string): number {
+    if (typeof id !== 'string') {
+      id = id.toString();
+    }
+    return this.activeClips.findIndex((c) => c._id.toString() === id);
+  }
+
+  findActiveClipById(id: ObjectId | string): ClipCreatedEvent | undefined {
+    const index = this.findActiveClipIndexById(id);
+    if (index === -1) {
+      return undefined;
+    }
+    return this.activeClips[index];
+  }
+
+  /** Add clip to activeClips list */
   setActive(clip: ClipCreatedEvent): void {
     this.activeClips.push(clip);
   }
 
+  /** Remove clip from activeClips list */
   setInactive(id: ObjectId | string): void {
-    if (typeof id !== 'string') {
-      id = id.toString();
-    }
-
-    const index = this.activeClips.findIndex((c) => c._id.toString() === id);
+    const index = this.findActiveClipIndexById(id);
     if (index !== -1) {
       this.activeClips.splice(index, 1);
     }
   }
 
+  /** @returns Percent from 0 to 100 or -1 if clip not active */
   progress(id: ObjectId | string): number {
-    if (typeof id !== 'string') {
-      id = id.toString();
-    }
-    const clip = this.activeClips.find((c) => c._id.toString() === id);
+    const clip = this.findActiveClipById(id);
     return clip ? clip.percentDone : -1;
   }
 }
