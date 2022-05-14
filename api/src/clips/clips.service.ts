@@ -50,7 +50,7 @@ export class ClipsService {
     });
   }
 
-  deleteFile(file: string): void {
+  private deleteFile(file: string): void {
     Logger.log(`Deleting file ${file}`);
     try {
       unlinkSync(file);
