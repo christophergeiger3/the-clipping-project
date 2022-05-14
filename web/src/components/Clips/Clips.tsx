@@ -18,7 +18,7 @@ function useClips() {
 
   useEffect(() => {
     async function getClips(): Promise<void> {
-      const clips = (await axios.get("http://localhost:3000/clips")).data
+      const clips = (await axios.get("http://localhost:3000/clips"))
         .data as Clip[];
       setClips(clips);
     }
