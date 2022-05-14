@@ -52,4 +52,9 @@ export class ClipsService {
   async remove(id: ObjectId): Promise<ClipDocument> {
     return this.clipModel.findByIdAndDelete(id);
   }
+
+  progress(id: ObjectId): number {
+    const clip = this.activeClips.find((c) => c._id === id);
+    return clip ? clip.percentDone : -1;
+  }
 }

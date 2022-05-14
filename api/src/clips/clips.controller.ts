@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Sse,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -15,6 +16,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
+import { interval, map, Observable } from 'rxjs';
 import { ClipsService } from './clips.service';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
@@ -90,5 +92,20 @@ export class ClipsController {
   @ApiParam({ name: 'id', type: String })
   remove(@Param('id') id: ObjectId) {
     return this.clipsService.remove(id);
+  }
+
+  // TODO: Pass MessageEvent generic type
+  @Sse(':id/progress')
+  @ApiOperation({ summary: 'Stream progress of a clip' })
+  @ApiParam({ name: 'id', type: String })
+  progress(@Param('id') id: ObjectId): Observable<MessageEvent> {
+    return interval(1000).pipe(
+      map(
+        () =>
+          ({
+            data: { progress: this.clipsService.progress(id) },
+          } as MessageEvent),
+      ),
+    );
   }
 }
