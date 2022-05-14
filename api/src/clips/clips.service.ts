@@ -50,6 +50,7 @@ export class ClipsService {
   }
 
   async remove(id: ObjectId): Promise<ClipDocument> {
+    this.setInactive(id);
     return this.clipModel.findByIdAndDelete(id);
   }
 
@@ -57,8 +58,12 @@ export class ClipsService {
     this.activeClips.push(clip);
   }
 
-  setInactive(clip: ClipCreatedEvent): void {
-    const index = this.activeClips.findIndex((c) => c._id === clip._id);
+  setInactive(id: ObjectId | string): void {
+    if (typeof id !== 'string') {
+      id = id.toString();
+    }
+
+    const index = this.activeClips.findIndex((c) => c._id.toString() === id);
     if (index !== -1) {
       this.activeClips.splice(index, 1);
     }

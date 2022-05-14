@@ -78,7 +78,7 @@ class ClipCreatedListener {
         Logger.error(`exit, error: ${clip.output}`);
       }
       await this.clipsService.update(clip._id, { status: clip.status });
-      this.clipsService.setInactive(clip);
+      this.clipsService.setInactive(clip._id);
       this.eventEmitter.emit('clip.exit', { clip });
     });
   }
