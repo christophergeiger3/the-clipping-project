@@ -18,9 +18,9 @@ export default function ClipCard({ clip }: { clip: Clip }) {
       `http://localhost:3000/clips/${clip._id}`
     );
     console.log(response.data);
-    if (response.data.message === "success") {
-      console.log("deleted clip", clip._id);
-    }
+    // if (response.data.message === "success") {
+    //   console.log("deleted clip", clip._id);
+    // }
     setIsDeleting(false);
   }, [clip._id]);
   return (

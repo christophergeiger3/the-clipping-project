@@ -66,11 +66,11 @@ export default function ClipView() {
   const handleSubmitURL = useCallback(async () => {
     // console.log(`getting video url for: ${url}`);
     setIsLoadingURL(true);
-    const ret = await axios.post(`http://localhost:3000/analyze`, {
+    const { data } = await axios.post(`http://localhost:3000/analyze`, {
       url,
     });
-    console.log(ret.data.data);
-    setVideoUrl(ret.data.data.urls[0]);
+    console.log(data[0]);
+    setVideoUrl(data[0]);
     setIsLoadingURL(false);
   }, [url]);
 
@@ -97,8 +97,8 @@ export default function ClipView() {
       output: `${title}.${extension}`,
     });
     console.log("response:", ret.data);
-    console.log(`http://localhost:3001/clips/progress/${ret.data.data._id}`);
-    handleOpenSnackbar(`Clipping to /${ret.data.data.output}`);
+    console.log(`http://localhost:3001/clips/progress/${ret.data._id}`);
+    handleOpenSnackbar(`Clipping to /${ret.data.output}`);
   }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
