@@ -396,3 +396,9 @@ Temporary Items
 # Local
 .env
 dist
+
+# Video/audio files
+**.mp4
+**.webm
+**.mp3
+**.ogg
