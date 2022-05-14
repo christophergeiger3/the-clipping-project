@@ -98,12 +98,14 @@ export default function ClipView() {
     });
     console.log("response:", ret.data);
     console.log(`http://localhost:3001/clips/progress/${ret.data._id}`);
-    handleOpenSnackbar(`Clipping to /${ret.data.output}`);
+    handleOpenSnackbar(
+      `Clipping to http://localhost:3000/${title}.${extension}`
+    );
   }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
     navigator.clipboard.writeText(
-      `http://localhost:3000/clips/${title}.${extension}`
+      `http://localhost:3000/${title}.${extension}`
     );
     handleOpenSnackbar(`Copied destination URL to clipboard`);
   }, [title, extension, handleOpenSnackbar]);
