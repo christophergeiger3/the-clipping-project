@@ -20,13 +20,9 @@ class ClipCreatedListener {
 
   @OnEvent('clip.created')
   handleClipCreatedEvent(clip: ClipCreatedEvent) {
-    Logger.log('clipCreated event received');
-    this.clipsService.activeClips.push(clip);
+    // Add clip to active clips array, to be removed when clip.child 'exit' event is emitted
+    this.clipsService.setActive(clip);
     this.process(clip);
-    this.clipsService.activeClips.splice(
-      this.clipsService.activeClips.indexOf(clip),
-      1,
-    );
   }
 
   /** FFMPEG processing pipeline */
@@ -36,7 +32,7 @@ class ClipCreatedListener {
     clip.child = spawn('ffmpeg', clip.args, {
       stdio: ['ignore', 'pipe', 'pipe', 'pipe'],
     });
-    Logger.log(`Spawned child process for ${clip.analyzedUrl}`);
+    Logger.log(`Spawned child process for ${clip.url}`);
 
     clip.child.stdio[3]?.on('data', (data) => {
       // includes various progress related info -- we only care about frame number (frame=)
@@ -82,6 +78,7 @@ class ClipCreatedListener {
         Logger.error(`exit, error: ${clip.output}`);
       }
       await this.clipsService.update(clip._id, { status: clip.status });
+      this.clipsService.setInactive(clip);
       this.eventEmitter.emit('clip.exit', { clip });
     });
   }

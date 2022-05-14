@@ -53,8 +53,22 @@ export class ClipsService {
     return this.clipModel.findByIdAndDelete(id);
   }
 
-  progress(id: ObjectId): number {
-    const clip = this.activeClips.find((c) => c._id === id);
+  setActive(clip: ClipCreatedEvent): void {
+    this.activeClips.push(clip);
+  }
+
+  setInactive(clip: ClipCreatedEvent): void {
+    const index = this.activeClips.findIndex((c) => c._id === clip._id);
+    if (index !== -1) {
+      this.activeClips.splice(index, 1);
+    }
+  }
+
+  progress(id: ObjectId | string): number {
+    if (typeof id !== 'string') {
+      id = id.toString();
+    }
+    const clip = this.activeClips.find((c) => c._id.toString() === id);
     return clip ? clip.percentDone : -1;
   }
 }
