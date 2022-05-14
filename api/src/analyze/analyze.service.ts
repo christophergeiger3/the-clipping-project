@@ -4,16 +4,25 @@ import { promisify } from 'util';
 
 const exec = promisify(callbackExec);
 
+enum QualityTypes {
+  best = 'best',
+  worst = 'worst',
+}
+
+type Quality = QualityTypes;
+
 @Injectable()
 export class AnalyzeService {
   /** Analyze a URL with youtube-dl (runs `youtube-dl -f best --get-url '${url}'` under the hood)
    *  @returns an array of URLs, since in some cases youtube-dl returns multiple
    *  separate URLs for the same video (e.g. separate audio and video tracks)
    */
-  async analyze(url: string): Promise<string[]> {
+  async analyze(
+    url: string,
+    quality: Quality = QualityTypes.best,
+  ): Promise<string[]> {
     const { stdout, stderr } = await exec(
-      // TODO: consider changing to -f worst for better load times (or better yet add toggle for qualities)
-      `youtube-dl -f best --get-url '${url}'`,
+      `youtube-dl -f ${quality} --get-url '${url}'`,
     );
 
     // TODO: handle error
