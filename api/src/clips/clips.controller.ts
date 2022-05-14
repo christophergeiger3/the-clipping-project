@@ -22,6 +22,8 @@ import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
 import { Clip } from './schema/clip.schema';
 
+const ONE_SECOND = 1000;
+
 @ApiTags('clips')
 @Controller('clips')
 export class ClipsController {
@@ -99,7 +101,7 @@ export class ClipsController {
   @ApiOperation({ summary: 'Stream progress of a clip' })
   @ApiParam({ name: 'id', type: String })
   progress(@Param('id') id: ObjectId): Observable<MessageEvent> {
-    return interval(1000).pipe(
+    return interval(ONE_SECOND).pipe(
       map(
         () =>
           ({
