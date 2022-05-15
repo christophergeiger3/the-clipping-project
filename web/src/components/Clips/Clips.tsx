@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import ClipCard from "./ClipCard";
@@ -32,11 +33,13 @@ export default function Clips() {
     [clips]
   );
 
-  return clips ? (
+  return clips?.length ? (
     <>
       {clips.map((clip) => (
         <ClipCard key={clip._id} clip={clip} onDelete={handleClipDelete} />
       ))}
     </>
-  ) : null;
+  ) : (
+    <Typography variant="h5">No clips found.</Typography>
+  );
 }
