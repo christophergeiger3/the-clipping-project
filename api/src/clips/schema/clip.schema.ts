@@ -4,6 +4,13 @@ import { Document } from 'mongoose';
 
 export type ClipDocument = Clip & Document;
 
+export enum Status {
+  Done = 'done',
+  Error = 'error',
+  Idle = 'idle',
+  Processing = 'processing',
+}
+
 @Schema({ timestamps: true })
 export class Clip {
   @Prop({ required: true })
@@ -23,7 +30,7 @@ export class Clip {
   output: string;
 
   @Prop()
-  status: string;
+  status: Status;
 
   @Prop()
   analyzedUrl: string;

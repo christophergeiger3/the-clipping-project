@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { CreateClipDto } from './dto/create-clip.dto';
-import { Clip, ClipDocument } from './schema/clip.schema';
+import { Clip, ClipDocument, Status } from './schema/clip.schema';
 import ClipCreatedEvent from './events/clip-created.event';
 import { AnalyzeService } from '../analyze/analyze.service';
 import { unlinkSync } from 'fs';
@@ -96,16 +96,23 @@ export class ClipsService {
     return this.activeClips[index];
   }
 
-  /** Add clip to activeClips list */
+  /** Add clip to activeClips list, set status to 'processing' */
   setActive(clip: ClipCreatedEvent): void {
+    this.update(clip._id, { status: Status.Processing });
     this.activeClips.push(clip);
   }
 
-  /** Remove clip from activeClips list */
-  setInactive(id: ObjectId | string): void {
+  /** Remove clip from activeClips list, set optional clip status */
+  setInactive(id: ObjectId | string, status?: Status): void {
     const index = this.findActiveClipIndexById(id);
+    const clip = this.activeClips[index];
+
     if (index !== -1) {
       this.activeClips.splice(index, 1);
+    }
+
+    if (status) {
+      this.update(clip._id, { status });
     }
   }
 

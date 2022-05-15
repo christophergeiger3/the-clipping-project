@@ -3,13 +3,7 @@ import { OnEvent, EventEmitter2 } from '@nestjs/event-emitter';
 import { spawn } from 'child_process';
 import { ClipsService } from '../clips.service';
 import ClipCreatedEvent from '../events/clip-created.event';
-
-enum Status {
-  Done = 'done',
-  Error = 'error',
-  Idle = 'idle',
-  Processing = 'processing',
-}
+import { Status } from '../schema/clip.schema';
 
 @Injectable()
 class ClipCreatedListener {
@@ -28,7 +22,6 @@ class ClipCreatedListener {
   /** FFMPEG processing pipeline */
   async process(clip: ClipCreatedEvent) {
     Logger.log('Processing clip');
-    clip.status = Status.Processing;
     clip.child = spawn('ffmpeg', clip.args, {
       stdio: ['ignore', 'pipe', 'pipe', 'pipe'],
     });
@@ -77,8 +70,7 @@ class ClipCreatedListener {
         this.eventEmitter.emit('clip.error', { clip });
         Logger.error(`exit, error: ${clip.output}`);
       }
-      await this.clipsService.update(clip._id, { status: clip.status });
-      this.clipsService.setInactive(clip._id);
+      this.clipsService.setInactive(clip._id, clip.status);
       this.eventEmitter.emit('clip.exit', { clip });
     });
   }
