@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ClipCard from "./ClipCard";
 
 export type Clip = {
@@ -13,7 +13,7 @@ export type Clip = {
   updatedAt: string;
 };
 
-function useClips() {
+export default function Clips() {
   const [clips, setClips] = useState<Clip[]>();
 
   useEffect(() => {
@@ -25,15 +25,17 @@ function useClips() {
     getClips();
   }, []);
 
-  return clips;
-}
+  const handleClipDelete = useCallback(
+    (id: string) => {
+      setClips(clips?.filter((clip) => clip._id !== id));
+    },
+    [clips]
+  );
 
-export default function Clips() {
-  const clips = useClips();
   return clips ? (
     <>
       {clips.map((clip) => (
-        <ClipCard key={clip._id} clip={clip} />
+        <ClipCard key={clip._id} clip={clip} onDelete={handleClipDelete} />
       ))}
     </>
   ) : null;

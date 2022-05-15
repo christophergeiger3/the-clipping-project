@@ -8,7 +8,13 @@ import { useCallback, useState } from "react";
 import { Clip } from "./Clips";
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
-export default function ClipCard({ clip }: { clip: Clip }) {
+export default function ClipCard({
+  clip,
+  onDelete,
+}: {
+  clip: Clip;
+  onDelete?: (id: string) => void;
+}) {
   const [isDeleting, setIsDeleting] = useState(false);
   const clipLink = `/clips/${clip._id}`;
 
@@ -18,11 +24,9 @@ export default function ClipCard({ clip }: { clip: Clip }) {
       `http://localhost:3000/clips/${clip._id}`
     );
     console.log(response.data);
-    // if (response.data.message === "success") {
-    //   console.log("deleted clip", clip._id);
-    // }
     setIsDeleting(false);
-  }, [clip._id]);
+    onDelete?.(clip._id);
+  }, [clip._id, onDelete]);
   return (
     <Card variant="outlined">
       <CardContent>
