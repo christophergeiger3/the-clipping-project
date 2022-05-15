@@ -15,29 +15,32 @@ const useEventSource = (url: string) => {
     source.onmessage = ({ data }: MessageEvent<string>) => {
       const { progress } = JSON.parse(data) as ProgressResponse;
       updateData(progress);
+      if (progress === 100 || progress === -1) {
+        source.close();
+      }
     };
   }, [url]);
 
   return data;
 };
 
-export default function Progress() {
-  const { id } = useParams<{ id: string }>();
-  const data = useEventSource(`http://localhost:3000/clips/${id}/progress`);
+export function ClipProgressBar({ id }: { id: string }) {
+  const progress = useEventSource(`http://localhost:3000/clips/${id}/progress`);
 
-  // Null response from event source means the clip is not processing
-  if (data === null) {
-    return <Typography>Done.</Typography>;
-  }
-
-  if (data === undefined) {
-    return <Typography>Loading...</Typography>;
+  if (!progress) {
+    return null;
   }
 
   return (
     <>
-      <LinearProgress variant="determinate" value={data} />
-      <Typography variant="h6">{data}%</Typography>
+      <LinearProgress variant="determinate" value={progress} />
+      <Typography variant="h6">{progress}%</Typography>
     </>
   );
+}
+
+export default function Progress() {
+  const { id } = useParams<{ id: string }>();
+
+  return id ? <ClipProgressBar id={id} /> : null;
 }

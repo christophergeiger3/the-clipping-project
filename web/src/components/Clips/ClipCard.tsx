@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useCallback, useState } from "react";
+import { ClipProgressBar } from "../Progress";
 import { Clip } from "./Clips";
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
@@ -42,6 +43,9 @@ export default function ClipCard({
         <Typography color="text.secondary">{clip.status}</Typography>
         {/* Temporary, for debugging: */}
         <Typography>{clip._id}</Typography>
+        {clip.status === "processing" ? (
+          <ClipProgressBar id={clip._id} />
+        ) : null}
       </CardContent>
       <CardActions>
         <LoadingButton
