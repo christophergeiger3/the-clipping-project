@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://openclipart.org/image/800px/249421" width="120" alt="TCP Logo" />
 </p>
-<p align="center">An easy to use web based clipping tool.</p>
+<p align="center">An easy to use web based clipping tool; TCP generates and hosts shareable video clips. </p>
 
 ## Getting Started
 
