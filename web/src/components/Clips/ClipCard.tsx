@@ -17,7 +17,8 @@ export default function ClipCard({
   onDelete?: (id: string) => void;
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const clipLink = `/clips/${clip._id}`;
+  // TODO: store link to clip in clip schema
+  const clipLink = `http://localhost:3000/${clip.output.split("/").pop()}`;
 
   const deleteClip = useCallback(async () => {
     setIsDeleting(true);
