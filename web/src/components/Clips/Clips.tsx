@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import ClipCard from "./ClipCard";
@@ -34,8 +34,12 @@ export default function Clips() {
     [clips]
   );
 
+  if (!clips) {
+    return <CircularProgress />;
+  }
+
   // TODO: update clips array somehow when a new clip has been created
-  return clips?.length ? (
+  return clips.length ? (
     <>
       {clips.map((clip) => (
         <ClipCard key={clip._id} clip={clip} onDelete={handleClipDelete} />
