@@ -23,6 +23,7 @@ export default function Clips() {
         .data as Clip[];
       setClips(clips);
     }
+    getClips();
     const timer = setInterval(getClips, 5000);
     return () => clearInterval(timer);
   }, []);
