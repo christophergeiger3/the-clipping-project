@@ -1,4 +1,9 @@
-# To run:
+<p align="center">
+  <img src="https://openclipart.org/image/800px/249421" width="120" alt="TCP Logo" />
+</p>
+<p align="center">An easy to use web based clipping tool.</p>
+
+## Getting Started
 
 First start mongodb:
 ```
