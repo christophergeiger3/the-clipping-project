@@ -31,6 +31,11 @@ export function ClipProgressBar({ id }: { id: string }) {
     return null;
   }
 
+  if (progress === -1) {
+    // Return loading bar (clip is not active)
+    return <LinearProgress />;
+  }
+
   return (
     <>
       <LinearProgress variant="determinate" value={progress} />
