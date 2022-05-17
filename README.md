@@ -29,3 +29,6 @@ cd web
 yarn
 yarn start
 ```
+
+## 🐛 Bugs, feedback, contributions
+Leave no question unasked! Feel free to drop any feedback or thought under the [issues tab](https://github.com/christophergeiger3/the-clipping-project/issues).
