@@ -3,6 +3,8 @@
 </p>
 <p align="center">An easy to use self-hosted clipping tool; TCP generates and hosts shareable video clips. </p>
 
+## 📽️ Demo
+
 ## ⚙️ Installation
 The Clipping Project may be installed either via Docker or by running each service independently (local).
 ### 🐋 Docker
