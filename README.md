@@ -21,7 +21,7 @@ Launch the app API:
 ```bash
 cd api
 npm install
-npm run start
+npm start
 ```
 Open a new terminal and launch the web front-end:
 ```bash
