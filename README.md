@@ -13,7 +13,7 @@ Make sure [Docker is installed](https://docs.docker.com/get-docker/) and the Doc
 docker compose up
 ```
 ### 🏠 Local
-Make sure youtube-dl, ffmpeg, and mongodb are installed. Start the mongodb service:
+Make sure youtube-dl, ffmpeg, npm, yarn and mongodb are installed. Start the mongodb service:
 ```bash
 sudo systemctl start mongodb.service
 ```
