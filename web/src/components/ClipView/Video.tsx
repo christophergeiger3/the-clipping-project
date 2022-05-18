@@ -12,14 +12,13 @@ function convertSecondsToTimestamp(seconds: number) {
   return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
 }
 
-// TODO:
-// button to seek to end of clip
-// button to seek to start of clip
-// play/pause button
-// form to seek to a specific time
-// loop video to start on end
-// loading indicator while post request is loading
-// use milliseconds instead of seconds for precision
+// TODO: Change skip buttons to control playback seeking, not slider controls
+// TODO: Slider stop does not precisely match the end of the clip
+// TODO: Add toggle to enable clip looping at clip end
+// TODO: (backend) clip output value is videos/outputfilename.mp4 but should be outputfilename.mp4
+// TODO: on /clips endpoint the analyzed URL sometimes appears, not the pre-analysis URL
+// TODO: (backend) rename url in clip schema
+// TODO: Add more granular seeking control for milliseconds
 export default function Video({
   src,
   startEndTimes,
@@ -67,15 +66,21 @@ export default function Video({
     ]);
   }, [setStartEndTimes, duration]);
 
-  const handleSetStartZero = useCallback(() => {
-    const [, end] = startEndRef.current;
-    setStartEndTimes([0, end]);
-  }, [setStartEndTimes]);
+  const handleJumpToClipStart = useCallback(() => {
+    const [start] = startEndRef.current;
+    if (!playerRef.current) {
+      return;
+    }
+    playerRef.current.currentTime(start);
+  }, []);
 
-  const handleSetEndDuration = useCallback(() => {
-    const [start, end] = startEndRef.current;
-    setStartEndTimes([start, duration || end]);
-  }, [setStartEndTimes, duration]);
+  const handleJumpToClipEnd = useCallback(() => {
+    const [, end] = startEndRef.current;
+    if (!playerRef.current) {
+      return;
+    }
+    playerRef.current.currentTime(end);
+  }, []);
 
   const options = useMemo(() => {
     return {
@@ -215,7 +220,7 @@ export default function Video({
           <Button
             variant="contained"
             color="primary"
-            onClick={handleSetStartZero}
+            onClick={handleJumpToClipStart}
             startIcon={<SkipPrevious />}
             sx={{ marginRight: 1 }}
           />
@@ -238,7 +243,7 @@ export default function Video({
           <Typography sx={{ marginRight: 1 }}>Right: </Typography>
           <Button
             variant="contained"
-            onClick={handleSetEndDuration}
+            onClick={handleJumpToClipEnd}
             color="primary"
             startIcon={<SkipNext />}
             sx={{ marginRight: 1 }}
