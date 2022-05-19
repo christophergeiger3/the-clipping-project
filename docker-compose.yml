@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  web:  # AKA client
+    container_name: tcp-web
+    stdin_open: true
+    build: ./web
+    depends_on:
+      - server
+    volumes:
+      - ./web:/app/web
+      - /app/web/node_modules
+    ports:
+      - 3001:3001
+
+  api:
+    container_name: tcp-api
+    stdin_open: true
+    build: ./api
+    depends_on:
+      - mongo
+    volumes:
+      - ./api:/app/api
+      - /app/api/node_modules
+    ports:
+      - 3000:3000
+
+  mongo:
+    image: mongo:latest
+    container_name: tcp-database
+    volumes:
+      - mongo-data:/data/db
+    # environment:
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=root
+      # - MONGO_INITDB_DATABASE=local
+    # ports:
+    #   - 27017:27017
+
+volumes:
+  mongo-data:

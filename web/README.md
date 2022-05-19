@@ -1,3 +1,9 @@
+# Docker
+```
+docker build -t tcp-web .
+docker run --name tcp-web tcp-web
+```
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
