@@ -1,8 +1,8 @@
 {
-  "name": "nest-typescript-starter",
+  "name": "tcp-api",
   "private": true,
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "description": "API for The Clipping Project",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
