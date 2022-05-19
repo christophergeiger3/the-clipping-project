@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClipsModule } from './clips/clips.module';
@@ -12,9 +13,10 @@ import { join } from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(), // for .env files
     ClipsModule,
     EventEmitterModule.forRoot(),
-    MongooseModule.forRoot('mongodb://localhost/the-clipping-project'),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
     AnalyzeModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'videos'),
