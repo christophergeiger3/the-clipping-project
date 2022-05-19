@@ -1,6 +1,8 @@
 FROM node:lts-alpine
 
-# TODO: install ffmpeg and youtube-dl
+# Install youtube-dl and ffmpeg
+RUN apk add --no-cache youtube-dl
+RUN apk add --no-cache ffmpeg
 
 WORKDIR /api
 
