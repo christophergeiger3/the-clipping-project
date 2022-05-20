@@ -93,14 +93,6 @@ export default function Video({
   }, [src]);
 
   useEffect(() => {
-    // const options = {
-    //   autoplay: true,
-    //   controls: true,
-    //   responsive: true,
-    //   fluid: true,
-    //   sources: [{ type: "video/mp4", src }], // TODO: fix me, types hack
-    // };
-
     // make sure Video.js player is only initialized once
     if (!playerRef.current) {
       const videoElement = videoRef.current;
@@ -157,31 +149,35 @@ export default function Video({
       const player = playerRef.current;
 
       if (activeThumb === 0) {
-        // setStartEndTimes(newStartEndTimes as number[]);
         setStartEndTimes([
           Math.min(newStartEndTimes[0], startEndTimes[1] - MIN_CLIP_DURATION),
           startEndTimes[1],
         ]);
+        if (player) {
+          player.currentTime(newStartEndTimes[0]);
+        }
       } else {
-        // setStartEndTimes([start, Math.max(end + MIN_DURATION)]);
         setStartEndTimes([
           startEndTimes[0],
           Math.max(newStartEndTimes[1], startEndTimes[0] + MIN_CLIP_DURATION),
         ]);
+        if (player) {
+          player.currentTime(newStartEndTimes[1]);
+        }
       }
 
-      if (startEndTimes && player) {
-        const [startTime, endTime] = startEndTimes;
-        const currentTime = player.currentTime();
-        if (currentTime > endTime) {
-          player.pause();
-          player.currentTime(endTime);
-        }
-        if (currentTime < startTime) {
-          player.pause();
-          player.currentTime(startTime);
-        }
-      }
+      // if (startEndTimes && player) {
+      //   const [startTime, endTime] = startEndTimes;
+      //   const currentTime = player.currentTime();
+      //   if (currentTime > endTime) {
+      //     player.pause();
+      //     player.currentTime(endTime);
+      //   }
+      //   if (currentTime < startTime) {
+      //     player.pause();
+      //     player.currentTime(startTime);
+      //   }
+      // }
     },
     [setStartEndTimes, startEndTimes, playerRef]
   );
