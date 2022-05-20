@@ -31,6 +31,10 @@ cd web
 yarn
 yarn start
 ```
+## 🔨 API
+To access the docs for TCP's API, navigate to the `/api` route of your API's URL (default: http://localhost:3000/api).
+
+TCP's API is self-documented by Swagger/OpenAPI through NestJS.
 
 ## 🐛 Bugs, feedback, contributions
 Leave no question unasked! Feel free to drop any feedback or thoughts under the [issues tab](https://github.com/christophergeiger3/the-clipping-project/issues).
