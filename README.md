@@ -10,6 +10,7 @@ The Clipping Project may be installed either via Docker or by running each servi
 ### 🐋 Docker
 Make sure [Docker is installed](https://docs.docker.com/get-docker/) and the Docker service is running.
 ```bash
+docker compose build
 docker compose up
 ```
 ### 🏠 Local
