@@ -33,7 +33,7 @@ yarn start
 ```
 
 ## 🌲 Environment
-TCP ships with a `.env.example` file which gives an example of some configuration options you can tweak, such as the port the API that TCP will run on (`API_PORT`) and the port that TCP's web client will run on (`WEB_PORT`).
+TCP ships with a `.env.example` file which gives an example of some configuration options you can tweak, such as the port the API that TCP's API will run on (`API_PORT`) and the port that TCP's web client will run on (`WEB_PORT`).
 
 To configure TCP, copy the example env file to `.env` in the same directory:
 ```bash
