@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import videojs, { VideoJsPlayer } from "video.js";
 import "video.js/dist/video-js.css";
-import { Button, Grid, Slider, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Slider,
+  Typography,
+} from "@mui/material";
 import { SkipNext, SkipPrevious } from "@mui/icons-material";
 
 const MIN_CLIP_DURATION = 1;
@@ -38,6 +45,15 @@ export default function Video({
       onUpdateStartEndTimes([start, end]);
     },
     [onUpdateStartEndTimes]
+  );
+
+  const [willSeekOnSliderUpdate, setWillSeekOnSliderUpdate] = useState(true);
+
+  const handleWillSeekOnSliderUpdateChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setWillSeekOnSliderUpdate(event.target.checked);
+    },
+    []
   );
 
   const handleIncrementStart = useCallback(() => {
@@ -113,6 +129,7 @@ export default function Video({
 
   useEffect(() => {
     const player = playerRef.current;
+
     if (player) {
       player.on("timeupdate", () => {
         const currentTime = player.currentTime();
@@ -153,7 +170,7 @@ export default function Video({
           Math.min(newStartEndTimes[0], startEndTimes[1] - MIN_CLIP_DURATION),
           startEndTimes[1],
         ]);
-        if (player) {
+        if (player && willSeekOnSliderUpdate) {
           player.currentTime(newStartEndTimes[0]);
         }
       } else {
@@ -161,7 +178,7 @@ export default function Video({
           startEndTimes[0],
           Math.max(newStartEndTimes[1], startEndTimes[0] + MIN_CLIP_DURATION),
         ]);
-        if (player) {
+        if (player && willSeekOnSliderUpdate) {
           player.currentTime(newStartEndTimes[1]);
         }
       }
@@ -179,7 +196,7 @@ export default function Video({
       //   }
       // }
     },
-    [setStartEndTimes, startEndTimes, playerRef]
+    [setStartEndTimes, startEndTimes, playerRef, willSeekOnSliderUpdate]
   );
 
   // Dispose the Video.js player when the functional component unmounts
@@ -211,6 +228,17 @@ export default function Video({
             valueLabelDisplay="auto"
           />
         ) : null}
+        <Grid pb={2} container={true}>
+          <FormControlLabel
+            label="Seek on slider movement"
+            control={
+              <Checkbox
+                checked={willSeekOnSliderUpdate}
+                onChange={handleWillSeekOnSliderUpdateChange}
+              />
+            }
+          />
+        </Grid>
         <Grid pb={2} container={true}>
           <Typography sx={{ marginRight: 1 }}>Left: </Typography>
           <Button
