@@ -33,13 +33,17 @@ yarn start
 ```
 
 ## 🌲 Environment
-TCP ships with a `.env.example` file which gives an example of some configuration options you can tweak, such as the port the API for TCP will run on (`API_PORT`) and the port of the web client (`WEB_PORT`).
+TCP ships with a `.env.example` file which gives an example of some configuration options you can tweak, such as the port the API that TCP will run on (`API_PORT`) and the port that TCP's web client will run on (`WEB_PORT`).
 
 To configure TCP, copy the example env file to `.env` in the same directory:
 ```bash
 cp .env.example .env
 ```
 then edit the `.env` file as you see fit.
+If you're running docker, you may need to rebuild your docker images before starting your containers:
+```bash
+docker compose build
+```
 
 ## 🛠️ API
 To access the docs for TCP's API, navigate to the `/api` route of your API's URL (default: http://localhost:3000/api).
