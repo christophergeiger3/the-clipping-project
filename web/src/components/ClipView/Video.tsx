@@ -1,18 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import videojs, { VideoJsPlayer } from "video.js";
 import "video.js/dist/video-js.css";
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Slider,
-  Typography,
-} from "@mui/material";
-import { SkipNext, SkipPrevious } from "@mui/icons-material";
+import { Grid, Slider } from "@mui/material";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
+import VideoControlPanel from "./VideoControlPanel";
 
-const MIN_CLIP_DURATION = 1000;
+export const MIN_CLIP_DURATION = 1000;
 
 // TODO: Slider stop does not precisely match the end of the clip
 // TODO: Add toggle to enable clip looping at clip end
@@ -23,6 +16,7 @@ const MIN_CLIP_DURATION = 1000;
 // TODO: Swap slider to use seconds instead of milliseconds when preciseToMilliseconds is false (lower granularity)
 // TODO: Rework styling of "Left:" and "Right:" labels
 // TODO: use 'worst' quality for preview, and 'best' quality for output (makes significant difference)
+// TODO: run docker in production by default
 export default function Video({
   src,
   startEndTimes,
@@ -47,79 +41,17 @@ export default function Video({
   const [willSeekOnSliderUpdate, setWillSeekOnSliderUpdate] = useState(true);
   const [isPreciseToMilliseconds, setIsPreciseToMilliseconds] = useState(false);
 
-  const handleWillSeekOnSliderUpdateChange = useCallback(
+  const handleCheckboxChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setWillSeekOnSliderUpdate(event.target.checked);
+      const { name, checked } = event.target;
+      if (name === "willSeekOnSliderUpdate") {
+        setWillSeekOnSliderUpdate(checked);
+      } else if (name === "isPreciseToMilliseconds") {
+        setIsPreciseToMilliseconds(checked);
+      }
     },
-    []
+    [setWillSeekOnSliderUpdate, setIsPreciseToMilliseconds]
   );
-
-  const handleIsPreciseToMillisecondsChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setIsPreciseToMilliseconds(event.target.checked);
-    },
-    []
-  );
-
-  const handleIncrementStart = useCallback(() => {
-    const [start, end] = startEndRef.current;
-    setStartEndTimes([Math.max(0, start + MIN_CLIP_DURATION), end]);
-  }, [setStartEndTimes]);
-
-  const handleDecrementStart = useCallback(() => {
-    const [start, end] = startEndRef.current;
-    setStartEndTimes([Math.max(0, start - MIN_CLIP_DURATION), end]);
-  }, [setStartEndTimes]);
-
-  const handleIncrementEnd = useCallback(() => {
-    const [start, end] = startEndRef.current;
-    setStartEndTimes([
-      start,
-      Math.min(end + MIN_CLIP_DURATION, duration || end + MIN_CLIP_DURATION),
-    ]);
-  }, [setStartEndTimes, duration]);
-
-  const handleDecrementEnd = useCallback(() => {
-    const [start, end] = startEndRef.current;
-    setStartEndTimes([
-      start,
-      Math.min(end - MIN_CLIP_DURATION, duration || end - MIN_CLIP_DURATION),
-    ]);
-  }, [setStartEndTimes, duration]);
-
-  const handleJumpToClipStart = useCallback(() => {
-    const [start] = startEndRef.current;
-    if (!playerRef.current) {
-      return;
-    }
-    playerRef.current.currentTime(start / 1000);
-  }, []);
-
-  const handleJumpToClipEnd = useCallback(() => {
-    const [, end] = startEndRef.current;
-    if (!playerRef.current) {
-      return;
-    }
-    playerRef.current.currentTime(end / 1000);
-  }, []);
-
-  const handleSetStartToCurrentTime = useCallback(() => {
-    const player = playerRef.current;
-    if (!player) {
-      return;
-    }
-    const currentTime = Math.floor(player.currentTime() * 1000);
-    setStartEndTimes([currentTime, startEndRef.current[1]]);
-  }, [setStartEndTimes]);
-
-  const handleSetEndToCurrentTime = useCallback(() => {
-    const player = playerRef.current;
-    if (!player) {
-      return;
-    }
-    const currentTime = Math.floor(player.currentTime() * 1000);
-    setStartEndTimes([startEndRef.current[0], currentTime]);
-  }, [setStartEndTimes]);
 
   const convertNumberToTimestamp = useMemo(
     () => (timestamp: number) => {
@@ -134,7 +66,7 @@ export default function Video({
       controls: true,
       // responsive: true,
       fluid: true,
-      sources: [{ type: "video/mp4", src }], // TODO: fix me, types hack
+      sources: [{ type: "video/mp4", src }],
     };
   }, [src]);
 
@@ -245,92 +177,15 @@ export default function Video({
             valueLabelDisplay="auto"
           />
         ) : null}
-        <Grid pb={2} container={true}>
-          <FormControlLabel
-            label="Seek on slider movement"
-            control={
-              <Checkbox
-                checked={willSeekOnSliderUpdate}
-                onChange={handleWillSeekOnSliderUpdateChange}
-              />
-            }
-          />
-          <FormControlLabel
-            label="Precise to milliseconds"
-            control={
-              <Checkbox
-                checked={isPreciseToMilliseconds}
-                onChange={handleIsPreciseToMillisecondsChange}
-              />
-            }
-          />
-        </Grid>
-        <Grid pb={2} container={true}>
-          <Typography sx={{ marginRight: 1 }}>Left: </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleJumpToClipStart}
-            startIcon={<SkipPrevious />}
-            sx={{ marginRight: 1 }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleDecrementStart}
-            color="primary"
-            sx={{ marginRight: 1 }}
-          >
-            -{MIN_CLIP_DURATION / 1000} sec
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleIncrementStart}
-            color="primary"
-            sx={{ marginRight: 1 }}
-          >
-            +{MIN_CLIP_DURATION / 1000} sec
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleSetStartToCurrentTime}
-            color="primary"
-            sx={{ marginRight: 1 }}
-          >
-            {`Set to current time`}
-          </Button>
-          <Typography sx={{ marginRight: 1 }}>Right: </Typography>
-          <Button
-            variant="contained"
-            onClick={handleJumpToClipEnd}
-            color="primary"
-            startIcon={<SkipNext />}
-            sx={{ marginRight: 1 }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleDecrementEnd}
-            color="primary"
-            sx={{ marginRight: 1 }}
-          >
-            -{MIN_CLIP_DURATION / 1000} sec
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleIncrementEnd}
-            color="primary"
-            sx={{ marginRight: 1 }}
-          >
-            +{MIN_CLIP_DURATION / 1000} sec
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleSetEndToCurrentTime}
-            color="primary"
-            sx={{ marginRight: 1 }}
-          >
-            {`Set to current time`}
-          </Button>
-        </Grid>
+        <VideoControlPanel
+          playerRef={playerRef}
+          startEndRef={startEndRef}
+          setStartEndTimes={setStartEndTimes}
+          duration={duration}
+          onCheckboxChange={handleCheckboxChange}
+          willSeekOnSliderUpdate={willSeekOnSliderUpdate}
+          isPreciseToMilliseconds={isPreciseToMilliseconds}
+        />
       </Grid>
     </>
   );
