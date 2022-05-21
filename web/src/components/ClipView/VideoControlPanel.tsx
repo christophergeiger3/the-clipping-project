@@ -123,7 +123,7 @@ export default function VideoControlPanel({
         />
       </Grid>
       <Grid pb={2} container={true}>
-        <Grid item={true} xs={6}>
+        <Grid item={true} xs={12} lg={6}>
           <Typography sx={{ marginRight: 1 }}>Left: </Typography>
           <Button
             name="jumpToClipStart"
@@ -158,7 +158,7 @@ export default function VideoControlPanel({
             {`Set to current time`}
           </Button>
         </Grid>
-        <Grid item={true} xs={6}>
+        <Grid item={true} xs={12} lg={6}>
           <Typography sx={{ marginRight: 1 }}>Right: </Typography>
           <Button
             variant="contained"
