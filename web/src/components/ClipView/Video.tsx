@@ -22,6 +22,7 @@ const MIN_CLIP_DURATION = 1000;
 // TODO: Swap -1sec and +1sec toggles to -100ms and +100ms when preciseToMilliseconds is true
 // TODO: Swap slider to use seconds instead of milliseconds when preciseToMilliseconds is false (lower granularity)
 // TODO: Rework styling of "Left:" and "Right:" labels
+// TODO: use 'worst' quality for preview, and 'best' quality for output (makes significant difference)
 export default function Video({
   src,
   startEndTimes,
