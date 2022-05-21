@@ -7,6 +7,7 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { ClipProgressBar } from "../Progress";
 import { Clip } from "./Clips";
+import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
 export default function ClipCard({
@@ -39,7 +40,8 @@ export default function ClipCard({
           {clip.url}
         </Typography>
         <Typography color="text.secondary">
-          {clip.start} - {clip.end}
+          {convertMillisecondsToTimestamp(clip.start)} -{" "}
+          {convertMillisecondsToTimestamp(clip.end)}
         </Typography>
         <Typography color="text.secondary">{clip.status}</Typography>
         {/* Temporary, for debugging: */}

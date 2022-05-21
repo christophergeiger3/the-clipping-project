@@ -10,29 +10,9 @@ import {
   Typography,
 } from "@mui/material";
 import { SkipNext, SkipPrevious } from "@mui/icons-material";
+import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 
 const MIN_CLIP_DURATION = 1000;
-
-function convertSecondsToTimestamp(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
-  const secondsLeft = seconds % 60;
-  return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
-}
-
-function convertMillisecondsToSecondsTimestamp(
-  milliseconds: number,
-  preciseToMilliseconds = true
-) {
-  if (preciseToMilliseconds) {
-    return (
-      convertSecondsToTimestamp(Math.floor(milliseconds / 1000)) +
-      "." +
-      (milliseconds % 1000)
-    );
-  }
-  const seconds = Math.floor(milliseconds / 1000);
-  return convertSecondsToTimestamp(seconds);
-}
 
 // TODO: Change skip buttons to control playback seeking, not slider controls
 // TODO: Slider stop does not precisely match the end of the clip
@@ -40,7 +20,7 @@ function convertMillisecondsToSecondsTimestamp(
 // TODO: (backend) clip output value is videos/outputfilename.mp4 but should be outputfilename.mp4
 // TODO: on /clips endpoint the analyzed URL sometimes appears, not the pre-analysis URL
 // TODO: (backend) rename url in clip schema
-// TODO: Set -1sec and +1sec toggles to -100ms and +100ms when preciseToMilliseconds is true
+// TODO: Swap -1sec and +1sec toggles to -100ms and +100ms when preciseToMilliseconds is true
 // TODO: Swap slider to use seconds instead of milliseconds when preciseToMilliseconds is false (lower granularity)
 export default function Video({
   src,
@@ -124,10 +104,7 @@ export default function Video({
 
   const convertNumberToTimestamp = useMemo(
     () => (timestamp: number) => {
-      return convertMillisecondsToSecondsTimestamp(
-        timestamp,
-        isPreciseToMilliseconds
-      );
+      return convertMillisecondsToTimestamp(timestamp, isPreciseToMilliseconds);
     },
     [isPreciseToMilliseconds]
   );
