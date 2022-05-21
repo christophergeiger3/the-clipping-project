@@ -14,7 +14,6 @@ import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 
 const MIN_CLIP_DURATION = 1000;
 
-// TODO: Change skip buttons to control playback seeking, not slider controls
 // TODO: Slider stop does not precisely match the end of the clip
 // TODO: Add toggle to enable clip looping at clip end
 // TODO: (backend) clip output value is videos/outputfilename.mp4 but should be outputfilename.mp4
@@ -22,6 +21,7 @@ const MIN_CLIP_DURATION = 1000;
 // TODO: (backend) rename url in clip schema
 // TODO: Swap -1sec and +1sec toggles to -100ms and +100ms when preciseToMilliseconds is true
 // TODO: Swap slider to use seconds instead of milliseconds when preciseToMilliseconds is false (lower granularity)
+// TODO: Rework styling of "Left:" and "Right:" labels
 export default function Video({
   src,
   startEndTimes,
@@ -101,6 +101,24 @@ export default function Video({
     }
     playerRef.current.currentTime(end / 1000);
   }, []);
+
+  const handleSetStartToCurrentTime = useCallback(() => {
+    const player = playerRef.current;
+    if (!player) {
+      return;
+    }
+    const currentTime = Math.floor(player.currentTime() * 1000);
+    setStartEndTimes([currentTime, startEndRef.current[1]]);
+  }, [setStartEndTimes]);
+
+  const handleSetEndToCurrentTime = useCallback(() => {
+    const player = playerRef.current;
+    if (!player) {
+      return;
+    }
+    const currentTime = Math.floor(player.currentTime() * 1000);
+    setStartEndTimes([startEndRef.current[0], currentTime]);
+  }, [setStartEndTimes]);
 
   const convertNumberToTimestamp = useMemo(
     () => (timestamp: number) => {
@@ -271,6 +289,14 @@ export default function Video({
           >
             +{MIN_CLIP_DURATION / 1000} sec
           </Button>
+          <Button
+            variant="contained"
+            onClick={handleSetStartToCurrentTime}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            {`Set to current time`}
+          </Button>
           <Typography sx={{ marginRight: 1 }}>Right: </Typography>
           <Button
             variant="contained"
@@ -294,6 +320,14 @@ export default function Video({
             sx={{ marginRight: 1 }}
           >
             +{MIN_CLIP_DURATION / 1000} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSetEndToCurrentTime}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            {`Set to current time`}
           </Button>
         </Grid>
       </Grid>
