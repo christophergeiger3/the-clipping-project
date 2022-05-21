@@ -14,13 +14,13 @@ export default function AppWrapper({
 }) {
   return (
     <Grid container={true} columnSpacing={2}>
-      <Grid className="sidebar" item={true} xs={2}>
+      <Grid className="sidebar" item={true} xs={1}>
         <Sidebar />
       </Grid>
-      <Grid item={true} xs={8}>
+      <Grid item={true} xs={10}>
         {children}
       </Grid>
-      <Grid item={true} xs={2} />
+      <Grid item={true} xs={1} />
     </Grid>
   );
 }
