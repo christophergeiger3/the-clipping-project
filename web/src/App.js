@@ -3,13 +3,11 @@ import ClipView from "./components/ClipView/ClipView";
 import Clip from "./components/Clip";
 import Clips from "./components/Clips/Clips";
 import Progress from "./components/Progress";
-import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 
 // TODO:
 // job queue view / submit job to job queue
 // transcode options (e.g. video file type, bitrate, etc.)
-// auto-upload clips to 3rd parties
 function App() {
   return (
     <div className="App">

@@ -100,7 +100,7 @@ export default function VideoControlPanel({
 
   return (
     <>
-      <Grid pb={2} container={true}>
+      <Grid container={true}>
         <FormControlLabel
           label="Seek on slider movement"
           control={
@@ -123,71 +123,75 @@ export default function VideoControlPanel({
         />
       </Grid>
       <Grid pb={2} container={true}>
-        <Typography sx={{ marginRight: 1 }}>Left: </Typography>
-        <Button
-          name="jumpToClipStart"
-          variant="contained"
-          color="primary"
-          onClick={handleJumpToClipStart}
-          startIcon={<SkipPrevious />}
-          sx={{ marginRight: 1 }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleDecrementStartByMinimum}
-          color="primary"
-          sx={{ marginRight: 1 }}
-        >
-          -{MIN_CLIP_DURATION / 1000} sec
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleIncrementStartByMinimum}
-          color="primary"
-          sx={{ marginRight: 1 }}
-        >
-          +{MIN_CLIP_DURATION / 1000} sec
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleSetStartToCurrentTime}
-          color="primary"
-          sx={{ marginRight: 1 }}
-        >
-          {`Set to current time`}
-        </Button>
-        <Typography sx={{ marginRight: 1 }}>Right: </Typography>
-        <Button
-          variant="contained"
-          onClick={handleJumpToClipEnd}
-          color="primary"
-          startIcon={<SkipNext />}
-          sx={{ marginRight: 1 }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleDecrementEndByMinimum}
-          color="primary"
-          sx={{ marginRight: 1 }}
-        >
-          -{MIN_CLIP_DURATION / 1000} sec
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleIncrementEndByMinimum}
-          color="primary"
-          sx={{ marginRight: 1 }}
-        >
-          +{MIN_CLIP_DURATION / 1000} sec
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleSetEndToCurrentTime}
-          color="primary"
-          sx={{ marginRight: 1 }}
-        >
-          {`Set to current time`}
-        </Button>
+        <Grid item={true} xs={6}>
+          <Typography sx={{ marginRight: 1 }}>Left: </Typography>
+          <Button
+            name="jumpToClipStart"
+            variant="contained"
+            color="primary"
+            onClick={handleJumpToClipStart}
+            startIcon={<SkipPrevious />}
+            sx={{ marginRight: 1 }}
+          />
+          <Button
+            variant="contained"
+            onClick={handleDecrementStartByMinimum}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            -{MIN_CLIP_DURATION / 1000} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleIncrementStartByMinimum}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            +{MIN_CLIP_DURATION / 1000} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSetStartToCurrentTime}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            {`Set to current time`}
+          </Button>
+        </Grid>
+        <Grid item={true} xs={6}>
+          <Typography sx={{ marginRight: 1 }}>Right: </Typography>
+          <Button
+            variant="contained"
+            onClick={handleJumpToClipEnd}
+            color="primary"
+            startIcon={<SkipNext />}
+            sx={{ marginRight: 1 }}
+          />
+          <Button
+            variant="contained"
+            onClick={handleDecrementEndByMinimum}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            -{MIN_CLIP_DURATION / 1000} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleIncrementEndByMinimum}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            +{MIN_CLIP_DURATION / 1000} sec
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSetEndToCurrentTime}
+            color="primary"
+            sx={{ marginRight: 1 }}
+          >
+            {`Set to current time`}
+          </Button>
+        </Grid>
       </Grid>
     </>
   );

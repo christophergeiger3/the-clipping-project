@@ -17,6 +17,7 @@ export const MIN_CLIP_DURATION = 1000;
 // TODO: Rework styling of "Left:" and "Right:" labels
 // TODO: use 'worst' quality for preview, and 'best' quality for output (makes significant difference)
 // TODO: run docker in production by default
+// TODO: add snackbar notification when clip finishes
 export default function Video({
   src,
   startEndTimes,
@@ -161,7 +162,7 @@ export default function Video({
   }, [playerRef]);
 
   return (
-    <>
+    <Grid>
       <Grid container={true} pt={2} direction="column">
         <div data-vjs-player>
           <video ref={videoRef} className="video-js vjs-big-play-centered" />
@@ -187,6 +188,6 @@ export default function Video({
           isPreciseToMilliseconds={isPreciseToMilliseconds}
         />
       </Grid>
-    </>
+    </Grid>
   );
 }

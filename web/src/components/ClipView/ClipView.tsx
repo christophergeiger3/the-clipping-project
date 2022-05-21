@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   Grid,
-  Snackbar,
   TextField,
 } from "@mui/material";
 import { useCallback, useState } from "react";
@@ -11,17 +10,11 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Video from "./Video";
 import axios from "axios";
 import * as React from "react";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import { useSnackbar } from "notistack";
 
 export default function ClipView() {
+  const { enqueueSnackbar } = useSnackbar();
   const [url, setUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
@@ -32,20 +25,6 @@ export default function ClipView() {
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
   const [isLoadingURL, setIsLoadingURL] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarText, setSnackbarText] = useState("");
-
-  const handleOpenSnackbar = useCallback((snackbarText?: string) => {
-    setSnackbarText(snackbarText || "");
-    setSnackbarOpen(true);
-  }, []);
-
-  const handleCloseSnackbar = useCallback(
-    (_event?: React.SyntheticEvent | Event, _reason?: string) => {
-      setSnackbarOpen(false);
-    },
-    []
-  );
 
   const handleURLChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,17 +77,19 @@ export default function ClipView() {
     });
     console.log("response:", ret.data);
     console.log(`http://localhost:3001/clips/progress/${ret.data._id}`);
-    handleOpenSnackbar(
-      `Clipping to http://localhost:3000/${title}.${extension}`
-    );
-  }, [videoUrl, startEndTimes, title, extension, handleOpenSnackbar]);
+    enqueueSnackbar(`Clipping to http://localhost:3000/${title}.${extension}`, {
+      variant: "success",
+    });
+  }, [videoUrl, startEndTimes, title, extension, enqueueSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
     navigator.clipboard.writeText(
       `http://localhost:3000/${title}.${extension}`
     );
-    handleOpenSnackbar(`Copied destination URL to clipboard`);
-  }, [title, extension, handleOpenSnackbar]);
+    enqueueSnackbar(`Copied destination URL to clipboard`, {
+      variant: "success",
+    });
+  }, [title, extension, enqueueSnackbar]);
 
   return (
     <>
@@ -172,26 +153,8 @@ export default function ClipView() {
               startIcon={<ContentCopyIcon />}
             />
           </ButtonGroup>
-          {/* <Button variant="contained" onClick={handleClip}>
-            Clip
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<ContentCopyIcon />}
-            onClick={handleCopyDestinationURL}
-          /> */}
         </Grid>
       </Grid>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success">
-          {snackbarText}
-        </Alert>
-      </Snackbar>
     </>
   );
 }
