@@ -11,12 +11,27 @@ import {
 } from "@mui/material";
 import { SkipNext, SkipPrevious } from "@mui/icons-material";
 
-const MIN_CLIP_DURATION = 1;
+const MIN_CLIP_DURATION = 1000;
 
 function convertSecondsToTimestamp(seconds: number) {
   const minutes = Math.floor(seconds / 60);
   const secondsLeft = seconds % 60;
   return `${minutes}:${secondsLeft < 10 ? "0" : ""}${secondsLeft}`;
+}
+
+function convertMillisecondsToSecondsTimestamp(
+  milliseconds: number,
+  preciseToMilliseconds = true
+) {
+  if (preciseToMilliseconds) {
+    return (
+      convertSecondsToTimestamp(Math.floor(milliseconds / 1000)) +
+      "." +
+      (milliseconds % 1000)
+    );
+  }
+  const seconds = Math.floor(milliseconds / 1000);
+  return convertSecondsToTimestamp(seconds);
 }
 
 // TODO: Change skip buttons to control playback seeking, not slider controls
@@ -25,7 +40,8 @@ function convertSecondsToTimestamp(seconds: number) {
 // TODO: (backend) clip output value is videos/outputfilename.mp4 but should be outputfilename.mp4
 // TODO: on /clips endpoint the analyzed URL sometimes appears, not the pre-analysis URL
 // TODO: (backend) rename url in clip schema
-// TODO: Add more granular seeking control for milliseconds
+// TODO: Set -1sec and +1sec toggles to -100ms and +100ms when preciseToMilliseconds is true
+// TODO: Swap slider to use seconds instead of milliseconds when preciseToMilliseconds is false (lower granularity)
 export default function Video({
   src,
   startEndTimes,
@@ -48,10 +64,18 @@ export default function Video({
   );
 
   const [willSeekOnSliderUpdate, setWillSeekOnSliderUpdate] = useState(true);
+  const [isPreciseToMilliseconds, setIsPreciseToMilliseconds] = useState(false);
 
   const handleWillSeekOnSliderUpdateChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setWillSeekOnSliderUpdate(event.target.checked);
+    },
+    []
+  );
+
+  const handleIsPreciseToMillisecondsChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setIsPreciseToMilliseconds(event.target.checked);
     },
     []
   );
@@ -87,7 +111,7 @@ export default function Video({
     if (!playerRef.current) {
       return;
     }
-    playerRef.current.currentTime(start);
+    playerRef.current.currentTime(start / 1000);
   }, []);
 
   const handleJumpToClipEnd = useCallback(() => {
@@ -95,8 +119,18 @@ export default function Video({
     if (!playerRef.current) {
       return;
     }
-    playerRef.current.currentTime(end);
+    playerRef.current.currentTime(end / 1000);
   }, []);
+
+  const convertNumberToTimestamp = useMemo(
+    () => (timestamp: number) => {
+      return convertMillisecondsToSecondsTimestamp(
+        timestamp,
+        isPreciseToMilliseconds
+      );
+    },
+    [isPreciseToMilliseconds]
+  );
 
   const options = useMemo(() => {
     return {
@@ -118,7 +152,7 @@ export default function Video({
         console.log("player is ready");
         player.on("loadedmetadata", () => {
           console.log("loadedmetadata");
-          const d = Math.floor(player.duration()); // TODO: Remove floor and use milliseconds
+          const d = Math.floor(player.duration() * 1000); // TODO: Remove floor and use milliseconds
           setDuration(d);
           setStartEndTimes([0, d]);
         });
@@ -132,14 +166,14 @@ export default function Video({
 
     if (player) {
       player.on("timeupdate", () => {
-        const currentTime = player.currentTime();
+        const currentTime = player.currentTime() * 1000;
         const [start, end] = startEndRef.current;
         if (currentTime > end) {
           player.pause();
-          player.currentTime(end);
+          player.currentTime(end / 1000);
         } else if (currentTime < start) {
           player.pause();
-          player.currentTime(start);
+          player.currentTime(start / 1000);
         }
       });
     }
@@ -171,7 +205,7 @@ export default function Video({
           startEndTimes[1],
         ]);
         if (player && willSeekOnSliderUpdate) {
-          player.currentTime(newStartEndTimes[0]);
+          player.currentTime(newStartEndTimes[0] / 1000);
         }
       } else {
         setStartEndTimes([
@@ -179,22 +213,9 @@ export default function Video({
           Math.max(newStartEndTimes[1], startEndTimes[0] + MIN_CLIP_DURATION),
         ]);
         if (player && willSeekOnSliderUpdate) {
-          player.currentTime(newStartEndTimes[1]);
+          player.currentTime(newStartEndTimes[1] / 1000);
         }
       }
-
-      // if (startEndTimes && player) {
-      //   const [startTime, endTime] = startEndTimes;
-      //   const currentTime = player.currentTime();
-      //   if (currentTime > endTime) {
-      //     player.pause();
-      //     player.currentTime(endTime);
-      //   }
-      //   if (currentTime < startTime) {
-      //     player.pause();
-      //     player.currentTime(startTime);
-      //   }
-      // }
     },
     [setStartEndTimes, startEndTimes, playerRef, willSeekOnSliderUpdate]
   );
@@ -224,7 +245,7 @@ export default function Video({
             onChange={handleSliderChange}
             min={0}
             max={duration}
-            valueLabelFormat={convertSecondsToTimestamp}
+            valueLabelFormat={convertNumberToTimestamp}
             valueLabelDisplay="auto"
           />
         ) : null}
@@ -235,6 +256,15 @@ export default function Video({
               <Checkbox
                 checked={willSeekOnSliderUpdate}
                 onChange={handleWillSeekOnSliderUpdateChange}
+              />
+            }
+          />
+          <FormControlLabel
+            label="Precise to milliseconds"
+            control={
+              <Checkbox
+                checked={isPreciseToMilliseconds}
+                onChange={handleIsPreciseToMillisecondsChange}
               />
             }
           />
@@ -254,7 +284,7 @@ export default function Video({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            -{MIN_CLIP_DURATION} sec
+            -{MIN_CLIP_DURATION / 1000} sec
           </Button>
           <Button
             variant="contained"
@@ -262,7 +292,7 @@ export default function Video({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            +{MIN_CLIP_DURATION} sec
+            +{MIN_CLIP_DURATION / 1000} sec
           </Button>
           <Typography sx={{ marginRight: 1 }}>Right: </Typography>
           <Button
@@ -278,7 +308,7 @@ export default function Video({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            -{MIN_CLIP_DURATION} sec
+            -{MIN_CLIP_DURATION / 1000} sec
           </Button>
           <Button
             variant="contained"
@@ -286,7 +316,7 @@ export default function Video({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            +{MIN_CLIP_DURATION} sec
+            +{MIN_CLIP_DURATION / 1000} sec
           </Button>
         </Grid>
       </Grid>

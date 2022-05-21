@@ -92,8 +92,8 @@ export default function ClipView() {
     );
     const ret = await axios.post(`http://localhost:3000/clips`, {
       url: videoUrl,
-      start: startEndTimes[0] * 1000, // TODO: * 1000 is a hack, fix me!
-      end: startEndTimes[1] * 1000, // TODO: * 1000 is a hack, fix me!
+      start: startEndTimes[0],
+      end: startEndTimes[1],
       output: `${title}.${extension}`,
     });
     console.log("response:", ret.data);
