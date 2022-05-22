@@ -7,19 +7,6 @@ import VideoControlPanel from "./VideoControlPanel";
 
 export const MIN_CLIP_DURATION = 1000;
 
-// TODO: Slider stop does not precisely match the end of the clip
-// TODO: Add toggle to enable clip looping at clip end
-// TODO: (backend) clip output value is videos/outputfilename.mp4 but should be outputfilename.mp4
-// TODO: on /clips endpoint the analyzed URL sometimes appears, not the pre-analysis URL
-// TODO: (backend) rename url in clip schema
-// TODO: Swap -1sec and +1sec toggles to -100ms and +100ms when preciseToMilliseconds is true
-// TODO: Swap slider to use seconds instead of milliseconds when preciseToMilliseconds is false (lower granularity)
-// TODO: Rework styling of "Left:" and "Right:" labels
-// TODO: use 'worst' quality for preview, and 'best' quality for output (makes significant difference)
-// TODO: run docker in production by default
-// TODO: add snackbar notification when clip finishes
-// TODO: handle youtube-dl analyze errors gracefully
-// TODO: add ability to "zoom" to a particular section of the video, for easier slider control
 export default function Video({
   src,
   startEndTimes,
@@ -83,7 +70,7 @@ export default function Video({
         console.log("player is ready");
         player.on("loadedmetadata", () => {
           console.log("loadedmetadata");
-          const d = Math.floor(player.duration() * 1000); // TODO: Remove floor and use milliseconds
+          const d = Math.floor(player.duration() * 1000);
           setDuration(d);
           setStartEndTimes([0, d]);
         });

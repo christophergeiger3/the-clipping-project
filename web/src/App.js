@@ -5,9 +5,6 @@ import Clips from "./components/Clips/Clips";
 import Progress from "./components/Progress";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 
-// TODO:
-// job queue view / submit job to job queue
-// transcode options (e.g. video file type, bitrate, etc.)
 function App() {
   return (
     <div className="App">

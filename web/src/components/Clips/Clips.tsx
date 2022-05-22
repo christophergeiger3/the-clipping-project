@@ -39,7 +39,6 @@ export default function Clips() {
     return <CircularProgress />;
   }
 
-  // TODO: update clips array somehow when a new clip has been created
   return clips.length ? (
     <>
       {clips.map((clip) => (

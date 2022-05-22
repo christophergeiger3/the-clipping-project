@@ -1,7 +1,6 @@
 import { Grid } from "@mui/material";
 import "./AppWrapper.css";
 
-// TODO: need to make a Sidebar, and need to fix ClipView so that the video renders within the contianer
 // resize video player: https://docs.videojs.com/tutorial-layout.html
 function Sidebar() {
   return <ul></ul>;
