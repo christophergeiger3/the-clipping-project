@@ -6,14 +6,15 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useCallback } from "react";
 import { VideoJsPlayer } from "video.js";
-import { MIN_CLIP_DURATION } from "./Video";
+
+const CLIP_INCREMENT_AMOUNT_LOW_PRECISION = 1000;
+const CLIP_INCREMENT_AMOUNT_HIGH_PRECISION = 100;
 
 interface VideoControlPanelProps {
   playerRef: React.MutableRefObject<VideoJsPlayer | null>;
   startEndRef: React.MutableRefObject<number[]>;
   setStartEndTimes: (startEndTimes: [number, number]) => void;
   duration: number | undefined;
-  //   onSliderChange: ([start, end]: [number, number]) => void;
   onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   willSeekOnSliderUpdate: boolean;
   isPreciseToMilliseconds: boolean;
@@ -83,20 +84,36 @@ export default function VideoControlPanel({
   }, [playerRef, startEndRef]);
 
   const handleIncrementStartByMinimum = useCallback(() => {
-    handleAddToStart(MIN_CLIP_DURATION);
-  }, [handleAddToStart]);
+    if (isPreciseToMilliseconds) {
+      handleAddToStart(CLIP_INCREMENT_AMOUNT_HIGH_PRECISION);
+    } else {
+      handleAddToStart(CLIP_INCREMENT_AMOUNT_LOW_PRECISION);
+    }
+  }, [isPreciseToMilliseconds, handleAddToStart]);
 
   const handleDecrementStartByMinimum = useCallback(() => {
-    handleAddToStart(-MIN_CLIP_DURATION);
-  }, [handleAddToStart]);
+    if (isPreciseToMilliseconds) {
+      handleAddToStart(-CLIP_INCREMENT_AMOUNT_HIGH_PRECISION);
+    } else {
+      handleAddToStart(-CLIP_INCREMENT_AMOUNT_LOW_PRECISION);
+    }
+  }, [isPreciseToMilliseconds, handleAddToStart]);
 
   const handleIncrementEndByMinimum = useCallback(() => {
-    handleAddToEnd(MIN_CLIP_DURATION);
-  }, [handleAddToEnd]);
+    if (isPreciseToMilliseconds) {
+      handleAddToEnd(CLIP_INCREMENT_AMOUNT_HIGH_PRECISION);
+    } else {
+      handleAddToEnd(CLIP_INCREMENT_AMOUNT_LOW_PRECISION);
+    }
+  }, [isPreciseToMilliseconds, handleAddToEnd]);
 
   const handleDecrementEndByMinimum = useCallback(() => {
-    handleAddToEnd(-MIN_CLIP_DURATION);
-  }, [handleAddToEnd]);
+    if (isPreciseToMilliseconds) {
+      handleAddToEnd(-CLIP_INCREMENT_AMOUNT_HIGH_PRECISION);
+    } else {
+      handleAddToEnd(-CLIP_INCREMENT_AMOUNT_LOW_PRECISION);
+    }
+  }, [isPreciseToMilliseconds, handleAddToEnd]);
 
   return (
     <>
@@ -139,7 +156,9 @@ export default function VideoControlPanel({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            -{MIN_CLIP_DURATION / 1000} sec
+            {isPreciseToMilliseconds
+              ? `-${CLIP_INCREMENT_AMOUNT_HIGH_PRECISION} ms`
+              : `-${CLIP_INCREMENT_AMOUNT_LOW_PRECISION / 1000} sec`}
           </Button>
           <Button
             variant="contained"
@@ -147,7 +166,9 @@ export default function VideoControlPanel({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            +{MIN_CLIP_DURATION / 1000} sec
+            {isPreciseToMilliseconds
+              ? `+${CLIP_INCREMENT_AMOUNT_HIGH_PRECISION} ms`
+              : `+${CLIP_INCREMENT_AMOUNT_LOW_PRECISION / 1000} sec`}
           </Button>
           <Button
             variant="contained"
@@ -173,7 +194,9 @@ export default function VideoControlPanel({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            -{MIN_CLIP_DURATION / 1000} sec
+            {isPreciseToMilliseconds
+              ? `-${CLIP_INCREMENT_AMOUNT_HIGH_PRECISION} ms`
+              : `-${CLIP_INCREMENT_AMOUNT_LOW_PRECISION / 1000} sec`}
           </Button>
           <Button
             variant="contained"
@@ -181,7 +204,9 @@ export default function VideoControlPanel({
             color="primary"
             sx={{ marginRight: 1 }}
           >
-            +{MIN_CLIP_DURATION / 1000} sec
+            {isPreciseToMilliseconds
+              ? `+${CLIP_INCREMENT_AMOUNT_HIGH_PRECISION} ms`
+              : `+${CLIP_INCREMENT_AMOUNT_LOW_PRECISION / 1000} sec`}
           </Button>
           <Button
             variant="contained"

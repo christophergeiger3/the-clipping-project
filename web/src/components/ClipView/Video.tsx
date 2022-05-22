@@ -18,6 +18,8 @@ export const MIN_CLIP_DURATION = 1000;
 // TODO: use 'worst' quality for preview, and 'best' quality for output (makes significant difference)
 // TODO: run docker in production by default
 // TODO: add snackbar notification when clip finishes
+// TODO: handle youtube-dl analyze errors gracefully
+// TODO: add ability to "zoom" to a particular section of the video, for easier slider control
 export default function Video({
   src,
   startEndTimes,
