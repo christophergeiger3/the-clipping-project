@@ -6,7 +6,7 @@ import { Client as TheClippingProjectClient } from "../client";
 // After updating the API (e.g. adding a new endpoint or controller),
 // the client.d.ts file must be regenerated.
 // Run `typegen http://localhost:3000/api-json > client.d.ts` to do so.
-// (replace `http://localhost:3000` with the URL of a running instance of tcp's API)
+// (replace `http://localhost:3000` with the URL of a running instance of tcp's updated API)
 
 interface ApiState {
   isApiReady: boolean;

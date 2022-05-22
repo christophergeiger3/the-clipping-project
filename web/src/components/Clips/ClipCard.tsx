@@ -3,11 +3,11 @@ import { CardActions, Link } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import { useCallback, useState } from "react";
 import { ClipProgressBar } from "../Progress";
 import { Clip } from "./Clips";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
+import { useClient } from "../../providers/ApiProvider";
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
 export default function ClipCard({
@@ -17,19 +17,18 @@ export default function ClipCard({
   clip: Clip;
   onDelete?: (id: string) => void;
 }) {
+  const { client } = useClient();
   const [isDeleting, setIsDeleting] = useState(false);
   // TODO: store link to clip in clip schema
   const clipLink = `http://localhost:3000/${clip.output.split("/").pop()}`;
 
   const deleteClip = useCallback(async () => {
     setIsDeleting(true);
-    const response = await axios.delete(
-      `http://localhost:3000/clips/${clip._id}`
-    );
+    const response = await (await client).ClipsController_remove(clip._id);
     console.log(response.data);
     setIsDeleting(false);
     onDelete?.(clip._id);
-  }, [clip._id, onDelete]);
+  }, [client, clip._id, onDelete]);
   return (
     <Card variant="outlined">
       <CardContent>

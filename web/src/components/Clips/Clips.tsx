@@ -1,6 +1,6 @@
 import { CircularProgress, Typography } from "@mui/material";
-import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import { useClient } from "../../providers/ApiProvider";
 import ClipCard from "./ClipCard";
 
 export type Clip = {
@@ -15,18 +15,21 @@ export type Clip = {
 };
 
 export default function Clips() {
+  const { client } = useClient();
   const [clips, setClips] = useState<Clip[]>();
 
   useEffect(() => {
     async function getClips(): Promise<void> {
-      const clips = (await axios.get("http://localhost:3000/clips"))
+      // const clips = (await axios.get("http://localhost:3000/clips"))
+      //   .data as Clip[];
+      const clips = (await (await client).ClipsController_findAll())
         .data as Clip[];
       setClips(clips);
     }
     getClips();
     const timer = setInterval(getClips, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [client]);
 
   const handleClipDelete = useCallback(
     (id: string) => {

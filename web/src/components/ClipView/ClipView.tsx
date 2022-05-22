@@ -12,9 +12,12 @@ import axios from "axios";
 import * as React from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
+import { useClient } from "../../providers/ApiProvider";
 
 export default function ClipView() {
   const { enqueueSnackbar } = useSnackbar();
+  const { client } = useClient();
+
   const [url, setUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
@@ -69,25 +72,26 @@ export default function ClipView() {
       `clipping video: ${videoUrl}, from ${startEndTimes[0]} to ${startEndTimes[1]}`,
       `filename: ${title}.${extension}`
     );
-    const ret = await axios.post(`http://localhost:3000/clips`, {
+    const response = await (
+      await client
+    ).ClipsController_create(null, {
       url: videoUrl,
       start: startEndTimes[0],
       end: startEndTimes[1],
       output: `${title}.${extension}`,
     });
-    console.log("response:", ret.data);
-    console.log(`http://localhost:3001/clips/progress/${ret.data._id}`);
-    enqueueSnackbar(`Clipping to http://localhost:3000/${title}.${extension}`, {
+    const clip = response.data;
+    enqueueSnackbar(`Clipping to http://localhost:3000/${clip.output}`, {
       variant: "success",
     });
-  }, [videoUrl, startEndTimes, title, extension, enqueueSnackbar]);
+  }, [client, videoUrl, startEndTimes, title, extension, enqueueSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
     navigator.clipboard.writeText(
       `http://localhost:3000/${title}.${extension}`
     );
     enqueueSnackbar(`Copied destination URL to clipboard`, {
-      variant: "success",
+      variant: "info",
     });
   }, [title, extension, enqueueSnackbar]);
 
