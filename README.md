@@ -2,7 +2,7 @@
   <img src="https://openclipart.org/image/800px/249421" width="120" alt="TCP Logo" />
 </p>
 <p align="center">An easy to use self-hosted clipping tool; TCP generates and hosts shareable video clips. </p>
-<p align="center">TCP works great with sites like YouTube, Dailymotion, and many others. </p>
+<p align="center">TCP works great with sites like YouTube, Odysee, and many others. </p>
 
 ## 📽️ Demo
 
