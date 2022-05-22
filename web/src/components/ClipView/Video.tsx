@@ -21,7 +21,7 @@ export default function Video({
   const [duration, setDuration] = useState<number>();
   const startEndRef = useRef<number[]>(startEndTimes);
   const setStartEndTimes = useCallback(
-    ([start, end]) => {
+    ([start, end]: number[]) => {
       startEndRef.current = [start, end];
       onUpdateStartEndTimes([start, end]);
     },
