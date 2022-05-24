@@ -12,8 +12,8 @@ export default function Clips() {
 
   useEffect(() => {
     async function getClips(): Promise<void> {
-      const clips = (await (await client).ClipsController_findAll())
-        .data as Clip[];
+      const request = await client;
+      const clips = (await request.ClipsController_findAll()).data as Clip[];
       setClips(clips);
     }
     getClips();

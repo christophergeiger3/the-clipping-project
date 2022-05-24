@@ -72,9 +72,8 @@ export default function ClipView() {
       `clipping video: ${videoUrl}, from ${startEndTimes[0]} to ${startEndTimes[1]}`,
       `filename: ${title}.${extension}`
     );
-    const response = await (
-      await client
-    ).ClipsController_create(null, {
+    const request = await client;
+    const response = await request.ClipsController_create(null, {
       url: videoUrl,
       start: startEndTimes[0],
       end: startEndTimes[1],

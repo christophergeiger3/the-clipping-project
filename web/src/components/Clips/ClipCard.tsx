@@ -26,7 +26,8 @@ export default function ClipCard({
 
   const deleteClip = useCallback(async () => {
     setIsDeleting(true);
-    const response = await (await client).ClipsController_remove(clip._id);
+    const request = await client;
+    const response = await request.ClipsController_remove(clip._id);
     console.log(response.data);
     setIsDeleting(false);
     onDelete?.(clip._id);
