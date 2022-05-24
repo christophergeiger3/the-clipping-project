@@ -1,18 +1,10 @@
 import { CircularProgress, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { Components } from "../../client";
 import { useClient } from "../../providers/ApiProvider";
 import ClipCard from "./ClipCard";
 
-export type Clip = {
-  _id: string;
-  url: string;
-  start: number;
-  end: number;
-  output: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-};
+type Clip = Components.Schemas.ClipWithId;
 
 export default function Clips() {
   const { client } = useClient();
@@ -20,8 +12,6 @@ export default function Clips() {
 
   useEffect(() => {
     async function getClips(): Promise<void> {
-      // const clips = (await axios.get("http://localhost:3000/clips"))
-      //   .data as Clip[];
       const clips = (await (await client).ClipsController_findAll())
         .data as Clip[];
       setClips(clips);

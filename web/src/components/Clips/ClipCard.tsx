@@ -5,9 +5,11 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { useCallback, useState } from "react";
 import { ClipProgressBar } from "../Progress";
-import { Clip } from "./Clips";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 import { useClient } from "../../providers/ApiProvider";
+import { Components } from "../../client";
+
+type Clip = Components.Schemas.ClipWithId;
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
 export default function ClipCard({
