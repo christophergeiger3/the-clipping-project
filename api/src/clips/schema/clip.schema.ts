@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 export type ClipDocument = Clip & Document;
 
@@ -30,6 +30,7 @@ export class Clip {
   output: string;
 
   @Prop()
+  @ApiProperty()
   status: Status;
 
   @Prop()
@@ -45,6 +46,18 @@ export class Clip {
       this.status = clip.status;
     }
   }
+}
+
+/** Helper class with additional properties such as _id, createdAt, updatedAt, added to the schema */
+export class ClipWithId extends Clip {
+  @ApiProperty({ type: String })
+  _id: ObjectId;
+
+  @ApiProperty({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty({ type: Date })
+  updatedAt: Date;
 }
 
 export const ClipSchema = SchemaFactory.createForClass(Clip);

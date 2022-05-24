@@ -20,7 +20,7 @@ import { interval, map, Observable } from 'rxjs';
 import { ClipsService } from './clips.service';
 import { CreateClipDto } from './dto/create-clip.dto';
 import { UpdateClipDto } from './dto/update-clip.dto';
-import { Clip } from './schema/clip.schema';
+import { Clip, ClipWithId } from './schema/clip.schema';
 
 const ONE_SECOND = 1000;
 
@@ -35,7 +35,7 @@ export class ClipsController {
   @ApiResponse({
     status: 201,
     description: 'The record has been successfully created',
-    type: Clip,
+    type: ClipWithId,
   })
   async create(@Body() createClipDto: CreateClipDto): Promise<Clip> {
     return this.clipsService.create(createClipDto);
@@ -46,7 +46,7 @@ export class ClipsController {
   @ApiResponse({
     status: 200,
     description: 'The records have been successfully returned',
-    type: Clip,
+    type: ClipWithId,
     isArray: true,
   })
   async findAll(): Promise<Clip[]> {
@@ -63,7 +63,7 @@ export class ClipsController {
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully returned',
-    type: Clip,
+    type: ClipWithId,
   })
   findOne(@Param('id') id: ObjectId): Promise<Clip> {
     return this.clipsService.findOne(id);
@@ -80,7 +80,7 @@ export class ClipsController {
   @ApiResponse({
     status: 204,
     description: 'The record has been successfully updated',
-    type: Clip,
+    type: ClipWithId,
   })
   update(
     @Param('id') id: ObjectId,
@@ -92,6 +92,11 @@ export class ClipsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a clip' })
   @ApiParam({ name: 'id', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'The record has been successfully deleted',
+    type: ClipWithId,
+  })
   remove(@Param('id') id: ObjectId) {
     return this.clipsService.remove(id);
   }
