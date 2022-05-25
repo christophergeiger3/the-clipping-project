@@ -1,7 +1,9 @@
 import {
+  Alert,
   Autocomplete,
   Button,
   ButtonGroup,
+  CardContent,
   Grid,
   TextField,
 } from "@mui/material";
@@ -28,6 +30,7 @@ export default function ClipView() {
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
   const [isLoadingURL, setIsLoadingURL] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleURLChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +49,18 @@ export default function ClipView() {
   );
 
   const handleSubmitURL = useCallback(async () => {
-    // console.log(`getting video url for: ${url}`);
+    // Validation
+    if (!url) {
+      setValidationError("URL is required");
+      return;
+    }
+    // Check if URL contains spaces
+    if (url.includes(" ")) {
+      setValidationError("URL cannot contain spaces");
+      return;
+    }
+    setValidationError(null);
+
     setIsLoadingURL(true);
     const { data } = await axios.post(`http://localhost:3000/analyze`, {
       url,
@@ -67,10 +81,33 @@ export default function ClipView() {
   );
 
   const handleClip = useCallback(async () => {
-    if (title === "") {
-      // TODO: do actual validation / error handling
+    // Validation
+    if (!videoUrl) {
+      setValidationError("Video URL is required");
       return;
     }
+    if (!title) {
+      setValidationError("Title is required");
+      return;
+    }
+    if (title.includes(" ")) {
+      setValidationError("Title cannot contain spaces");
+      return;
+    }
+    if (startEndTimes[0] >= startEndTimes[1]) {
+      setValidationError("Start time must be less than end time");
+      return;
+    }
+    if (!extension) {
+      setValidationError("Extension is required");
+      return;
+    }
+    if (extension.includes(" ")) {
+      setValidationError("Extension cannot contain spaces");
+      return;
+    }
+
+    setValidationError(null);
     console.log(
       `clipping video: ${videoUrl}, from ${startEndTimes[0]} to ${startEndTimes[1]}`,
       `filename: ${title}.${extension}`
@@ -104,6 +141,14 @@ export default function ClipView() {
         startEndTimes={startEndTimes}
         onUpdateStartEndTimes={setStartEndTimes}
       />
+
+      {validationError ? (
+        <CardContent sx={{ backgroundColor: "#D3D3D3" }}>
+          <Alert sx={{ backgroundColor: "#c3c3c3" }} severity="error">
+            {validationError}
+          </Alert>
+        </CardContent>
+      ) : null}
 
       <Grid container={true} spacing={2} pb={1} alignItems="center">
         <Grid item={true} xs={10}>
