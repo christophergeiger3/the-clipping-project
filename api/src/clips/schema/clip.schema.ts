@@ -34,6 +34,7 @@ export class Clip {
   status: Status;
 
   @Prop()
+  @ApiProperty()
   analyzedUrl: string;
 
   constructor(clip?: Clip) {
