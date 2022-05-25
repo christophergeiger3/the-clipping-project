@@ -54,7 +54,10 @@ export default function ClipView() {
     console.log(data[0]);
     setVideoUrl(data[0]);
     setIsLoadingURL(false);
-  }, [url]);
+    enqueueSnackbar("Video URL parsed and set as player source", {
+      variant: "info",
+    });
+  }, [enqueueSnackbar, url]);
 
   const handleTitleChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
