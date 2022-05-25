@@ -25,7 +25,6 @@ export default function VideoControlPanel({
   startEndRef,
   setStartEndTimes,
   duration,
-  //   onSliderChange,
   onCheckboxChange,
   willSeekOnSliderUpdate,
   isPreciseToMilliseconds,

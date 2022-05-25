@@ -28,8 +28,18 @@ export default function Video({
     [onUpdateStartEndTimes]
   );
 
-  const [willSeekOnSliderUpdate, setWillSeekOnSliderUpdate] = useState(true);
-  const [isPreciseToMilliseconds, setIsPreciseToMilliseconds] = useState(false);
+  const localWillSeekOnSliderUpdate: boolean | null = JSON.parse(
+    localStorage.getItem("willSeekOnSliderUpdate") || "null"
+  );
+  const [willSeekOnSliderUpdate, setWillSeekOnSliderUpdate] = useState(
+    !!(localWillSeekOnSliderUpdate === null || localWillSeekOnSliderUpdate)
+  );
+  const localIsPreciseToMilliseconds: boolean | null = JSON.parse(
+    localStorage.getItem("isPreciseToMilliseconds") || "null"
+  );
+  const [isPreciseToMilliseconds, setIsPreciseToMilliseconds] = useState(
+    !!localIsPreciseToMilliseconds
+  );
 
   const handleCheckboxChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +49,7 @@ export default function Video({
       } else if (name === "isPreciseToMilliseconds") {
         setIsPreciseToMilliseconds(checked);
       }
+      localStorage.setItem(name, JSON.stringify(checked));
     },
     [setWillSeekOnSliderUpdate, setIsPreciseToMilliseconds]
   );
