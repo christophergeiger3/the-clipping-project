@@ -1,8 +1,7 @@
-import { ClipDocument } from '../schema/clip.schema';
+import { Clip } from '../schema/clip.schema';
 import { Injectable } from '@nestjs/common';
 import { ChildProcess } from 'child_process';
 import { ObjectId } from 'mongoose';
-import { Clip } from '../schema/clip.schema';
 
 @Injectable()
 class ClipCreatedEvent extends Clip {
@@ -16,10 +15,9 @@ class ClipCreatedEvent extends Clip {
   /** The current frame being processed */
   currentFrameNumber: number;
 
-  constructor(clip: ClipDocument) {
+  constructor(clip: Clip) {
     super(clip);
     // this.customFFMPEGCommand = clip.customFFMPEGCommand;
-    this._id = clip._id;
     this.percentDone = 0;
     this.currentFrameNumber = 0;
     this.args = [

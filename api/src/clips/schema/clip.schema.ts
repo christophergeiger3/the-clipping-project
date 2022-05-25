@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document, ObjectId } from 'mongoose';
 
-export type ClipDocument = Clip & Document;
+export type ClipDocument = ClipBaseSchema & Document;
 
 export enum Status {
   Done = 'done',
@@ -11,8 +11,9 @@ export enum Status {
   Processing = 'processing',
 }
 
-@Schema({ timestamps: true })
-export class Clip {
+// TODO: test me!
+@Schema({ timestamps: true, collection: 'clips' })
+export class ClipBaseSchema {
   @Prop({ required: true })
   @ApiProperty()
   url: string;
@@ -37,7 +38,7 @@ export class Clip {
   @ApiProperty()
   analyzedUrl: string;
 
-  constructor(clip?: Clip) {
+  constructor(clip?: ClipBaseSchema) {
     if (clip) {
       this.start = clip.start;
       this.end = clip.end;
@@ -50,7 +51,7 @@ export class Clip {
 }
 
 /** Helper class with additional properties such as _id, createdAt, updatedAt, added to the schema */
-export class ClipWithId extends Clip {
+export class Clip extends ClipBaseSchema {
   @ApiProperty({ type: String })
   _id: ObjectId;
 
@@ -59,6 +60,15 @@ export class ClipWithId extends Clip {
 
   @ApiProperty({ type: Date })
   updatedAt: Date;
+
+  constructor(clip?: Clip) {
+    super(clip);
+    if (clip) {
+      this._id = clip._id;
+      this.createdAt = clip.createdAt;
+      this.updatedAt = clip.updatedAt;
+    }
+  }
 }
 
-export const ClipSchema = SchemaFactory.createForClass(Clip);
+export const ClipSchema = SchemaFactory.createForClass(ClipBaseSchema);

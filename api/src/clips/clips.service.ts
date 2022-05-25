@@ -40,14 +40,11 @@ export class ClipsService {
     return clips;
   }
 
-  async findOne(id: ObjectId): Promise<ClipDocument> {
+  async findOne(id: ObjectId): Promise<Clip> {
     return this.clipModel.findById(id);
   }
 
-  async update(
-    id: ObjectId,
-    update: Partial<ClipDocument>,
-  ): Promise<ClipDocument> {
+  async update(id: ObjectId, update: Partial<ClipDocument>): Promise<Clip> {
     return this.clipModel.findByIdAndUpdate(id, update, {
       new: true,
     });
@@ -72,7 +69,7 @@ export class ClipsService {
     }
   }
 
-  async remove(id: ObjectId): Promise<ClipDocument> {
+  async remove(id: ObjectId): Promise<Clip> {
     const clip = await this.clipModel.findByIdAndDelete(id);
     this.forceStopClipTranscode(id);
     this.setInactive(id);
