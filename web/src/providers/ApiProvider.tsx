@@ -18,9 +18,9 @@ const ApiContext = createContext<ApiState | undefined>(undefined);
 
 async function initializeApi(): Promise<OpenAPIClientAxios> {
   const api = new OpenAPIClientAxios({
-    definition: "http://localhost:4190/api-json",
+    definition: `${process.env.REACT_APP_API_URL}/api-json`,
     axiosConfigDefaults: {
-      baseURL: "http://localhost:4190",
+      baseURL: process.env.REACT_APP_API_URL,
       // withCredentials: true,
     },
   });

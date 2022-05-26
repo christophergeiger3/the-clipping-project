@@ -62,7 +62,7 @@ export default function ClipView() {
     setValidationError(null);
 
     setIsLoadingURL(true);
-    const { data } = await axios.post(`http://localhost:4190/analyze`, {
+    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/analyze`, {
       url,
     });
     console.log(data[0]);
@@ -120,14 +120,14 @@ export default function ClipView() {
       output: `${title}.${extension}`,
     });
     const clip = response.data;
-    enqueueSnackbar(`Clipping to http://localhost:4190/${clip.output}`, {
+    enqueueSnackbar(`Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`, {
       variant: "success",
     });
   }, [client, videoUrl, startEndTimes, title, extension, enqueueSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
     navigator.clipboard.writeText(
-      `http://localhost:4190/${title}.${extension}`
+      `${process.env.REACT_APP_API_URL}/${title}.${extension}`
     );
     enqueueSnackbar(`Copied destination URL to clipboard`, {
       variant: "info",

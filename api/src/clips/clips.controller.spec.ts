@@ -17,7 +17,7 @@ describe('ClipsController', () => {
         EventEmitterModule.forRoot(),
         // TODO: avoid database connection during testing
         // TODO: fix improper teardown
-        MongooseModule.forRoot('mongodb://localhost/the-clipping-project-test'),
+        MongooseModule.forRoot(process.env.DATABASE_URL),
       ],
     }).compile();
 

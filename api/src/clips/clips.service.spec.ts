@@ -16,7 +16,7 @@ describe('ClipsService', () => {
         EventEmitterModule.forRoot(),
         // TODO: avoid database connection during testing
         // TODO: fix improper teardown
-        MongooseModule.forRoot('mongodb://localhost/the-clipping-project-test'),
+        MongooseModule.forRoot(process.env.TEST_DATABASE_URL),
       ],
     }).compile();
 

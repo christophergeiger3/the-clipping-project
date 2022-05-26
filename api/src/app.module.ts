@@ -17,7 +17,7 @@ const environmentValidationSchema = Joi.object({
   ENV: Joi.string()
     .valid('development', 'production', 'test')
     .default('production'),
-  HOST: Joi.string().default('http://localhost:4190'),
+  API_URL: Joi.string().default('http://localhost:4190'),
   DATABASE_URL: Joi.string().default('mongodb://mongo/the-clipping-project'),
   TEST_DATABASE_URL: Joi.string().default(
     'mongodb://mongo/the-clipping-project-test',

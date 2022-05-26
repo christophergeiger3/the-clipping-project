@@ -25,7 +25,9 @@ const useEventSource = (url: string) => {
 };
 
 export function ClipProgressBar({ id }: { id: string }) {
-  const progress = useEventSource(`http://localhost:4190/clips/${id}/progress`);
+  const progress = useEventSource(
+    `${process.env.REACT_APP_API_URL}/clips/${id}/progress`
+  );
 
   if (!progress) {
     return null;
