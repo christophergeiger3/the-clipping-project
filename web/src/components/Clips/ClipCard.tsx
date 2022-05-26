@@ -22,7 +22,7 @@ export default function ClipCard({
   const { client } = useClient();
   const [isDeleting, setIsDeleting] = useState(false);
   // TODO: store link to clip in clip schema
-  const clipLink = `http://localhost:3000/${clip.output.split("/").pop()}`;
+  const clipLink = `http://localhost:4190/${clip.output.split("/").pop()}`;
 
   const deleteClip = useCallback(async () => {
     setIsDeleting(true);

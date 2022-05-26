@@ -25,7 +25,7 @@ const useEventSource = (url: string) => {
 };
 
 export function ClipProgressBar({ id }: { id: string }) {
-  const progress = useEventSource(`http://localhost:3000/clips/${id}/progress`);
+  const progress = useEventSource(`http://localhost:4190/clips/${id}/progress`);
 
   if (!progress) {
     return null;

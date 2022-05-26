@@ -12,7 +12,7 @@ RUN npm install
 
 COPY . /api/
 
-EXPOSE 3000
+EXPOSE 4190
 
 # start app
 CMD ["npm", "run", "start:debug"]

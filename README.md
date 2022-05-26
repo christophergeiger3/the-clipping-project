@@ -47,7 +47,7 @@ docker compose build
 ```
 
 ## 🛠️ API
-To access the docs for TCP's API, navigate to the `/api` route of your API's URL (default: http://localhost:3000/api).
+To access the docs for TCP's API, navigate to the `/api` route of your API's URL (default: http://localhost:4190/api).
 
 TCP's API is self-documented by Swagger/OpenAPI through NestJS, and comes with a built-in tool for building HTTP queries quickly and easily.
 

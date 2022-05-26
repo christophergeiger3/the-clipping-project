@@ -9,7 +9,7 @@ RUN yarn
 
 COPY . /web/
 
-EXPOSE 3001
+EXPOSE 4191
 
 # start app
 CMD ["yarn", "start"]

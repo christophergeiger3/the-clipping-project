@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 export default function Clip() {
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
-    window.location.href = "http://localhost:3000/clips/videos/" + id;
+    window.location.href = "http://localhost:4190/clips/videos/" + id;
   }, [id]);
   return <></>;
 }

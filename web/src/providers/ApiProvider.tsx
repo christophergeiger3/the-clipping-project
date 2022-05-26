@@ -5,8 +5,8 @@ import { Client as TheClippingProjectClient } from "../client";
 // Note:
 // After updating the API (e.g. adding a new endpoint or controller),
 // the client.d.ts file must be regenerated.
-// Run `typegen http://localhost:3000/api-json > client.d.ts` to do so.
-// (replace `http://localhost:3000` with the URL of a running instance of tcp's updated API)
+// Run `typegen http://localhost:4190/api-json > client.d.ts` to do so.
+// (replace `http://localhost:4190` with the URL of a running instance of tcp's updated API)
 
 interface ApiState {
   isApiReady: boolean;
@@ -18,9 +18,9 @@ const ApiContext = createContext<ApiState | undefined>(undefined);
 
 async function initializeApi(): Promise<OpenAPIClientAxios> {
   const api = new OpenAPIClientAxios({
-    definition: "http://localhost:3000/api-json",
+    definition: "http://localhost:4190/api-json",
     axiosConfigDefaults: {
-      baseURL: "http://localhost:3000",
+      baseURL: "http://localhost:4190",
       // withCredentials: true,
     },
   });
