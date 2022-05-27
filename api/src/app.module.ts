@@ -35,6 +35,7 @@ const environmentValidationSchema = Joi.object({
     AnalyzeModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'videos'),
+      exclude: ['/'],
     }),
   ],
   controllers: [AppController, AnalyzeController],
