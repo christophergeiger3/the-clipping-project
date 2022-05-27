@@ -30,6 +30,7 @@ export default function ClipView() {
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
   const [isLoadingURL, setIsLoadingURL] = useState(false);
+  const [isLoadingClip, setIsLoadingClip] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleURLChange = useCallback(
@@ -62,9 +63,12 @@ export default function ClipView() {
     setValidationError(null);
 
     setIsLoadingURL(true);
-    const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/analyze`, {
-      url,
-    });
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_API_URL}/analyze`,
+      {
+        url,
+      }
+    );
     console.log(data[0]);
     setVideoUrl(data[0]);
     setIsLoadingURL(false);
@@ -108,10 +112,7 @@ export default function ClipView() {
     }
 
     setValidationError(null);
-    console.log(
-      `clipping video: ${videoUrl}, from ${startEndTimes[0]} to ${startEndTimes[1]}`,
-      `filename: ${title}.${extension}`
-    );
+    setIsLoadingClip(true);
     const request = await client;
     const response = await request.ClipsController_create(null, {
       url: videoUrl,
@@ -119,10 +120,14 @@ export default function ClipView() {
       end: startEndTimes[1],
       output: `${title}.${extension}`,
     });
+    setIsLoadingClip(false);
     const clip = response.data;
-    enqueueSnackbar(`Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`, {
-      variant: "success",
-    });
+    enqueueSnackbar(
+      `Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`,
+      {
+        variant: "success",
+      }
+    );
   }, [client, videoUrl, startEndTimes, title, extension, enqueueSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
@@ -198,8 +203,10 @@ export default function ClipView() {
         </Grid>
         <Grid item={true} xs={2}>
           <ButtonGroup variant="contained" color="primary">
-            <Button onClick={handleClip}>Clip</Button>
-            <Button
+            <LoadingButton loading={isLoadingClip} onClick={handleClip}>
+              Clip
+            </LoadingButton>
+            <LoadingButton
               onClick={handleCopyDestinationURL}
               startIcon={<ContentCopyIcon />}
             />
