@@ -203,10 +203,14 @@ export default function ClipView() {
         </Grid>
         <Grid item={true} xs={2}>
           <ButtonGroup variant="contained" color="primary">
-            <LoadingButton loading={isLoadingClip} onClick={handleClip}>
+            <LoadingButton
+              variant="contained"
+              loading={isLoadingClip}
+              onClick={handleClip}
+            >
               Clip
             </LoadingButton>
-            <LoadingButton
+            <Button
               onClick={handleCopyDestinationURL}
               startIcon={<ContentCopyIcon />}
             />
