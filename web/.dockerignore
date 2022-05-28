@@ -1,5 +1,2 @@
-.env
 node_modules
-.dockerignore
-Dockerfile
 build
