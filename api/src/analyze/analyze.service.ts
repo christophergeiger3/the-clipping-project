@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { exec as callbackExec } from 'child_process';
 import { promisify } from 'util';
 
@@ -21,13 +21,20 @@ export class AnalyzeService {
     url: string,
     quality: Quality = QualityTypes.best,
   ): Promise<string[]> {
-    const { stdout, stderr } = await exec(
-      `youtube-dl -f ${quality} --get-url '${url}'`,
-    );
+    let stdout: string;
 
-    // TODO: handle error
-    if (stderr) {
-      throw new Error(stderr);
+    try {
+      const result = await exec(`youtube-dl -f ${quality} --get-url '${url}'`);
+      stdout = result.stdout;
+    } catch (err) {
+      if (err.message.includes('HTTP Error 404')) {
+        throw new HttpException(
+          'The requested URL was not found. If you entered the URL manually please check your spelling and try again.',
+          404,
+        );
+      } else {
+        throw new HttpException(err.message, 500);
+      }
     }
 
     return stdout.split(/\r?\n/);
