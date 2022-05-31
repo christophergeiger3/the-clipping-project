@@ -4,7 +4,7 @@ import { Components } from "../../client";
 import { useClient } from "../../providers/ApiProvider";
 import ClipCard from "./ClipCard";
 
-type Clip = Components.Schemas.ClipWithId;
+type Clip = Components.Schemas.Clip;
 
 export default function Clips() {
   const { client } = useClient();

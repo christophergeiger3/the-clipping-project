@@ -9,7 +9,7 @@ import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 import { useClient } from "../../providers/ApiProvider";
 import { Components } from "../../client";
 
-type Clip = Components.Schemas.ClipWithId;
+type Clip = Components.Schemas.Clip;
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
 export default function ClipCard({
@@ -21,7 +21,9 @@ export default function ClipCard({
 }) {
   const { client } = useClient();
   const [isDeleting, setIsDeleting] = useState(false);
-  const clipLink = `${process.env.REACT_APP_API_URL}/${clip.output.split("/").pop()}`;
+  const clipLink = `${process.env.REACT_APP_API_URL}/${clip.output
+    .split("/")
+    .pop()}`;
 
   const deleteClip = useCallback(async () => {
     setIsDeleting(true);

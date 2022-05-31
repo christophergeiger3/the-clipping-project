@@ -10,7 +10,6 @@ import {
 import { useCallback, useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Video from "./Video";
-import axios from "axios";
 import * as React from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
@@ -63,19 +62,33 @@ export default function ClipView() {
     setValidationError(null);
 
     setIsLoadingURL(true);
-    const { data } = await axios.post(
-      `${process.env.REACT_APP_API_URL}/analyze`,
-      {
+
+    const request = await client;
+    type AnalyzeResponse = ReturnType<typeof request.AnalyzeController_analyze>;
+    let response: Awaited<AnalyzeResponse>;
+    try {
+      response = await request.AnalyzeController_analyze(null, {
         url,
-      }
-    );
-    console.log(data[0]);
-    setVideoUrl(data[0]);
+      });
+    } catch (err) {
+      setIsLoadingURL(false);
+      // @ts-expect-error err is of type unknown
+      enqueueSnackbar(err.message, { variant: "error" });
+      return;
+    }
+
+    // if (response.status === 404) {
+    //   enqueueSnackbar(response.statusText, { variant: "error" });
+    //   setIsLoadingURL(false);
+    //   return;
+    // }
+
+    setVideoUrl(response.data[0]);
     setIsLoadingURL(false);
     enqueueSnackbar("Video URL parsed and set as player source", {
       variant: "info",
     });
-  }, [enqueueSnackbar, url]);
+  }, [client, enqueueSnackbar, url]);
 
   const handleTitleChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -12,11 +12,16 @@ export class AnalyzeController {
   @ApiOperation({ summary: 'Parse video URL with youtube-dl' })
   @ApiBody({ type: AnalyzeUrlDto })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: `Returns an array of URLs, which may correspond to multiple audio/video
     tracks for the same video. Often there is only a single URL result at index 0.`,
     type: String,
     isArray: true,
+  })
+  @ApiResponse({
+    status: 404,
+    description:
+      'The requested URL was not found. If you entered the URL manually please check your spelling and try again.',
   })
   async analyze(@Body() analyzeUrlDto: AnalyzeUrlDto): Promise<string[]> {
     return this.analyzeService.analyze(analyzeUrlDto.url);

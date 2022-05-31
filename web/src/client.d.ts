@@ -22,13 +22,7 @@ declare namespace Components {
             end: number;
             output: string;
             status: string;
-        }
-        export interface ClipWithId {
-            url: string;
-            start: number;
-            end: number;
-            output: string;
-            status: string;
+            analyzedUrl: string;
             _id: string;
             createdAt: string; // date-time
             updatedAt: string; // date-time
@@ -67,8 +61,9 @@ declare namespace Paths {
     namespace AnalyzeControllerAnalyze {
         export type RequestBody = Components.Schemas.AnalyzeUrlDto;
         namespace Responses {
-            export type $200 = string[];
             export type $201 = string[];
+            export interface $404 {
+            }
         }
     }
     namespace AppControllerGetStatus {
@@ -79,12 +74,12 @@ declare namespace Paths {
     namespace ClipsControllerCreate {
         export type RequestBody = Components.Schemas.CreateClipDto;
         namespace Responses {
-            export type $201 = Components.Schemas.ClipWithId;
+            export type $201 = Components.Schemas.Clip;
         }
     }
     namespace ClipsControllerFindAll {
         namespace Responses {
-            export type $200 = Components.Schemas.ClipWithId[];
+            export type $200 = Components.Schemas.Clip[];
         }
     }
     namespace ClipsControllerFindOne {
@@ -95,7 +90,7 @@ declare namespace Paths {
             id: Parameters.Id;
         }
         namespace Responses {
-            export type $200 = Components.Schemas.ClipWithId;
+            export type $200 = Components.Schemas.Clip;
         }
     }
     namespace ClipsControllerProgress {
@@ -118,7 +113,7 @@ declare namespace Paths {
             id: Parameters.Id;
         }
         namespace Responses {
-            export type $200 = Components.Schemas.ClipWithId;
+            export type $200 = Components.Schemas.Clip;
         }
     }
     namespace ClipsControllerUpdate {
@@ -131,7 +126,7 @@ declare namespace Paths {
         export type RequestBody = Components.Schemas.UpdateClipDto;
         namespace Responses {
             export type $200 = Components.Schemas.Clip;
-            export type $204 = Components.Schemas.ClipWithId;
+            export type $204 = Components.Schemas.Clip;
         }
     }
 }
@@ -152,7 +147,7 @@ export interface OperationMethods {
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.AnalyzeControllerAnalyze.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.AnalyzeControllerAnalyze.Responses.$200 | Paths.AnalyzeControllerAnalyze.Responses.$201>
+  ): OperationResponse<Paths.AnalyzeControllerAnalyze.Responses.$201>
   /**
    * ClipsController_findAll - Return all clips
    */
@@ -222,7 +217,7 @@ export interface PathsDictionary {
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.AnalyzeControllerAnalyze.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.AnalyzeControllerAnalyze.Responses.$200 | Paths.AnalyzeControllerAnalyze.Responses.$201>
+    ): OperationResponse<Paths.AnalyzeControllerAnalyze.Responses.$201>
   }
   ['/clips']: {
     /**
