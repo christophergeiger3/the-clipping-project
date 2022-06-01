@@ -41,7 +41,7 @@ cp .env.example .env
 ```
 then edit the `.env` file as you see fit.
 
-If you're running docker, you may need to rebuild your docker images before starting your containers:
+If you're running docker, you may need to rebuild your docker images once you've made changes:
 ```bash
 docker compose build
 ```
