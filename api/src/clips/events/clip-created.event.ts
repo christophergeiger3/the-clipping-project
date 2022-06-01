@@ -2,6 +2,7 @@ import { Clip } from '../schema/clip.schema';
 import { Injectable } from '@nestjs/common';
 import { ChildProcess } from 'child_process';
 import { ObjectId } from 'mongoose';
+import { join } from 'path';
 
 @Injectable()
 class ClipCreatedEvent extends Clip {
@@ -34,7 +35,7 @@ class ClipCreatedEvent extends Clip {
       'info',
       '-progress',
       'pipe:3',
-      `${this.output}`, // TODO: Output path may need to be tweaked
+      `${join('videos', this.output)}`,
     ];
   }
 }
