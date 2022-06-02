@@ -4,11 +4,13 @@ ARG PORT
 ARG DATABASE_URL
 ARG TEST_DATABASE_URL
 ARG API_URL
+ARG NODE_ENV
 
 ENV PORT $PORT
 ENV DATABASE_URL $DATABASE_URL
 ENV TEST_DATABASE_URL $TEST_DATABASE_URL
 ENV API_URL $API_URL
+ENV NODE_ENV $NODE_ENV
 
 # Install youtube-dl and ffmpeg
 RUN apk add --no-cache youtube-dl
@@ -18,6 +20,7 @@ WORKDIR /api
 
 COPY . /api/
 
+RUN npm install -g @nestjs/cli
 RUN npm install
 RUN npm run build
 
