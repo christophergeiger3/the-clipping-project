@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  web: # AKA client
+    container_name: tcp-web-dev
+    stdin_open: true
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+      args:
+        NODE_ENV: ${ENV:-development}
+        PORT: ${WEB_PORT:-4191}
+        REACT_APP_API_URL: ${API_URL:-http://localhost:4190}
+        REACT_APP_WEB_URL: ${WEB_URL:-http://localhost:4191}
+    depends_on:
+      - api
+    volumes:
+      - ./web:/app/web
+      - /app/web/node_modules
+      - /app/web/build
+    ports:
+      - ${WEB_PORT:-4191}:${WEB_PORT:-4191}
+
+  api:
+    container_name: tcp-api-dev
+    stdin_open: true
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+      args:
+        NODE_ENV: ${ENV:-development}
+        PORT: ${API_PORT:-4190}
+        API_URL: ${API_URL:-http://localhost:4190}
+        DATABASE_URL: ${DATABASE_URL:-mongodb://mongo/the-clipping-project}
+        TEST_DATABASE_URL: ${TEST_DATABASE_URL:-mongodb://mongo/the-clipping-project-test}
+    depends_on:
+      - mongo
+    volumes:
+      - ./api:/app/api
+      - ./clips:/api/videos
+      - /app/api/node_modules
+      - /app/api/dist
+    ports:
+      - ${API_PORT:-4190}:${API_PORT:-4190}
+
+  mongo:
+    image: mongo:latest
+    container_name: tcp-database
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:
