@@ -2148,13 +2148,6 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/nouislider@^15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@types/nouislider/-/nouislider-15.0.0.tgz#de1915ce34ea82bc8a9187249fbdbaa6999ad81c"
-  integrity sha512-CgBRRaaoR09F+yIp3y222atrs8+e2fDv0sFJmhhgJP9fvKfoZsKHX10oBMe/Y3toZ4obIY+CMirfGeli+aoKwg==
-  dependencies:
-    nouislider "*"
-
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -8143,11 +8136,6 @@ notistack@^2.0.5:
   dependencies:
     clsx "^1.1.0"
     hoist-non-react-statics "^3.3.0"
-
-nouislider@*, nouislider@^15.5.0:
-  version "15.5.0"
-  resolved "https://registry.yarnpkg.com/nouislider/-/nouislider-15.5.0.tgz#2adc143de400e3ae191ca291f0df24c519a15b5b"
-  integrity sha512-p0Rn0a4XzrBJ+JZRhNDYpRYr6sDPkajsjbvEQoTp/AZlNI3NirO15s1t11D25Gk3zVyvNJAzc1DO48cq/KX5Sw==
 
 npm-run-path@^2.0.0:
   version "2.0.2"
