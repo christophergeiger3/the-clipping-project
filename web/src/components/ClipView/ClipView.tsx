@@ -7,6 +7,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useCallback, useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Video from "./Video";
@@ -229,6 +230,19 @@ export default function ClipView() {
             />
           </ButtonGroup>
         </Grid>
+      </Grid>
+
+      <Grid pt={1} pb={2} container={true}>
+        <Button
+          startIcon={<OpenInNewIcon />}
+          fullWidth={true}
+          href="/clips"
+          target="_blank"
+          variant="contained"
+          color="info"
+        >
+          View all clips
+        </Button>
       </Grid>
     </>
   );

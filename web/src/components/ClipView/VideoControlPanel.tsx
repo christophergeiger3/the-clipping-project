@@ -1,5 +1,4 @@
 import { SkipNext, SkipPrevious } from "@mui/icons-material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -217,18 +216,6 @@ export default function VideoControlPanel({
             {`Set to current time`}
           </Button>
         </Grid>
-      </Grid>
-      <Grid pb={2} container={true}>
-        <Button
-          startIcon={<OpenInNewIcon />}
-          fullWidth={true}
-          href="/clips"
-          target="_blank"
-          variant="contained"
-          color="info"
-        >
-          View all clips
-        </Button>
       </Grid>
     </>
   );
