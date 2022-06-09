@@ -24,7 +24,7 @@ export class AnalyzeService {
     let stdout: string;
 
     try {
-      const result = await exec(`youtube-dl -f ${quality} --get-url '${url}'`);
+      const result = await exec(`yt-dlp -f ${quality} --get-url '${url}'`);
       stdout = result.stdout;
     } catch (err) {
       if (err.message.includes('HTTP Error 404')) {
