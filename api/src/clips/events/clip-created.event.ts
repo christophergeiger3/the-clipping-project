@@ -21,20 +21,27 @@ class ClipCreatedEvent extends Clip {
     // this.customFFMPEGCommand = clip.customFFMPEGCommand;
     this.percentDone = 0;
     this.currentFrameNumber = 0;
+    // this.args = [
+    //   '-nostats',
+    //   '-y',
+    //   '-ss',
+    //   `${this.start}ms`,
+    //   '-to',
+    //   `${this.end}ms`,
+    //   '-i',
+    //   `${this.analyzedUrl}`,
+    //   '-hide_banner',
+    //   '-loglevel',
+    //   'info',
+    //   '-progress',
+    //   'pipe:3',
+    //   `${join('videos', this.output)}`,
+    // ];
     this.args = [
-      '-nostats',
-      '-y',
-      '-ss',
-      `${this.start}ms`,
-      '-to',
-      `${this.end}ms`,
-      '-i',
-      `${this.analyzedUrl}`,
-      '-hide_banner',
-      '-loglevel',
-      'info',
-      '-progress',
-      'pipe:3',
+      '--force-overwrites',
+      '--progress',
+      this.url,
+      '-o',
       `${join('videos', this.output)}`,
     ];
   }

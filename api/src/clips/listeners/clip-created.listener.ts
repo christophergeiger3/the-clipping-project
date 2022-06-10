@@ -22,43 +22,46 @@ class ClipCreatedListener {
   /** FFMPEG processing pipeline */
   async process(clip: ClipCreatedEvent) {
     Logger.log('Processing clip');
-    clip.child = spawn('ffmpeg', clip.args, {
+    clip.child = spawn('yt-dlp', clip.args, {
       stdio: ['ignore', 'pipe', 'pipe', 'pipe'],
     });
     Logger.log(`Spawned child process for ${clip.url}`);
 
-    clip.child.stdio[3]?.on('data', (data) => {
-      // includes various progress related info -- we only care about frame number (frame=)
-      // later we can parse other stats for time running, etc.
-      const progressStats = data.toString() as string;
-      const frameNumber = progressStats.match(/frame=\s*(\d+)/);
-      if (frameNumber) {
-        const frame = parseInt(frameNumber[1]);
-        const totalNumFrames =
-          ((clip.end - clip.start) / 1000) * clip.overallFPS;
-
-        clip.currentFrameNumber = frame;
-        clip.percentDone = Math.round((frame / totalNumFrames) * 100);
-        this.eventEmitter.emit('clip.progress', { frame });
-        Logger.log(
-          `id: ${clip._id}, frame: ${frame}, ${Math.round(
-            (frame / totalNumFrames) * 100,
-          )}%`,
-        );
-      }
+    clip.child.stdio[1]?.on('data', (rawData) => {
+      console.log(rawData.toString());
     });
 
-    clip.child.stdio[2]?.on('data', (raw) => {
-      const data = raw.toString() as string;
-      const fps = data.match(/(\d+) fps/);
+    // clip.child.stdio[3]?.on('data', (rawData) => {
+    //   console.log(rawData.toString());
+    // includes various progress related info -- we only care about frame number (frame=)
+    // later we can parse other stats for time running, etc.
+    // const progressStats = data.toString() as string;
+    // const frameNumber = progressStats.match(/frame=\s*(\d+)/);
+    // if (frameNumber) {
+    //   const frame = parseInt(frameNumber[1]);
+    //   const totalNumFrames =
+    //     ((clip.end - clip.start) / 1000) * clip.overallFPS;
+    //   clip.currentFrameNumber = frame;
+    //   clip.percentDone = Math.round((frame / totalNumFrames) * 100);
+    //   this.eventEmitter.emit('clip.progress', { frame });
+    //   Logger.log(
+    //     `id: ${clip._id}, frame: ${frame}, ${Math.round(
+    //       (frame / totalNumFrames) * 100,
+    //     )}%`,
+    // });
 
-      if (fps && !clip.overallFPS) {
-        clip.overallFPS = parseInt(fps[1]);
-        Logger.log(`fps: ${clip.overallFPS}`);
-      }
+    // clip.child.stdio[2]?.on('data', (rawData) => {
+    //   console.log(rawData.toString());
+    // const data = raw.toString() as string;
+    // const fps = data.match(/(\d+) fps/);
 
-      this.eventEmitter.emit('clip.data', { data });
-    });
+    // if (fps && !clip.overallFPS) {
+    //   clip.overallFPS = parseInt(fps[1]);
+    //   Logger.log(`fps: ${clip.overallFPS}`);
+    // }
+
+    // this.eventEmitter.emit('clip.data', { data });
+    // });
 
     clip.child.on('exit', async (code) => {
       if (code === 0) {
