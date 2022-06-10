@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ChildProcess } from 'child_process';
 import { ObjectId } from 'mongoose';
 import { join } from 'path';
+import convertToSeconds from '../utils/convertToSeconds';
 
 @Injectable()
 class ClipCreatedEvent extends Clip {
@@ -18,28 +19,15 @@ class ClipCreatedEvent extends Clip {
 
   constructor(clip: Clip) {
     super(clip);
-    // this.customFFMPEGCommand = clip.customFFMPEGCommand;
     this.percentDone = 0;
     this.currentFrameNumber = 0;
-    // this.args = [
-    //   '-nostats',
-    //   '-y',
-    //   '-ss',
-    //   `${this.start}ms`,
-    //   '-to',
-    //   `${this.end}ms`,
-    //   '-i',
-    //   `${this.analyzedUrl}`,
-    //   '-hide_banner',
-    //   '-loglevel',
-    //   'info',
-    //   '-progress',
-    //   'pipe:3',
-    //   `${join('videos', this.output)}`,
-    // ];
     this.args = [
       '--force-overwrites',
       '--progress',
+      '--newline', // output progress bar on newlines
+      '--download-sections',
+      `'*${convertToSeconds(this.start)}-${convertToSeconds(this.end)}'`,
+      '--force-keyframes-at-cuts',
       this.url,
       '-o',
       `${join('videos', this.output)}`,
