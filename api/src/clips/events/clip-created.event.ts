@@ -10,17 +10,12 @@ class ClipCreatedEvent extends Clip {
   _id: ObjectId;
   child: ChildProcess;
   args: string[];
-  /** The FPS of the full clip */
-  overallFPS?: number;
   /** Integer (0 - 100) of how much of the clip has been processed in ffmpeg */
   percentDone: number;
-  /** The current frame being processed */
-  currentFrameNumber: number;
 
   constructor(clip: Clip) {
     super(clip);
     this.percentDone = 0;
-    this.currentFrameNumber = 0;
     this.args = [
       '--force-overwrites',
       '--progress',
