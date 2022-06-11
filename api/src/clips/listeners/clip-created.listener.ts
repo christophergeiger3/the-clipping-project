@@ -32,7 +32,7 @@ class ClipCreatedListener {
       const percentDone = data.match(percentRegex)?.[1] || null;
 
       if (percentDone !== null) {
-        clip.percentDone = parseInt(percentDone, 10); // Note: parseInt is dropping decimals here
+        clip.percentDone = parseInt(percentDone, 10); // Note: parseInt drops decimals here
         Logger.log(`id: ${clip._id}, ${clip.percentDone}%`);
       }
     });

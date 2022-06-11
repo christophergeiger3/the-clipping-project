@@ -21,7 +21,7 @@ class ClipCreatedEvent extends Clip {
       '--progress',
       '--newline', // output progress bar on newlines
       '--download-sections',
-      `'*${convertToSeconds(this.start)}-${convertToSeconds(this.end)}'`,
+      `*${convertToSeconds(this.start)}-${convertToSeconds(this.end)}`,
       '--force-keyframes-at-cuts',
       this.url,
       '-o',
