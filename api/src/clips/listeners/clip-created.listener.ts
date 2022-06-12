@@ -22,7 +22,7 @@ class ClipCreatedListener {
   /** Clip processing pipeline */
   async process(clip: ClipCreatedEvent) {
     Logger.log('Processing clip');
-    Logger.log('yt-dlp ' + clip.args.join(' '));
+    Logger.log(`yt-dlp ${clip.args.join(' ')}`);
     clip.child = spawn('yt-dlp', clip.args);
     Logger.log(`Spawned child process for ${clip.url}`);
 

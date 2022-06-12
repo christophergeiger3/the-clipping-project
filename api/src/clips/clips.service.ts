@@ -7,6 +7,7 @@ import { Clip, ClipDocument, Status } from './schema/clip.schema';
 import ClipCreatedEvent from './events/clip-created.event';
 import { AnalyzeService } from '../analyze/analyze.service';
 import { unlinkSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class ClipsService {
@@ -47,25 +48,6 @@ export class ClipsService {
     });
   }
 
-  private deleteFile(file: string): void {
-    Logger.log(`Deleting file ${file}`);
-    try {
-      unlinkSync(file);
-    } catch (err) {
-      Logger.error(`Error deleting file ${file}`);
-      Logger.error(err);
-    }
-  }
-
-  /** Kills clip.child if the clip is active */
-  forceStopClipTranscode(id: ObjectId | string): void {
-    const clip = this.findActiveClipById(id);
-    if (clip) {
-      Logger.log(`Force stopping clip ${id}`);
-      clip.child.kill();
-    }
-  }
-
   async remove(id: ObjectId): Promise<Clip> {
     const clip = await this.clipModel.findByIdAndDelete(id);
     this.forceStopClipTranscode(id);
@@ -74,20 +56,24 @@ export class ClipsService {
     return clip;
   }
 
-  /** @returns Index or -1 if clip not found */
-  findActiveClipIndexById(id: ObjectId | string): number {
-    if (typeof id !== 'string') {
-      id = id.toString();
-    }
-    return this.activeClips.findIndex((c) => c._id.toString() === id);
-  }
-
-  findActiveClipById(id: ObjectId | string): ClipCreatedEvent | undefined {
+  findActiveClipById(id: ObjectId | string): ClipCreatedEvent | null {
     const index = this.findActiveClipIndexById(id);
     if (index === -1) {
-      return undefined;
+      return null;
     }
     return this.activeClips[index];
+  }
+
+  removeActiveClip(id: ObjectId | string): ClipCreatedEvent | null {
+    const index = this.findActiveClipIndexById(id);
+    const clip = this.activeClips[index];
+
+    if (index === -1) {
+      return null;
+    }
+
+    this.activeClips.splice(index, 1);
+    return clip;
   }
 
   /** Add clip to activeClips list, set status to 'processing' */
@@ -114,5 +100,32 @@ export class ClipsService {
   progress(id: ObjectId | string): number {
     const clip = this.findActiveClipById(id);
     return clip ? clip.percentDone : -1;
+  }
+
+  /** @returns Index or -1 if clip not found */
+  private findActiveClipIndexById(id: ObjectId | string): number {
+    if (typeof id !== 'string') {
+      id = id.toString();
+    }
+    return this.activeClips.findIndex((c) => c._id.toString() === id);
+  }
+
+  private deleteFile(file: string): void {
+    Logger.log(`Deleting file ${file}`);
+    try {
+      unlinkSync(join('videos', file));
+    } catch (err) {
+      Logger.error(`Error deleting file ${file}`);
+      Logger.error(err);
+    }
+  }
+
+  /** Kills clip.child if the clip is active */
+  private forceStopClipTranscode(id: ObjectId | string): void {
+    const clip = this.findActiveClipById(id);
+    if (clip) {
+      Logger.log(`Force stopping clip ${id}`);
+      clip.child.kill();
+    }
   }
 }
