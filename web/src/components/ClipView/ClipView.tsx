@@ -100,8 +100,8 @@ export default function ClipView() {
 
   const handleClip = useCallback(async () => {
     // Validation
-    if (!videoUrl) {
-      setValidationError("Video URL is required");
+    if (!url) {
+      setValidationError("URL is required");
       return;
     }
     if (!title) {
@@ -129,7 +129,7 @@ export default function ClipView() {
     setIsLoadingClip(true);
     const request = await client;
     const response = await request.ClipsController_create(null, {
-      url: videoUrl,
+      url,
       start: startEndTimes[0],
       end: startEndTimes[1],
       output: `${title}.${extension}`,
@@ -142,7 +142,7 @@ export default function ClipView() {
         variant: "success",
       }
     );
-  }, [client, videoUrl, startEndTimes, title, extension, enqueueSnackbar]);
+  }, [client, url, startEndTimes, title, extension, enqueueSnackbar]);
 
   const handleCopyDestinationURL = useCallback(() => {
     navigator.clipboard.writeText(

@@ -52,7 +52,7 @@ export class ClipsService {
     const clip = await this.clipModel.findByIdAndDelete(id);
     this.forceStopClipTranscode(id);
     this.setInactive(id);
-    this.deleteFile(clip.output);
+    this.deleteFile(join('videos', clip.output));
     return clip;
   }
 
@@ -113,7 +113,7 @@ export class ClipsService {
   private deleteFile(file: string): void {
     Logger.log(`Deleting file ${file}`);
     try {
-      unlinkSync(join('videos', file));
+      unlinkSync(file);
     } catch (err) {
       Logger.error(`Error deleting file ${file}`);
       Logger.error(err);
