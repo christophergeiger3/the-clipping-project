@@ -15,7 +15,7 @@ docker compose build
 docker compose up
 ```
 ### 🏠 Local
-Make sure youtube-dl, ffmpeg, npm, yarn and mongodb are installed. Start the mongodb service:
+Make sure yt-dlp, ffmpeg, npm, yarn and mongodb are installed. Start the mongodb service:
 ```bash
 sudo systemctl start mongodb.service
 ```
