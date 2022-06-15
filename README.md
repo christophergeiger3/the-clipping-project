@@ -22,7 +22,7 @@ sudo systemctl start mongod.service
 
 Compile yt-dlp from source:
 ```bash
-sudo apt-get install python3-pytest python3 make git zip ffmpeg
+sudo apt-get install -y python3-pytest python3 make git zip ffmpeg pandoc
 git clone https://github.com/yt-dlp/yt-dlp
 cd yt-dlp
 make
