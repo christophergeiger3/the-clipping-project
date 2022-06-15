@@ -15,10 +15,26 @@ docker compose build
 docker compose up
 ```
 ### 🏠 Local
-Make sure yt-dlp, ffmpeg, npm, yarn and mongodb are installed. Start the mongodb service:
+[Install mongodb](https://www.mongodb.com/docs/manual/administration/install-community/), then start the mongod service:
 ```bash
-sudo systemctl start mongodb.service
+sudo systemctl start mongod.service
 ```
+
+Compile yt-dlp from source:
+```bash
+sudo apt-get install python3-pytest python3 make git zip ffmpeg
+git clone https://github.com/yt-dlp/yt-dlp
+cd yt-dlp
+make
+cp yt-dlp /usr/local/bin/yt-dlp
+sudo chmod a+rx /usr/local/bin/yt-dlp
+```
+
+Install npm and yarn:
+```bash
+sudo apt-get install npm yarn
+```
+
 Launch the app API:
 ```bash
 cd api
