@@ -26,7 +26,7 @@ sudo apt-get install python3-pytest python3 make git zip ffmpeg
 git clone https://github.com/yt-dlp/yt-dlp
 cd yt-dlp
 make
-cp yt-dlp /usr/local/bin/yt-dlp
+sudo cp yt-dlp /usr/local/bin/yt-dlp
 sudo chmod a+rx /usr/local/bin/yt-dlp
 ```
 
