@@ -32,7 +32,7 @@ sudo chmod a+rx /usr/local/bin/yt-dlp
 
 Install npm and yarn:
 ```bash
-sudo apt-get install npm yarn
+sudo apt-get install -y npm yarn
 ```
 
 Launch the app API:
