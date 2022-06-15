@@ -30,16 +30,47 @@ sudo cp yt-dlp /usr/local/bin/yt-dlp
 sudo chmod a+rx /usr/local/bin/yt-dlp
 ```
 
-Install npm and yarn:
+Install npm and nodejs:
 ```bash
-sudo apt-get install -y npm yarn
+sudo apt-get install -y npm nodejs
+```
+
+Install yarn:
+```bash
+sudo npm install --global yarn
 ```
 
 Install the nestjs CLI:
 ```
 npm install -g @nestjs/cli
 ```
+#### Production:
+Build the app api:
+```bash
+cd api
+npm install
+cp .env.example .env
+npm run build
+```
+Launch the app api:
+```bash
+npm run start:prod
+```
 
+Open a new terminal and build the web front-end:
+```bash
+cd web
+yarn
+cp .env.example .env
+yarn build
+yarn global add serve
+```
+
+Launch the web front-end:
+```
+PORT=4191; serve -s build -l ${PORT}
+```
+#### Development: 
 Launch the app API:
 ```bash
 cd api
