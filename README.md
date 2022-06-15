@@ -35,6 +35,11 @@ Install npm and yarn:
 sudo apt-get install -y npm yarn
 ```
 
+Install the nestjs CLI:
+```
+npm install -g @nestjs/cli
+```
+
 Launch the app API:
 ```bash
 cd api
