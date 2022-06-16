@@ -26,6 +26,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ${{ secrets.TCP_API_PATH }}
+            git restore package-lock.json  # package-lock.json may be unique; restore so that git pull does not fail
             git pull
             npm install
             npm run build
