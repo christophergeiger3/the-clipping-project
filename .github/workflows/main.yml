@@ -26,7 +26,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ${{ secrets.TCP_API_PATH }}
-            git pull
+            git reset --hard
             npm install
             npm run build
             pm2 restart tcp-api
@@ -46,7 +46,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ${{ secrets.TCP_WEB_PATH }}
-            git pull
+            git reset --hard
             yarn
             yarn build
             pm2 restart tcp-web
