@@ -44,7 +44,7 @@ Install the nestjs CLI:
 ```
 npm install -g @nestjs/cli
 ```
-#### Production:
+#### Running a production build
 Build the app api:
 ```bash
 cd api
@@ -70,7 +70,7 @@ Launch the web front-end:
 ```
 PORT=4191; serve -s build -l ${PORT}
 ```
-#### Development: 
+#### Running a development build
 Launch the app API:
 ```bash
 cd api
