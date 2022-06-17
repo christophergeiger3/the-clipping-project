@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, IsUrl, Min } from 'class-validator';
+import { IsInt, IsUrl, Min } from 'class-validator';
 
 export class CreateClipDto {
   @ApiProperty({
-    description: 'URL passed to youtube-dl --get-video',
+    description: 'URL passed to yt-dlp --get-video',
     example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   })
   @IsUrl()
@@ -26,16 +26,8 @@ export class CreateClipDto {
   readonly end: number;
 
   @ApiProperty({
-    description: 'Output file name',
-    example: 'output.mp4',
+    description: 'Output name, without extension',
+    example: 'big-buck-bunny',
   })
   readonly output: string;
-
-  // @ApiProperty({
-  //   description: 'Custom FFMPEG command',
-  //   example: '-c:v libx264 -c:a aac',
-  // })
-  // @IsOptional()
-  // @IsString()
-  // readonly customFFMPEGCommand?: string;
 }

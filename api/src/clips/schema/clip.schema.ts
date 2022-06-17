@@ -38,6 +38,9 @@ export class ClipBaseSchema {
   @ApiProperty()
   analyzedUrl: string;
 
+  @Prop()
+  path: string;
+
   constructor(clip?: ClipBaseSchema) {
     if (clip) {
       this.start = clip.start;
@@ -46,6 +49,7 @@ export class ClipBaseSchema {
       this.url = clip.url;
       this.output = clip.output;
       this.status = clip.status;
+      this.path = clip.path;
     }
   }
 }

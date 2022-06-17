@@ -21,13 +21,16 @@ class ClipCreatedListener {
 
   /** Clip processing pipeline */
   async process(clip: ClipCreatedEvent) {
-    Logger.log('Processing clip');
-    Logger.log(`yt-dlp ${clip.args.join(' ')}`);
-    clip.child = spawn('yt-dlp', clip.args);
-    Logger.log(`Spawned child process for ${clip.url}`);
+    const parseDestinationFromString = (data: string) => {
+      const destinationRegex = /^\[download\] Destination: (\S*)\s*$/;
+      const path = data.match(destinationRegex)?.[1] || null;
+      if (path !== null) {
+        clip.path = path;
+        Logger.log(`id: ${clip._id}, ${path}`);
+      }
+    };
 
-    clip.child.stdout.setEncoding('utf8');
-    clip.child.stdout.on('data', (data: string) => {
+    const parseProgressFromString = (data: string) => {
       const percentRegex = /(\d+.?\d+)%/;
       const percentDone = data.match(percentRegex)?.[1] || null;
 
@@ -35,21 +38,36 @@ class ClipCreatedListener {
         clip.percentDone = parseInt(percentDone, 10); // Note: parseInt drops decimals here
         Logger.log(`id: ${clip._id}, ${clip.percentDone}%`);
       }
-    });
+    };
 
-    clip.child.on('exit', async (code) => {
+    const onExit = async (code: number) => {
+      Logger.log(`id: ${clip._id}, exited with code ${code}`);
+
       if (code === 0) {
         clip.status = Status.Done;
         this.eventEmitter.emit('clip.done', { clip });
-        Logger.log(`done: ${clip.output}`);
+        Logger.log(`done: ${clip.path}`);
       } else {
         clip.status = Status.Error;
         this.eventEmitter.emit('clip.error', { clip });
-        Logger.error(`exit, error: ${clip.output}`);
+        Logger.error(`error: ${clip.path}`);
       }
+
       this.clipsService.setInactive(clip._id, clip.status);
       this.eventEmitter.emit('clip.exit', { clip });
-    });
+    };
+
+    Logger.log(`Processing clip ${clip._id}`);
+    Logger.log(`yt-dlp ${clip.args.join(' ')}`);
+
+    clip.child = spawn('yt-dlp', clip.args);
+    Logger.log(`Spawned child process for ${clip.url}`);
+
+    clip.child.stdout.setEncoding('utf8');
+    clip.child.stdout.on('data', parseDestinationFromString);
+    clip.child.stdout.on('data', parseProgressFromString);
+
+    clip.child.on('exit', onExit);
   }
 }
 

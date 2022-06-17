@@ -52,7 +52,7 @@ export class ClipsService {
     const clip = await this.clipModel.findByIdAndDelete(id);
     this.forceStopClipTranscode(id);
     this.setInactive(id);
-    this.deleteFile(join('videos', clip.output));
+    this.deleteFile(clip.path);
     return clip;
   }
 
