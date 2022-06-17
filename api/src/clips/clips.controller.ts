@@ -82,7 +82,7 @@ export class ClipsController {
     description: 'The record has been successfully updated',
     type: Clip,
   })
-  update(
+  async update(
     @Param('id') id: ObjectId,
     @Body() updateClipDto: UpdateClipDto,
   ): Promise<Clip> {
@@ -103,13 +103,10 @@ export class ClipsController {
 
   // TODO: Pass MessageEvent generic type
   @Sse(':id/progress')
-  @ApiOperation({ summary: 'Stream progress of a clip' })
-  @ApiParam({ name: 'id', type: String })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Returns percent from 0 - 100 or -1 if clip not currently active (SSE)',
+  @ApiOperation({
+    summary: 'Stream progress of a clip as an integer from 0 - 100',
   })
+  @ApiParam({ name: 'id', type: String })
   progress(@Param('id') id: ObjectId): Observable<MessageEvent> {
     return interval(ONE_SECOND).pipe(
       map(

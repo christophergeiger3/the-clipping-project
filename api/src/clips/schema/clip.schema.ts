@@ -11,7 +11,6 @@ export enum Status {
   Processing = 'processing',
 }
 
-// TODO: test me!
 @Schema({ timestamps: true, collection: 'clips' })
 export class ClipBaseSchema {
   @Prop({ required: true })
@@ -39,6 +38,10 @@ export class ClipBaseSchema {
   analyzedUrl: string;
 
   @Prop()
+  @ApiProperty({
+    description: 'Path to the output file of the clip',
+    example: 'videos/big-buck-bunny.mp4',
+  })
   path: string;
 
   constructor(clip?: ClipBaseSchema) {
