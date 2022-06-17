@@ -1,6 +1,5 @@
 import {
   Alert,
-  Autocomplete,
   Button,
   ButtonGroup,
   CardContent,
@@ -9,7 +8,7 @@ import {
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useCallback, useState } from "react";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Video from "./Video";
 import * as React from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -24,12 +23,12 @@ export default function ClipView() {
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
   const [title, setTitle] = useState(`${Math.floor(Math.random() * 1e15)}`);
-  const [extension, setExtension] = useState("mp4");
+  // const [extension, setExtension] = useState("mp4");
   const [startEndTimes, setStartEndTimes] = useState<number[]>([0, 100]);
   const [videoUrl, setVideoUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
-  const [isLoadingURL, setIsLoadingURL] = useState(false);
+  const [isLoadingVideoPreview, setIsLoadingVideoPreview] = useState(false);
   const [isLoadingClip, setIsLoadingClip] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -40,16 +39,16 @@ export default function ClipView() {
     []
   );
 
-  const handleAutocompleteChange = useCallback(
-    (_e: React.ChangeEvent<{}>, value: string | null) => {
-      if (value) {
-        setExtension(value);
-      }
-    },
-    []
-  );
+  // const handleAutocompleteChange = useCallback(
+  //   (_e: React.ChangeEvent<{}>, value: string | null) => {
+  //     if (value) {
+  //       setExtension(value);
+  //     }
+  //   },
+  //   []
+  // );
 
-  const handleSubmitURL = useCallback(async () => {
+  const handleLoadVideoPreview = useCallback(async () => {
     // Validation
     if (!url) {
       setValidationError("URL is required");
@@ -62,7 +61,7 @@ export default function ClipView() {
     }
     setValidationError(null);
 
-    setIsLoadingURL(true);
+    setIsLoadingVideoPreview(true);
 
     const request = await client;
     type AnalyzeResponse = ReturnType<typeof request.AnalyzeController_analyze>;
@@ -72,7 +71,7 @@ export default function ClipView() {
         url,
       });
     } catch (err) {
-      setIsLoadingURL(false);
+      setIsLoadingVideoPreview(false);
       // @ts-expect-error err is of type unknown
       enqueueSnackbar(err.message, { variant: "error" });
       return;
@@ -85,7 +84,7 @@ export default function ClipView() {
     // }
 
     setVideoUrl(response.data[0]);
-    setIsLoadingURL(false);
+    setIsLoadingVideoPreview(false);
     enqueueSnackbar("Video URL parsed and set as player source", {
       variant: "info",
     });
@@ -116,42 +115,42 @@ export default function ClipView() {
       setValidationError("Start time must be less than end time");
       return;
     }
-    if (!extension) {
-      setValidationError("Extension is required");
-      return;
-    }
-    if (extension.includes(" ")) {
-      setValidationError("Extension cannot contain spaces");
-      return;
-    }
+    // if (!extension) {
+    //   setValidationError("Extension is required");
+    //   return;
+    // }
+    // if (extension.includes(" ")) {
+    //   setValidationError("Extension cannot contain spaces");
+    //   return;
+    // }
 
     setValidationError(null);
     setIsLoadingClip(true);
     const request = await client;
-    const response = await request.ClipsController_create(null, {
+    await request.ClipsController_create(null, {
       url,
       start: startEndTimes[0],
       end: startEndTimes[1],
-      output: `${title}.${extension}`,
+      output: title,
     });
     setIsLoadingClip(false);
-    const clip = response.data;
-    enqueueSnackbar(
-      `Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`,
-      {
-        variant: "success",
-      }
-    );
-  }, [client, url, startEndTimes, title, extension, enqueueSnackbar]);
+    // const clip = response.data;
+    // enqueueSnackbar(
+    //   `Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`,
+    //   {
+    //     variant: "success",
+    //   }
+    // );
+  }, [client, url, startEndTimes, title]);
 
-  const handleCopyDestinationURL = useCallback(() => {
-    navigator.clipboard.writeText(
-      `${process.env.REACT_APP_API_URL}/${title}.${extension}`
-    );
-    enqueueSnackbar(`Copied destination URL to clipboard`, {
-      variant: "info",
-    });
-  }, [title, extension, enqueueSnackbar]);
+  // const handleCopyDestinationURL = useCallback(() => {
+  //   navigator.clipboard.writeText(
+  //     `${process.env.REACT_APP_API_URL}/${title}.${extension}`
+  //   );
+  //   enqueueSnackbar(`Copied destination URL to clipboard`, {
+  //     variant: "info",
+  //   });
+  // }, [title, enqueueSnackbar]);
 
   return (
     <>
@@ -182,16 +181,16 @@ export default function ClipView() {
         <Grid item={true} xs={2}>
           <LoadingButton
             variant="contained"
-            loading={isLoadingURL}
-            onClick={handleSubmitURL}
+            loading={isLoadingVideoPreview}
+            onClick={handleLoadVideoPreview}
           >
-            Submit
+            Load Video Preview
           </LoadingButton>
         </Grid>
       </Grid>
 
       <Grid container={true} spacing={2} pb={1} alignItems="center">
-        <Grid item={true} xs={8}>
+        <Grid item={true} xs={10}>
           <TextField
             fullWidth={true}
             value={title}
@@ -200,7 +199,7 @@ export default function ClipView() {
             onChange={handleTitleChange}
           />
         </Grid>
-        <Grid item={true} xs={2}>
+        {/* <Grid item={true} xs={2}>
           <Autocomplete
             options={["mp4", "webm", "ogg", "mov"]}
             value={extension}
@@ -214,7 +213,7 @@ export default function ClipView() {
             )}
             onChange={handleAutocompleteChange}
           />
-        </Grid>
+        </Grid> */}
         <Grid item={true} xs={2}>
           <ButtonGroup variant="contained" color="primary">
             <LoadingButton
@@ -224,10 +223,10 @@ export default function ClipView() {
             >
               Clip
             </LoadingButton>
-            <Button
+            {/* <Button
               onClick={handleCopyDestinationURL}
               startIcon={<ContentCopyIcon />}
-            />
+            /> */}
           </ButtonGroup>
         </Grid>
       </Grid>
