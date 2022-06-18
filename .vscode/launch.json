@@ -5,7 +5,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Nest Framework",
+      "name": "Debug API",
       "args": ["${workspaceFolder}/api/src/main.ts"],
       "runtimeVersion": "14",
       "runtimeArgs": [
@@ -19,6 +19,16 @@
       "envFile": "${workspaceFolder}/api/.env",
       "cwd": "${workspaceRoot}/api",
       "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug Web",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:4191",
+      "webRoot": "${workspaceFolder}/web/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
     }
   ]
 }
