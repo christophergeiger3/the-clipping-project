@@ -1,0 +1,24 @@
+{
+  // https://javascript.plainenglish.io/debugging-nestjs-in-vscode-d474a088c63b
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Nest Framework",
+      "args": ["${workspaceFolder}/api/src/main.ts"],
+      "runtimeVersion": "14",
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
+      ],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/api/.env",
+      "cwd": "${workspaceRoot}/api",
+      "console": "integratedTerminal"
+    }
+  ]
+}
