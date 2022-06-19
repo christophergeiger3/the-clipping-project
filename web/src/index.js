@@ -4,12 +4,22 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { SnackbarProvider } from "notistack";
+import { QueryClient, QueryClientProvider } from "react-query";
+import Axios from "axios";
+
+Axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
+const queryClient = new QueryClient({
+  defaultOptions: {},
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
-      <App />
-    </SnackbarProvider>
+    <QueryClientProvider client={queryClient}>
+      <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
+        <App />
+      </SnackbarProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
