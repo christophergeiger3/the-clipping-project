@@ -49,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "volta": {
+    "node": "14.19.3",
+    "yarn": "1.22.19"
   }
 }
