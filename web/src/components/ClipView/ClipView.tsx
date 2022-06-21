@@ -13,11 +13,10 @@ import Video from "./Video";
 import * as React from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
-import { useClient } from "../../providers/ApiProvider";
+import { analyzeControllerAnalyze, clipsControllerCreate } from "../../api";
 
 export default function ClipView() {
   const { enqueueSnackbar } = useSnackbar();
-  const { client } = useClient();
 
   const [url, setUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
@@ -63,11 +62,9 @@ export default function ClipView() {
 
     setIsLoadingVideoPreview(true);
 
-    const request = await client;
-    type AnalyzeResponse = ReturnType<typeof request.AnalyzeController_analyze>;
-    let response: Awaited<AnalyzeResponse>;
+    let response: Awaited<ReturnType<typeof analyzeControllerAnalyze>>;
     try {
-      response = await request.AnalyzeController_analyze(null, {
+      response = await analyzeControllerAnalyze({
         url,
       });
     } catch (err) {
@@ -88,7 +85,7 @@ export default function ClipView() {
     enqueueSnackbar("Video URL parsed and set as player source", {
       variant: "info",
     });
-  }, [client, enqueueSnackbar, url]);
+  }, [enqueueSnackbar, url]);
 
   const handleTitleChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,8 +123,8 @@ export default function ClipView() {
 
     setValidationError(null);
     setIsLoadingClip(true);
-    const request = await client;
-    await request.ClipsController_create(null, {
+    // TODO: convert me to use react query hooks
+    await clipsControllerCreate({
       url,
       start: startEndTimes[0],
       end: startEndTimes[1],
@@ -141,7 +138,7 @@ export default function ClipView() {
     //     variant: "success",
     //   }
     // );
-  }, [client, url, startEndTimes, title]);
+  }, [url, startEndTimes, title]);
 
   // const handleCopyDestinationURL = useCallback(() => {
   //   navigator.clipboard.writeText(

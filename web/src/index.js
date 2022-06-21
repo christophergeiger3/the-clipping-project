@@ -7,6 +7,7 @@ import { SnackbarProvider } from "notistack";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Axios from "axios";
 
+// Required for orval client requests (api.ts):
 Axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const queryClient = new QueryClient({
