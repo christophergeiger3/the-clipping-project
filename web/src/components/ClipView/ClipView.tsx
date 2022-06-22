@@ -13,10 +13,12 @@ import Video from "./Video";
 import * as React from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
-import { analyzeControllerAnalyze, clipsControllerCreate } from "../../api";
+import { analyzeControllerAnalyze, useClipsControllerCreate } from "../../api";
 
 export default function ClipView() {
   const { enqueueSnackbar } = useSnackbar();
+  const { mutate: createClip, isLoading: isCreatingClip } =
+    useClipsControllerCreate();
 
   const [url, setUrl] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
@@ -28,7 +30,6 @@ export default function ClipView() {
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   );
   const [isLoadingVideoPreview, setIsLoadingVideoPreview] = useState(false);
-  const [isLoadingClip, setIsLoadingClip] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleURLChange = useCallback(
@@ -122,15 +123,14 @@ export default function ClipView() {
     // }
 
     setValidationError(null);
-    setIsLoadingClip(true);
-    // TODO: convert me to use react query hooks
-    await clipsControllerCreate({
-      url,
-      start: startEndTimes[0],
-      end: startEndTimes[1],
-      output: title,
+    createClip({
+      data: {
+        url,
+        start: startEndTimes[0],
+        end: startEndTimes[1],
+        output: title,
+      },
     });
-    setIsLoadingClip(false);
     // const clip = response.data;
     // enqueueSnackbar(
     //   `Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`,
@@ -138,7 +138,7 @@ export default function ClipView() {
     //     variant: "success",
     //   }
     // );
-  }, [url, startEndTimes, title]);
+  }, [createClip, url, startEndTimes, title]);
 
   // const handleCopyDestinationURL = useCallback(() => {
   //   navigator.clipboard.writeText(
@@ -215,7 +215,7 @@ export default function ClipView() {
           <ButtonGroup variant="contained" color="primary">
             <LoadingButton
               variant="contained"
-              loading={isLoadingClip}
+              loading={isCreatingClip}
               onClick={handleClip}
             >
               Clip
