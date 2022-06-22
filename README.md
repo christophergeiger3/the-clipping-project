@@ -111,7 +111,7 @@ TCP's API is self-documented by Swagger/OpenAPI through NestJS, and comes with a
 Leave no question unasked! Feel free to drop any feedback or thoughts under the [issues tab](https://github.com/christophergeiger3/the-clipping-project/issues).
 
 ## Similar Projects
-If TCP isn't what you're looking for, that's okay! Here are some other utilities which might have the functionality you're looking for:
+If TCP isn't what you're looking for, that's okay! Here are some other utilities which might have the functionality you want:
 
 - [WatchVideoByLink](https://github.com/MohamedBakoush/WatchVideoByLink)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp)
