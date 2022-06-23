@@ -1,31 +1,24 @@
 import { CircularProgress, Typography } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { Components } from "../../client";
-import { useClient } from "../../providers/ApiProvider";
+import { useClipsControllerFindAll } from "../../api";
+import { useCallback } from "react";
 import ClipCard from "./ClipCard";
 
-type Clip = Components.Schemas.Clip;
+/** @constant milliseconds */
+const FIND_ALL_CLIPS_REFETCH_INTERVAL = 5000;
 
 export default function Clips() {
-  const { client } = useClient();
-  const [clips, setClips] = useState<Clip[]>();
-
-  useEffect(() => {
-    async function getClips(): Promise<void> {
-      const request = await client;
-      const clips = (await request.ClipsController_findAll()).data as Clip[];
-      setClips(clips);
-    }
-    getClips();
-    const timer = setInterval(getClips, 5000);
-    return () => clearInterval(timer);
-  }, [client]);
+  const { data: clipsResponse, refetch } = useClipsControllerFindAll({
+    query: {
+      refetchInterval: FIND_ALL_CLIPS_REFETCH_INTERVAL,
+    },
+  });
+  const clips = clipsResponse?.data;
 
   const handleClipDelete = useCallback(
-    (id: string) => {
-      setClips(clips?.filter((clip) => clip._id !== id));
+    (_id: string) => {
+      refetch();
     },
-    [clips]
+    [refetch]
   );
 
   if (!clips) {

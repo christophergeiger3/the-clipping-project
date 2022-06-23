@@ -10,6 +10,7 @@ import Axios from "axios";
 // Required for orval client requests (api.ts):
 Axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
+// Required client for react-query:
 const queryClient = new QueryClient({
   defaultOptions: {},
 });

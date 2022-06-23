@@ -3,13 +3,10 @@ import { CardActions, Link } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { ClipProgressBar } from "../Progress";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
-import { useClient } from "../../providers/ApiProvider";
-import { Components } from "../../client";
-
-type Clip = Components.Schemas.Clip;
+import { Clip, useClipsControllerRemove } from "../../api";
 
 // MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
 export default function ClipCard({
@@ -19,20 +16,19 @@ export default function ClipCard({
   clip: Clip;
   onDelete?: (id: string) => void;
 }) {
-  const { client } = useClient();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { mutate: removeClipById, isLoading: isRemoving } =
+    useClipsControllerRemove();
+
+  const removeClip = useCallback(() => {
+    const id = clip._id;
+    removeClipById({ id });
+    onDelete?.(id);
+  }, [clip._id, removeClipById, onDelete]);
+
   const clipLink = `${process.env.REACT_APP_API_URL}/${clip.output
     .split("/")
     .pop()}`;
 
-  const deleteClip = useCallback(async () => {
-    setIsDeleting(true);
-    const request = await client;
-    const response = await request.ClipsController_remove(clip._id);
-    console.log(response.data);
-    setIsDeleting(false);
-    onDelete?.(clip._id);
-  }, [client, clip._id, onDelete]);
   return (
     <Card variant="outlined">
       <CardContent>
@@ -57,8 +53,8 @@ export default function ClipCard({
         <LoadingButton
           variant="outlined"
           color="secondary"
-          loading={isDeleting}
-          onClick={deleteClip}
+          loading={isRemoving}
+          onClick={removeClip}
         >
           Delete
         </LoadingButton>
