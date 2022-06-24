@@ -4,7 +4,6 @@ import Clip from "./components/Clip";
 import Clips from "./components/Clips/Clips";
 import Progress from "./components/Progress";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import ApiProvider from "./providers/ApiProvider";
 
 function AppRoutes() {
   return (
@@ -44,9 +43,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <ApiProvider>
-          <AppRoutes />
-        </ApiProvider>
+        <AppRoutes />
       </header>
     </div>
   );
