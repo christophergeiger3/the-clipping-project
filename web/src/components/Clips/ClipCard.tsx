@@ -14,16 +14,14 @@ export default function ClipCard({
   onDelete,
 }: {
   clip: Clip;
-  onDelete?: (id: string) => void;
+  onDelete?: () => void;
 }) {
   const { mutate: removeClipById, isLoading: isRemoving } =
     useClipsControllerRemove();
 
   const removeClip = useCallback(() => {
-    const id = clip._id;
-    removeClipById({ id });
-    onDelete?.(id);
-  }, [clip._id, removeClipById, onDelete]);
+    removeClipById({ id: clip._id }, { onSuccess: onDelete });
+  }, [removeClipById, clip._id, onDelete]);
 
   const clipLink = `${process.env.REACT_APP_API_URL}/${clip.output
     .split("/")

@@ -12,23 +12,15 @@ export default function Clips() {
       refetchInterval: FIND_ALL_CLIPS_REFETCH_INTERVAL,
     },
   });
-  const clips = clipsResponse?.data;
 
-  const handleClipDelete = useCallback(
-    (_id: string) => {
-      refetch();
-    },
-    [refetch]
-  );
-
-  if (!clips) {
+  if (!clipsResponse?.data) {
     return <CircularProgress />;
   }
 
-  return clips.length ? (
+  return clipsResponse.data.length ? (
     <>
-      {clips.map((clip) => (
-        <ClipCard key={clip._id} clip={clip} onDelete={handleClipDelete} />
+      {clipsResponse.data.map((clip) => (
+        <ClipCard key={clip._id} clip={clip} onDelete={refetch} />
       ))}
     </>
   ) : (
