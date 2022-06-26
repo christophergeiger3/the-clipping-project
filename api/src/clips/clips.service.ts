@@ -7,7 +7,6 @@ import { Clip, ClipDocument, Status } from './schema/clip.schema';
 import ClipCreatedEvent from './events/clip-created.event';
 import { AnalyzeService } from '../analyze/analyze.service';
 import { unlinkSync } from 'fs';
-import { join } from 'path';
 
 @Injectable()
 export class ClipsService {
@@ -52,7 +51,8 @@ export class ClipsService {
     const clip = await this.clipModel.findByIdAndDelete(id);
     this.forceStopClipTranscode(id);
     this.setInactive(id);
-    this.deleteFile(clip.path);
+    this.deleteClipFile(clip);
+
     return clip;
   }
 
@@ -118,6 +118,17 @@ export class ClipsService {
       Logger.error(`Error deleting file ${file}`);
       Logger.error(err);
     }
+  }
+
+  /** Delete clip file if one exists */
+  private deleteClipFile(clip: Clip): void {
+    if (!clip.path) {
+      Logger.log(
+        `A clip file path does not exist for ${clip._id}, so no file to delete`,
+      );
+      return;
+    }
+    this.deleteFile(clip.path);
   }
 
   /** Kills clip.child if the clip is active */

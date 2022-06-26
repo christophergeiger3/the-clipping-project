@@ -37,12 +37,12 @@ export class ClipBaseSchema {
   @ApiProperty()
   analyzedUrl: string;
 
-  @Prop()
+  @Prop({ required: false })
   @ApiProperty({
     description: 'Path to the output file of the clip',
     example: 'videos/big-buck-bunny.mp4',
   })
-  path: string;
+  path?: string;
 
   constructor(clip?: ClipBaseSchema) {
     if (clip) {
