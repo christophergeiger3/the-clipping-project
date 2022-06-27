@@ -22,11 +22,12 @@ class ClipCreatedListener {
   /** Clip processing pipeline */
   async process(clip: ClipCreatedEvent) {
     const parseDestinationFromString = (data: string) => {
-      const destinationRegex = /^\[download\] Destination: (\S*)\s*$/;
+      const destinationRegex = /^\[download\] Destination: \S*\/(\S*)\s*$/;
       const filename = data.match(destinationRegex)?.[1] || null;
       if (filename !== null) {
         clip.filename = filename;
         Logger.log(`id: ${clip._id}, ${filename}`);
+        this.clipsService.update(clip._id, { filename });
       }
     };
 

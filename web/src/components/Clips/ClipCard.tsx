@@ -23,7 +23,9 @@ export default function ClipCard({
     removeClipById({ id: clip._id }, { onSuccess: onDelete });
   }, [removeClipById, clip._id, onDelete]);
 
-  const clipLink = `${process.env.REACT_APP_API_URL}/${clip.name}`;
+  const clipLink = clip.filename
+    ? `${process.env.REACT_APP_API_URL}/${clip.filename}`
+    : undefined;
 
   return (
     <Card variant="outlined">
