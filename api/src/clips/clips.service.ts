@@ -122,13 +122,13 @@ export class ClipsService {
 
   /** Delete clip file if one exists */
   private deleteClipFile(clip: Clip): void {
-    if (!clip.path) {
+    if (!clip.filename) {
       Logger.log(
-        `A clip file path does not exist for ${clip._id}, so no file to delete`,
+        `A clip file does not exist for ${clip._id}, so no file to delete`,
       );
       return;
     }
-    this.deleteFile(clip.path);
+    this.deleteFile(clip.filename);
   }
 
   /** Kills clip.child if the clip is active */

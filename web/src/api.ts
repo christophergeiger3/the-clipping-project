@@ -28,9 +28,10 @@ export interface Clip {
   end: number;
   name: string;
   status: string;
+  /** Resulting URL from passing clip.url to yt-dlp --get-video */
   analyzedUrl: string;
-  /** Path to the output file of the clip */
-  path: string;
+  /** Filename of the clip video, if one exists */
+  filename: string;
   _id: string;
   createdAt: string;
   updatedAt: string;

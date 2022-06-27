@@ -34,15 +34,17 @@ export class ClipBaseSchema {
   status: Status;
 
   @Prop()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Resulting URL from passing clip.url to yt-dlp --get-video',
+  })
   analyzedUrl: string;
 
   @Prop({ required: false })
   @ApiProperty({
-    description: 'Path to the output file of the clip',
-    example: 'videos/big-buck-bunny.mp4',
+    description: 'Filename of the clip video, if one exists',
+    example: 'big-buck-bunny.mp4',
   })
-  path?: string;
+  filename?: string;
 
   constructor(clip?: ClipBaseSchema) {
     if (clip) {
@@ -52,7 +54,7 @@ export class ClipBaseSchema {
       this.url = clip.url;
       this.name = clip.name;
       this.status = clip.status;
-      this.path = clip.path;
+      this.filename = clip.filename;
     }
   }
 }

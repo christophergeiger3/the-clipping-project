@@ -23,10 +23,10 @@ class ClipCreatedListener {
   async process(clip: ClipCreatedEvent) {
     const parseDestinationFromString = (data: string) => {
       const destinationRegex = /^\[download\] Destination: (\S*)\s*$/;
-      const path = data.match(destinationRegex)?.[1] || null;
-      if (path !== null) {
-        clip.path = path;
-        Logger.log(`id: ${clip._id}, ${path}`);
+      const filename = data.match(destinationRegex)?.[1] || null;
+      if (filename !== null) {
+        clip.filename = filename;
+        Logger.log(`id: ${clip._id}, ${filename}`);
       }
     };
 
@@ -46,11 +46,11 @@ class ClipCreatedListener {
       if (code === 0) {
         clip.status = Status.Done;
         this.eventEmitter.emit('clip.done', { clip });
-        Logger.log(`done: ${clip.path}`);
+        Logger.log(`done: ${clip.filename}`);
       } else {
         clip.status = Status.Error;
         this.eventEmitter.emit('clip.error', { clip });
-        Logger.error(`error: ${clip.path}`);
+        Logger.error(`error: ${clip.filename}`);
       }
 
       this.clipsService.setInactive(clip._id, clip.status);
