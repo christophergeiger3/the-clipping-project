@@ -1,8 +1,8 @@
-// Update the output file by running:
+// Update the output file by installing orval:
+// $ npm install -g orval
+// then running:
 // $ orval
 // with the backend server running on http://localhost:4190.
-// If you are actively developing the backend, try:
-// $ orval --watch
 const orvalConfig = {
   apiSpec: {
     input: {

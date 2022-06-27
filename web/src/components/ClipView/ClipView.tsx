@@ -128,12 +128,12 @@ export default function ClipView() {
         url,
         start: startEndTimes[0],
         end: startEndTimes[1],
-        output: title,
+        name: title,
       },
     });
     // const clip = response.data;
     // enqueueSnackbar(
-    //   `Clipping to ${process.env.REACT_APP_API_URL}/${clip.output}`,
+    //   `Clipping to ${process.env.REACT_APP_API_URL}/${clip.name}`,
     //   {
     //     variant: "success",
     //   }

@@ -26,8 +26,8 @@ export class CreateClipDto {
   readonly end: number;
 
   @ApiProperty({
-    description: 'Output name, without extension',
+    description: 'Clip name, without extension',
     example: 'big-buck-bunny',
   })
-  readonly output: string;
+  readonly name: string;
 }

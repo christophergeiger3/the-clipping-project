@@ -27,7 +27,7 @@ export class ClipBaseSchema {
 
   @Prop({ required: true })
   @ApiProperty()
-  output: string;
+  name: string;
 
   @Prop()
   @ApiProperty()
@@ -50,7 +50,7 @@ export class ClipBaseSchema {
       this.end = clip.end;
       this.analyzedUrl = clip.analyzedUrl;
       this.url = clip.url;
-      this.output = clip.output;
+      this.name = clip.name;
       this.status = clip.status;
       this.path = clip.path;
     }

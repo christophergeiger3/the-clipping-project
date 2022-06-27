@@ -1,6 +1,5 @@
 import { CircularProgress, Typography } from "@mui/material";
 import { useClipsControllerFindAll } from "../../api";
-import { useCallback } from "react";
 import ClipCard from "./ClipCard";
 
 /** @constant milliseconds */

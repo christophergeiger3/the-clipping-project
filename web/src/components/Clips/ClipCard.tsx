@@ -8,7 +8,7 @@ import { ClipProgressBar } from "../Progress";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 import { Clip, useClipsControllerRemove } from "../../api";
 
-// MUI Card displaying clip id, url, start, end, output, status, createdAt, updatedAt
+// MUI Card displaying clip attributes
 export default function ClipCard({
   clip,
   onDelete,
@@ -23,15 +23,13 @@ export default function ClipCard({
     removeClipById({ id: clip._id }, { onSuccess: onDelete });
   }, [removeClipById, clip._id, onDelete]);
 
-  const clipLink = `${process.env.REACT_APP_API_URL}/${clip.output
-    .split("/")
-    .pop()}`;
+  const clipLink = `${process.env.REACT_APP_API_URL}/${clip.name}`;
 
   return (
     <Card variant="outlined">
       <CardContent>
         <Link href={clipLink}>
-          <Typography variant="h5">{clip.output}</Typography>
+          <Typography variant="h5">{clip.name}</Typography>
         </Link>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {clip.url}

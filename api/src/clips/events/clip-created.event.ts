@@ -25,7 +25,7 @@ class ClipCreatedEvent extends Clip {
       '--force-keyframes-at-cuts',
       this.url,
       '-o',
-      `${join('videos', `${clip.output}.%(ext)s`)}`,
+      `${join('videos', `${clip.name}.%(ext)s`)}`,
     ];
   }
 }
