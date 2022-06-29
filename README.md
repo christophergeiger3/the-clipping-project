@@ -20,14 +20,10 @@ docker compose up
 sudo systemctl start mongod.service
 ```
 
-Compile yt-dlp from source:
+Install yt-dlp:
 ```bash
-sudo apt-get install -y python3-pytest python3 make git zip ffmpeg pandoc
-git clone https://github.com/yt-dlp/yt-dlp
-cd yt-dlp
-make
-sudo cp yt-dlp /usr/local/bin/yt-dlp
-sudo chmod a+rx /usr/local/bin/yt-dlp
+wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp
+chmod a+rx /usr/local/bin/yt-dlp
 ```
 
 Install npm and nodejs:
