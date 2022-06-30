@@ -10,6 +10,10 @@ class ClipCreatedEvent extends Clip {
   _id: ObjectId;
   child: ChildProcess;
   args: string[];
+  /** The current frame being processed by ffmpeg, used to estimate ffmpeg progress */
+  currentFrame: number;
+  /** FPS of the downloaded clip, used to estimate ffmpeg progress */
+  fps: number;
   /** Integer (0 - 100) of how much of the clip has been processed in ffmpeg */
   percentDone: number;
 
@@ -23,6 +27,8 @@ class ClipCreatedEvent extends Clip {
       '--download-sections',
       `*${convertToSeconds(this.start)}-${convertToSeconds(this.end)}`,
       '--force-keyframes-at-cuts',
+      '--downloader-args',
+      'ffmpeg:-progress pipe:1', // pipe ffmpeg's progress to stdout (file descriptor 1)
       this.url,
       '-o',
       `${join('videos', `${clip.name}.%(ext)s`)}`,
