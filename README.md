@@ -71,7 +71,7 @@ Launch the app API:
 ```bash
 cd api
 npm install
-npm start
+npm run start:debug
 ```
 Open a new terminal and launch the web front-end:
 ```bash
