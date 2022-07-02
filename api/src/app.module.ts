@@ -34,6 +34,10 @@ const environmentValidationSchema = Joi.object({
     MongooseModule.forRoot(process.env.DATABASE_URL),
     AnalyzeModule,
     ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/',
+    }),
+    ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'videos'),
       exclude: ['/'],
     }),
