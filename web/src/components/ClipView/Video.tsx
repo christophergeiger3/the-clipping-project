@@ -40,6 +40,12 @@ export default function Video({
   const [isPreciseToMilliseconds, setIsPreciseToMilliseconds] = useState(
     !!localIsPreciseToMilliseconds
   );
+  const localShowStartEndTextFields: boolean | null = JSON.parse(
+    localStorage.getItem("showStartEndTextFields") || "null"
+  );
+  const [showStartEndTextFields, setShowStartEndTextFields] = useState(
+    !!localShowStartEndTextFields
+  );
 
   const handleCheckboxChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,6 +54,8 @@ export default function Video({
         setWillSeekOnSliderUpdate(checked);
       } else if (name === "isPreciseToMilliseconds") {
         setIsPreciseToMilliseconds(checked);
+      } else if (name === "showStartEndTextFields") {
+        setShowStartEndTextFields(checked);
       }
       localStorage.setItem(name, JSON.stringify(checked));
     },
@@ -186,6 +194,7 @@ export default function Video({
           onCheckboxChange={handleCheckboxChange}
           willSeekOnSliderUpdate={willSeekOnSliderUpdate}
           isPreciseToMilliseconds={isPreciseToMilliseconds}
+          showStartEndTextFields={showStartEndTextFields}
         />
       </Grid>
     </Grid>

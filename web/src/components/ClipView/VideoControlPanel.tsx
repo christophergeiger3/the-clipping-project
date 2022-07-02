@@ -1,4 +1,5 @@
 import { SkipNext, SkipPrevious } from "@mui/icons-material";
+import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -18,6 +19,7 @@ interface VideoControlPanelProps {
   onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   willSeekOnSliderUpdate: boolean;
   isPreciseToMilliseconds: boolean;
+  showStartEndTextFields: boolean;
 }
 
 export default function VideoControlPanel({
@@ -28,6 +30,7 @@ export default function VideoControlPanel({
   onCheckboxChange,
   willSeekOnSliderUpdate,
   isPreciseToMilliseconds,
+  showStartEndTextFields,
 }: VideoControlPanelProps) {
   const handleAddToStart = useCallback(
     (amount: number) => {
@@ -114,6 +117,28 @@ export default function VideoControlPanel({
     }
   }, [isPreciseToMilliseconds, handleAddToEnd]);
 
+  const handleUpdateStart = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const start = parseInt(event.target.value, 10);
+      if (isNaN(start)) {
+        return;
+      }
+      setStartEndTimes([start, startEndRef.current[1]]);
+    },
+    [setStartEndTimes, startEndRef]
+  );
+
+  const handleUpdateEnd = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const end = parseInt(event.target.value, 10);
+      if (isNaN(end)) {
+        return;
+      }
+      setStartEndTimes([startEndRef.current[0], end]);
+    },
+    [setStartEndTimes, startEndRef]
+  );
+
   return (
     <>
       <Grid container={true}>
@@ -137,7 +162,39 @@ export default function VideoControlPanel({
             />
           }
         />
+        <FormControlLabel
+          label="Edit clip start/end times manually"
+          control={
+            <Checkbox
+              name="showStartEndTextFields"
+              checked={showStartEndTextFields}
+              onChange={onCheckboxChange}
+            />
+          }
+        />
       </Grid>
+      {showStartEndTextFields ? (
+        <Grid pt={2} pl={2} pb={2} spacing={2} container={true}>
+          <Grid item={true} xs={6}>
+            <TextField
+              label="Start"
+              type="number"
+              value={startEndRef.current[0]}
+              onChange={handleUpdateStart}
+              fullWidth={true}
+            />
+          </Grid>
+          <Grid item={true} xs={6}>
+            <TextField
+              label="End"
+              type="number"
+              value={startEndRef.current[1]}
+              onChange={handleUpdateEnd}
+              fullWidth={true}
+            />
+          </Grid>
+        </Grid>
+      ) : null}
       <Grid pb={2} container={true}>
         <Grid item={true} xs={12} lg={6}>
           <Typography sx={{ marginRight: 1 }}>Left: </Typography>
