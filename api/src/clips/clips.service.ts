@@ -8,6 +8,8 @@ import ClipCreatedEvent from './events/clip-created.event';
 import { AnalyzeService } from '../analyze/analyze.service';
 import { unlinkSync } from 'fs';
 
+const CLIPS_DIRECTORY = 'videos/';
+
 @Injectable()
 export class ClipsService {
   /** Clips currently being processed (clip.status = 'processing') */
@@ -128,7 +130,7 @@ export class ClipsService {
       );
       return;
     }
-    this.deleteFile(clip.filename);
+    this.deleteFile(CLIPS_DIRECTORY + clip.filename);
   }
 
   /** Kills clip.child if the clip is active */
