@@ -32,58 +32,74 @@ export default function VideoControlPanel({
   isPreciseToMilliseconds,
   showStartEndTextFields,
 }: VideoControlPanelProps) {
+  const handleUpdateStartValue = useCallback(
+    (newStart: number) => {
+      setStartEndTimes([newStart, startEndRef.current[1]]);
+    },
+    [setStartEndTimes, startEndRef]
+  );
+
+  const handleUpdateEndValue = useCallback(
+    (newEnd: number) => {
+      setStartEndTimes([startEndRef.current[0], newEnd]);
+    },
+    [setStartEndTimes, startEndRef]
+  );
+
   const handleAddToStart = useCallback(
     (amount: number) => {
-      const [start, end] = startEndRef.current;
-      setStartEndTimes([Math.max(0, start + amount), end]);
+      const [start] = startEndRef.current;
+      handleUpdateStartValue(Math.max(0, start + amount));
     },
-    [startEndRef, setStartEndTimes]
+    [startEndRef, handleUpdateStartValue]
   );
 
   const handleAddToEnd = useCallback(
     (amount: number) => {
-      const [start, end] = startEndRef.current;
-      setStartEndTimes([
-        start,
-        Math.min(end + amount, duration || end + amount),
-      ]);
+      const [, end] = startEndRef.current;
+      handleUpdateEndValue(Math.min(end + amount, duration || end + amount));
     },
-    [startEndRef, setStartEndTimes, duration]
+    [startEndRef, handleUpdateEndValue, duration]
+  );
+
+  const getCurrentPlayerTime = useCallback(() => {
+    const player = playerRef.current;
+    if (!player) {
+      return 0;
+    }
+    return player.currentTime();
+  }, [playerRef]);
+
+  const setCurrentPlayerTime = useCallback(
+    (time: number) => {
+      const player = playerRef.current;
+      if (!player) {
+        return;
+      }
+      player.currentTime(time);
+    },
+    [playerRef]
   );
 
   const handleSetStartToCurrentTime = useCallback(() => {
-    const player = playerRef.current;
-    if (!player) {
-      return;
-    }
-    const currentTime = Math.floor(player.currentTime() * 1000);
-    setStartEndTimes([currentTime, startEndRef.current[1]]);
-  }, [playerRef, startEndRef, setStartEndTimes]);
+    const currentTime = Math.floor(getCurrentPlayerTime() * 1000);
+    handleUpdateStartValue(currentTime);
+  }, [getCurrentPlayerTime, handleUpdateStartValue]);
 
   const handleSetEndToCurrentTime = useCallback(() => {
-    const player = playerRef.current;
-    if (!player) {
-      return;
-    }
-    const currentTime = Math.floor(player.currentTime() * 1000);
-    setStartEndTimes([startEndRef.current[0], currentTime]);
-  }, [playerRef, startEndRef, setStartEndTimes]);
+    const currentTime = Math.floor(getCurrentPlayerTime() * 1000);
+    handleUpdateEndValue(currentTime);
+  }, [getCurrentPlayerTime, handleUpdateEndValue]);
 
   const handleJumpToClipStart = useCallback(() => {
     const [start] = startEndRef.current;
-    if (!playerRef.current) {
-      return;
-    }
-    playerRef.current.currentTime(start / 1000);
-  }, [playerRef, startEndRef]);
+    setCurrentPlayerTime(start / 1000);
+  }, [setCurrentPlayerTime, startEndRef]);
 
   const handleJumpToClipEnd = useCallback(() => {
     const [, end] = startEndRef.current;
-    if (!playerRef.current) {
-      return;
-    }
-    playerRef.current.currentTime(end / 1000);
-  }, [playerRef, startEndRef]);
+    setCurrentPlayerTime(end / 1000);
+  }, [setCurrentPlayerTime, startEndRef]);
 
   const handleIncrementStartByMinimum = useCallback(() => {
     if (isPreciseToMilliseconds) {
@@ -118,8 +134,8 @@ export default function VideoControlPanel({
   }, [isPreciseToMilliseconds, handleAddToEnd]);
 
   const handleUpdateStart = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const start = parseInt(event.target.value, 10);
+    ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+      const start = parseInt(value, 10);
       if (isNaN(start)) {
         return;
       }
@@ -129,8 +145,8 @@ export default function VideoControlPanel({
   );
 
   const handleUpdateEnd = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const end = parseInt(event.target.value, 10);
+    ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+      const end = parseInt(value, 10);
       if (isNaN(end)) {
         return;
       }
