@@ -4,7 +4,7 @@
 <p align="center">An easy to use self-hosted clipping tool.</p>
 <p align="center">Clip videos from popular websites like YouTube, then share with friends!</p>
 
-# ⚠️🚨🚧🔥🚩 The Clipping Project is in Pre-Alpha! ⚠️🚨🚧🔥🚩
+## ⚠️🚨🚧🔥🚩 The Clipping Project is in Pre-Alpha! ⚠️🚨🚧🔥🚩
 
 
 ## 📽️ Demo
