@@ -9,6 +9,15 @@
 
 ## 📽️ Demo
 
+
+https://user-images.githubusercontent.com/20095580/177227209-0a8de752-16d3-48cd-b8ec-6654aadcfad1.mp4
+
+
+
+https://user-images.githubusercontent.com/20095580/177227295-b658e424-282d-4e99-89e8-862bad40aeb8.mp4
+
+
+
 ## ⚙️ Installation
 The Clipping Project may be installed either via Docker or by running each service independently (local).
 ### 🐋 Docker
