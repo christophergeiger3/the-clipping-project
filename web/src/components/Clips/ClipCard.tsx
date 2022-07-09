@@ -42,7 +42,7 @@ export default function ClipCard({
         </Typography>
         <Typography color="text.secondary">{clip.status}</Typography>
         {/* Temporary, for debugging: */}
-        <Typography>{clip._id}</Typography>
+        {/* <Typography>{clip._id}</Typography> */}
         {clip.status === "processing" ? (
           <ClipProgressBar id={clip._id} />
         ) : null}
