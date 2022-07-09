@@ -6,6 +6,7 @@
 
 ## ⚠️🚨🚧🔥🚩 The Clipping Project is in Pre-Alpha! ⚠️🚨🚧🔥🚩
 
+The Clipping Project isn't really ready for production use yet, as there are still underlying security concerns with the video hosting portion of the app.
 
 ## 📽️ Demo
 
