@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 import { useClipsControllerFindAll } from "../../api";
 import ClipCard from "./ClipCard";
 
@@ -17,11 +17,11 @@ export default function Clips() {
   }
 
   return clipsResponse.data.length ? (
-    <>
+    <Grid rowSpacing={5}>
       {clipsResponse.data.map((clip) => (
         <ClipCard key={clip._id} clip={clip} onDelete={refetch} />
       ))}
-    </>
+    </Grid>
   ) : (
     <Typography variant="h5">No clips found.</Typography>
   );

@@ -49,8 +49,8 @@ export default function ClipCard({
       </CardContent>
       <CardActions>
         <LoadingButton
-          variant="outlined"
-          color="secondary"
+          variant="contained"
+          color="warning"
           loading={isRemoving}
           onClick={removeClip}
         >
