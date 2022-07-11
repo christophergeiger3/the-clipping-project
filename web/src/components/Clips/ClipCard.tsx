@@ -9,9 +9,9 @@ import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 import { Clip, useClipsControllerRemove } from "../../api";
 import { Check, Error, HourglassEmpty } from "@mui/icons-material";
 
-const SpinningHourglass = () => (
+const SpinningHourglass = ({ ...props }) => (
   <HourglassEmpty
-    color="warning"
+    color="info"
     sx={{
       animation: "spin 2s linear infinite",
       "@keyframes spin": {
@@ -19,6 +19,7 @@ const SpinningHourglass = () => (
         to: { transform: "rotate(360deg)" },
       },
     }}
+    {...props}
   />
 );
 
@@ -44,9 +45,26 @@ export default function ClipCard({
   return (
     <Card variant="outlined">
       <CardContent>
-        <Link href={clipLink}>
-          <Typography variant="h5">{clip.name}</Typography>
-        </Link>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <div style={{ marginRight: "0.5rem" }}>
+            {clip.status === "done" ? <Check color="success" /> : null}
+            {clip.status === "processing" ? <SpinningHourglass /> : null}
+            {clip.status === "idle" ? (
+              <SpinningHourglass color="warning" />
+            ) : null}
+            {clip.status === "error" ? <Error color="error" /> : null}
+          </div>
+
+          <Link href={clipLink}>
+            <Typography variant="h5">{clip.name}</Typography>
+          </Link>
+        </div>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {clip.url}
         </Typography>
@@ -54,20 +72,14 @@ export default function ClipCard({
           {convertMillisecondsToTimestamp(clip.start)} -{" "}
           {convertMillisecondsToTimestamp(clip.end)}
         </Typography>
-        {/* <Typography color="text.secondary">{clip.status}</Typography> */}
-        {/* Temporary, for debugging: */}
-        {/* <Typography>{clip._id}</Typography> */}
-        {clip.status === "done" ? <Check color="success" /> : null}
         {clip.status === "processing" ? (
           <ClipProgressBar id={clip._id} />
         ) : null}
-        {clip.status === "idle" ? <SpinningHourglass /> : null}
-        {clip.status === "error" ? <Error color="error" /> : null}
       </CardContent>
       <CardActions>
         <LoadingButton
           variant="contained"
-          color="warning"
+          color="error"
           loading={isRemoving}
           onClick={removeClip}
         >
