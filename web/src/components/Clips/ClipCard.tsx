@@ -43,7 +43,7 @@ export default function ClipCard({
     : undefined;
 
   return (
-    <Card variant="outlined">
+    <Card variant="outlined" sx={{ marginTop: 1 }}>
       <CardContent>
         <div
           style={{
