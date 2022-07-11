@@ -7,10 +7,10 @@ import { useCallback } from "react";
 import { ClipProgressBar } from "../Progress";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 import { Clip, useClipsControllerRemove } from "../../api";
-import { Check, Error, HourglassEmpty } from "@mui/icons-material";
+import { Check, Error, HourglassFullTwoTone } from "@mui/icons-material";
 
 const SpinningHourglass = ({ ...props }) => (
-  <HourglassEmpty
+  <HourglassFullTwoTone
     color="info"
     sx={{
       animation: "spin 2s linear infinite",
