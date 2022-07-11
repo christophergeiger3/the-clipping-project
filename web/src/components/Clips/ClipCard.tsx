@@ -7,6 +7,20 @@ import { useCallback } from "react";
 import { ClipProgressBar } from "../Progress";
 import { convertMillisecondsToTimestamp } from "../../utils/timestamp";
 import { Clip, useClipsControllerRemove } from "../../api";
+import { Check, Error, HourglassEmpty } from "@mui/icons-material";
+
+const SpinningHourglass = () => (
+  <HourglassEmpty
+    color="warning"
+    sx={{
+      animation: "spin 2s linear infinite",
+      "@keyframes spin": {
+        from: { transform: "rotate(0deg)" },
+        to: { transform: "rotate(360deg)" },
+      },
+    }}
+  />
+);
 
 // MUI Card displaying clip attributes
 export default function ClipCard({
@@ -36,16 +50,19 @@ export default function ClipCard({
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {clip.url}
         </Typography>
-        <Typography color="text.secondary">
+        <Typography>
           {convertMillisecondsToTimestamp(clip.start)} -{" "}
           {convertMillisecondsToTimestamp(clip.end)}
         </Typography>
-        <Typography color="text.secondary">{clip.status}</Typography>
+        {/* <Typography color="text.secondary">{clip.status}</Typography> */}
         {/* Temporary, for debugging: */}
         {/* <Typography>{clip._id}</Typography> */}
+        {clip.status === "done" ? <Check color="success" /> : null}
         {clip.status === "processing" ? (
           <ClipProgressBar id={clip._id} />
         ) : null}
+        {clip.status === "idle" ? <SpinningHourglass /> : null}
+        {clip.status === "error" ? <Error color="error" /> : null}
       </CardContent>
       <CardActions>
         <LoadingButton
