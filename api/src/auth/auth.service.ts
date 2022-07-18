@@ -7,6 +7,7 @@ import { compare } from 'bcrypt';
 export class AuthService {
   constructor(private usersService: UsersService) {}
 
+  /** @returns The user if the username and password are valid, otherwise null */
   async validateUser(username: string, password: string): Promise<User | null> {
     const user = await this.usersService.findOneByUsername(username);
 
