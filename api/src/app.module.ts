@@ -31,7 +31,6 @@ const environmentValidationSchema = Joi.object({
     ConfigModule.forRoot({
       validationSchema: environmentValidationSchema,
     }), // for .env files
-    ClipsModule,
     EventEmitterModule.forRoot(),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     AnalyzeModule,
@@ -43,10 +42,11 @@ const environmentValidationSchema = Joi.object({
       rootPath: join(__dirname, '..', 'videos'),
       exclude: ['/'],
     }),
+    ClipsModule,
     AuthModule,
     UsersModule,
   ],
-  controllers: [AppController, AnalyzeController],
-  providers: [AppService, AnalyzeService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
