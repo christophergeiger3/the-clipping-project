@@ -15,6 +15,6 @@ export class AuthService {
       return null;
     }
 
-    return compare(password, user.password) ? user : null;
+    return (await compare(password, user.password)) ? user : null;
   }
 }
