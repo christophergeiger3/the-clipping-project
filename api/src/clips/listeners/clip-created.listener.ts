@@ -99,12 +99,12 @@ class ClipCreatedListener {
     Logger.log(`Spawned child process for ${clip.url}`);
 
     // FFmpeg outputs fps and other info to file descriptor 3, aka stderr
-    clip.child.stderr.setEncoding('utf8');
-    clip.child.stderr.on('data', parseClipFPS);
+    clip.child.stderr?.setEncoding('utf8');
+    clip.child.stderr?.on('data', parseClipFPS);
 
-    clip.child.stdout.setEncoding('utf8');
-    clip.child.stdout.on('data', parseDestinationFromString);
-    clip.child.stdout.on('data', parseFFmpegProgress);
+    clip.child.stdout?.setEncoding('utf8');
+    clip.child.stdout?.on('data', parseDestinationFromString);
+    clip.child.stdout?.on('data', parseFFmpegProgress);
 
     clip.child.on('exit', onExit);
   }

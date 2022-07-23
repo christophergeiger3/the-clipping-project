@@ -2,9 +2,9 @@ import { AnalyzeModule } from '../analyze/analyze.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ClipsController } from './clips.controller';
 import { ClipsModule } from './clips.module';
-import { ClipsService } from './clips.service';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DATABASE_URL } from 'src/env.default';
 
 describe('ClipsController', () => {
   let controller: ClipsController;
@@ -17,7 +17,7 @@ describe('ClipsController', () => {
         EventEmitterModule.forRoot(),
         // TODO: avoid database connection during testing
         // TODO: fix improper teardown
-        MongooseModule.forRoot(process.env.DATABASE_URL),
+        MongooseModule.forRoot(process.env.DATABASE_URL || DATABASE_URL),
       ],
     }).compile();
 

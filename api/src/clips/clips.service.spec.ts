@@ -1,3 +1,4 @@
+import { TEST_DATABASE_URL } from './../env.default';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AnalyzeModule } from '../analyze/analyze.module';
 import { ClipsService } from './clips.service';
@@ -16,7 +17,9 @@ describe('ClipsService', () => {
         EventEmitterModule.forRoot(),
         // TODO: avoid database connection during testing
         // TODO: fix improper teardown
-        MongooseModule.forRoot(process.env.TEST_DATABASE_URL),
+        MongooseModule.forRoot(
+          process.env.TEST_DATABASE_URL || TEST_DATABASE_URL,
+        ),
       ],
     }).compile();
 

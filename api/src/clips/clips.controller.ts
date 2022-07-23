@@ -65,7 +65,7 @@ export class ClipsController {
     description: 'The record has been successfully returned',
     type: Clip,
   })
-  findOne(@Param('id') id: ObjectId): Promise<Clip> {
+  findOne(@Param('id') id: ObjectId): Promise<Clip | null> {
     return this.clipsService.findOne(id);
   }
 
@@ -85,7 +85,7 @@ export class ClipsController {
   async update(
     @Param('id') id: ObjectId,
     @Body() updateClipDto: UpdateClipDto,
-  ): Promise<Clip> {
+  ): Promise<Clip | null> {
     return this.clipsService.update(id, updateClipDto);
   }
 

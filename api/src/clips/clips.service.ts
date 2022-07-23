@@ -39,21 +39,27 @@ export class ClipsService {
     return clips;
   }
 
-  async findOne(id: ObjectId): Promise<Clip> {
+  async findOne(id: ObjectId): Promise<Clip | null> {
     return this.clipModel.findById(id);
   }
 
-  async update(id: ObjectId, update: Partial<ClipDocument>): Promise<Clip> {
+  async update(
+    id: ObjectId,
+    update: Partial<ClipDocument>,
+  ): Promise<Clip | null> {
     return this.clipModel.findByIdAndUpdate(id, update, {
       new: true,
     });
   }
 
-  async remove(id: ObjectId): Promise<Clip> {
+  async remove(id: ObjectId): Promise<Clip | null> {
     const clip = await this.clipModel.findByIdAndDelete(id);
     this.forceStopClipTranscode(id);
     this.setInactive(id);
-    this.deleteClipFile(clip);
+
+    if (clip) {
+      this.deleteClipFile(clip);
+    }
 
     return clip;
   }

@@ -22,11 +22,11 @@ export class UsersService {
     return this.userModel.find();
   }
 
-  async findOne(id: ObjectId): Promise<User> {
+  async findOne(id: ObjectId): Promise<User | null> {
     return this.userModel.findById(id);
   }
 
-  async findOneByUsername(username: string): Promise<User> {
+  async findOneByUsername(username: string): Promise<User | null> {
     return this.userModel.findOne({ username });
   }
 }
