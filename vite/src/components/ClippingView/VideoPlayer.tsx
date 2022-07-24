@@ -36,10 +36,10 @@ type VideoReducer = (
 
 export default function VideoPlayer({
   src,
-  startEndTimes,
+  readyCallback,
 }: {
   src: string;
-  startEndTimes?: [number, number];
+  readyCallback?: videojs.ReadyCallback;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -51,7 +51,7 @@ export default function VideoPlayer({
         case "INITIALIZE":
           if (!videoElement) return state;
           return {
-            player: initializeVideoPlayer({ src, videoElement }),
+            player: initializeVideoPlayer({ src, videoElement, readyCallback }),
           };
         default:
           throw new Error("Unknown action type");
