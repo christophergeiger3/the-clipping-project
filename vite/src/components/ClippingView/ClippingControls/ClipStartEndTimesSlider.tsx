@@ -1,6 +1,6 @@
 import { Slider } from "@mui/material";
 import { useCallback } from "react";
-import convertNumberToTimestamp from "./utils/convertNumberToTimestamp";
+import { convertMillisecondsToTimestamp } from "../../../utils/timestamp";
 
 export type ClipStartEndTimes = [number, number];
 
@@ -32,7 +32,7 @@ export default function ClipStartEndTimeSlider({
       onChange={handleChange}
       min={0}
       max={duration}
-      valueLabelFormat={convertNumberToTimestamp}
+      valueLabelFormat={convertMillisecondsToTimestamp}
       valueLabelDisplay="auto"
     />
   );

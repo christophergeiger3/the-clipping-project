@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import videojs, { VideoJsPlayer } from "video.js";
+import { toMilliseconds } from "../../utils/timestamp";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
@@ -11,14 +12,14 @@ const DEFAULT_VIDEO_SRC =
 
 export default function ClippingView() {
   const [src, _setSrc] = useState(DEFAULT_VIDEO_SRC);
-  const [clipDuration, setClipDuration] = useState<number>(100);
+  const [clipDuration, setClipDuration] = useState<number>(10000);
   const [[clipStart, clipEnd], setClipStartEnd] = useState([0, clipDuration]);
 
   const onVideoPlayerReady = useCallback<videojs.ReadyCallback>(function (
     this: videojs.Player
   ) {
     this.on("loadedmetadata", () => {
-      const duration = this.duration();
+      const duration = toMilliseconds(this.duration());
       setClipDuration(() => duration);
       setClipStartEnd([0, duration]);
     });
