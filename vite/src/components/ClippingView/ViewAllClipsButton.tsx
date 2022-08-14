@@ -1,3 +1,9 @@
+import { Button } from "@mui/material";
+
 export default function ViewAllClipsButton() {
-  return null;
+  return (
+    <Button variant="contained" fullWidth={true}>
+      View All Clips
+    </Button>
+  );
 }
