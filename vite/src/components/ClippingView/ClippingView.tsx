@@ -15,7 +15,7 @@ export default function ClippingView() {
   const [clipDuration, setClipDuration] = useState<number>(10000);
   const [[clipStart, clipEnd], setClipStartEnd] = useState([0, clipDuration]);
 
-  const onVideoPlayerReady = useCallback<videojs.ReadyCallback>(function (
+  const handleVideoPlayerReady = useCallback<videojs.ReadyCallback>(function (
     this: videojs.Player
   ) {
     this.on("loadedmetadata", () => {
@@ -28,7 +28,7 @@ export default function ClippingView() {
 
   return (
     <>
-      <VideoPlayer src={src} readyCallback={onVideoPlayerReady} />
+      <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
       <ClipStartEndTimesSlider
         start={clipStart}
         end={clipEnd}

@@ -3,6 +3,13 @@ import { useRef, useEffect, useReducer } from "react";
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import { Grid } from "@mui/material";
 
+type VideoReducerState = { player: VideoJsPlayer | null };
+type VideoReducerAction = { type: "INITIALIZE" } | { type: "DESTROY" };
+type VideoReducer = (
+  state: VideoReducerState,
+  action: VideoReducerAction
+) => VideoReducerState;
+
 interface InitializeVideoPlayer {
   src: string;
   videoElement: HTMLVideoElement;
@@ -25,22 +32,7 @@ function initializeVideoPlayer({
   return videojs(videoElement, options, readyCallback);
 }
 
-type VideoReducerState = {
-  player: VideoJsPlayer | null;
-};
-type VideoReducerAction = { type: "INITIALIZE" } | { type: "DESTROY" };
-type VideoReducer = (
-  state: VideoReducerState,
-  action: VideoReducerAction
-) => VideoReducerState;
-
-export default function VideoPlayer({
-  src,
-  readyCallback,
-}: {
-  src: string;
-  readyCallback?: videojs.ReadyCallback;
-}) {
+function useVideo(src: string, onVideoPlayerReady?: videojs.ReadyCallback) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [video, dispatchVideo] = useReducer<VideoReducer>(
@@ -51,7 +43,11 @@ export default function VideoPlayer({
         case "INITIALIZE":
           if (!videoElement) return state;
           return {
-            player: initializeVideoPlayer({ src, videoElement, readyCallback }),
+            player: initializeVideoPlayer({
+              src,
+              videoElement,
+              readyCallback: onVideoPlayerReady,
+            }),
           };
         default:
           throw new Error("Unknown action type");
@@ -62,10 +58,22 @@ export default function VideoPlayer({
 
   useEffect(() => {
     // make sure Video.js player is only initialized once when there's a video element
-    if (video.player || !videoRef.current) return;
+    if (video.player) return;
 
     dispatchVideo({ type: "INITIALIZE" });
-  }, [video.player, videoRef.current]);
+  }, [video.player]);
+
+  return { video, videoRef };
+}
+
+export default function VideoPlayer({
+  src,
+  onVideoPlayerReady,
+}: {
+  src: string;
+  onVideoPlayerReady?: videojs.ReadyCallback;
+}) {
+  const { videoRef } = useVideo(src, onVideoPlayerReady);
 
   return (
     <Grid>
