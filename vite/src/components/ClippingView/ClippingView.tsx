@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
 import videojs from "video.js";
+import isNonNullable from "../../utils/isNonNullable";
 import { toMilliseconds } from "../../utils/timestamp";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
@@ -9,10 +10,6 @@ import ViewAllClipsButton from "./ViewAllClipsButton";
 
 const DEFAULT_VIDEO_SRC =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-
-function isNonNullable<T>(value: T | null | undefined): value is T {
-  return value !== null && value !== undefined;
-}
 
 type ClipState = {
   start?: number;
