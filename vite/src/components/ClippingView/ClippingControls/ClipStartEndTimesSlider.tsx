@@ -1,6 +1,7 @@
 import { Slider } from "@mui/material";
 import { useCallback } from "react";
 import { convertMillisecondsToTimestamp } from "../../../utils/timestamp";
+import { ActionType, ClipAction } from "../ClippingView";
 
 export type ClipStartEndTimes = [number, number];
 
@@ -8,21 +9,25 @@ interface ClipStartEndTimesSliderProps {
   start: number;
   end: number;
   duration: number;
-  onUpdateStartEndTimes: ([start, end]: ClipStartEndTimes) => void;
+  dispatch: React.Dispatch<ClipAction>;
 }
 
 export default function ClipStartEndTimeSlider({
   start,
   end,
   duration,
-  onUpdateStartEndTimes,
+  dispatch,
 }: ClipStartEndTimesSliderProps) {
   const handleChange = useCallback(
     (_event: Event, value: number | number[]) => {
       if (!Array.isArray(value)) return;
-      onUpdateStartEndTimes?.([value[0], value[1]]);
+      dispatch({
+        type: ActionType.UPDATE_START_END,
+        start: value[0],
+        end: value[1],
+      });
     },
-    [onUpdateStartEndTimes]
+    [dispatch]
   );
 
   return (

@@ -35,7 +35,7 @@ function initializeVideoPlayer({
   return videojs(videoElement, options, readyCallback);
 }
 
-function useVideo(src: string, onVideoPlayerReady?: videojs.ReadyCallback) {
+function useVideo(src: string, readyCallback?: videojs.ReadyCallback) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [video, dispatchVideo] = useReducer<VideoReducer>(
@@ -46,11 +46,7 @@ function useVideo(src: string, onVideoPlayerReady?: videojs.ReadyCallback) {
         case VideoReducerActionType.INITIALIZE:
           if (!videoElement) return state;
           return {
-            player: initializeVideoPlayer({
-              src,
-              videoElement,
-              readyCallback: onVideoPlayerReady,
-            }),
+            player: initializeVideoPlayer({ src, videoElement, readyCallback }),
           };
         default:
           throw new Error("Unknown action type");
