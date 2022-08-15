@@ -4,7 +4,10 @@ import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import { Grid } from "@mui/material";
 
 type VideoReducerState = { player: VideoJsPlayer | null };
-type VideoReducerAction = { type: "INITIALIZE" } | { type: "DESTROY" };
+enum VideoReducerActionType {
+  INITIALIZE = "INITIALIZE",
+}
+type VideoReducerAction = { type: VideoReducerActionType };
 type VideoReducer = (
   state: VideoReducerState,
   action: VideoReducerAction
@@ -40,7 +43,7 @@ function useVideo(src: string, onVideoPlayerReady?: videojs.ReadyCallback) {
       const videoElement = videoRef.current;
 
       switch (type) {
-        case "INITIALIZE":
+        case VideoReducerActionType.INITIALIZE:
           if (!videoElement) return state;
           return {
             player: initializeVideoPlayer({
@@ -60,7 +63,7 @@ function useVideo(src: string, onVideoPlayerReady?: videojs.ReadyCallback) {
     // make sure Video.js player is only initialized once when there's a video element
     if (video.player) return;
 
-    dispatchVideo({ type: "INITIALIZE" });
+    dispatchVideo({ type: VideoReducerActionType.INITIALIZE });
   }, [video.player]);
 
   return { video, videoRef };
