@@ -21,11 +21,8 @@ export default function ClipStartEndTimeSlider({
   const handleChange = useCallback(
     (_event: Event, value: number | number[]) => {
       if (!Array.isArray(value)) return;
-      dispatch({
-        type: ActionType.UPDATE_START_END,
-        start: value[0],
-        end: value[1],
-      });
+      const [start, end] = value;
+      dispatch({ type: ActionType.UPDATE_START_END, start, end });
     },
     [dispatch]
   );

@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from "react";
 import videojs from "video.js";
-import isNonNullable from "../../utils/isNonNullable";
-import { toMilliseconds } from "../../utils/timestamp";
+import isNonNullable, { isNullable } from "../../utils/isNonNullable";
+import { toMilliseconds, toSeconds } from "../../utils/timestamp";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
@@ -19,13 +19,15 @@ type ClipState = {
 };
 
 export enum ActionType {
-  PLAYER_READY = "PLAYER_READY",
-  UPDATE_START_END = "UPDATE_START_END",
+  PLAYER_READY,
+  UPDATE_START_END,
+  PLAYER_TIME_UPDATE,
 }
 
 export type ClipAction =
-  | { type: ActionType.PLAYER_READY; duration: number }
-  | { type: ActionType.UPDATE_START_END; start: number; end: number };
+  | { type: ActionType.PLAYER_READY; player: videojs.Player }
+  | { type: ActionType.UPDATE_START_END; start: number; end: number }
+  | { type: ActionType.PLAYER_TIME_UPDATE; player: videojs.Player };
 
 const DEFAULT_CLIP_STATE: ClipState = {
   start: undefined,
@@ -34,15 +36,40 @@ const DEFAULT_CLIP_STATE: ClipState = {
   src: DEFAULT_VIDEO_SRC,
 };
 
+function pauseIfOutsideClip(
+  player: videojs.Player,
+  start: number,
+  end: number
+) {
+  const currentTime = toMilliseconds(player.currentTime());
+  if (currentTime > end) {
+    player.currentTime(toSeconds(end));
+    player.pause();
+  } else if (currentTime < start) {
+    player.currentTime(toSeconds(start));
+    player.pause();
+  }
+}
+
 function clipReducer(state: ClipState, action: ClipAction) {
   switch (action.type) {
     case ActionType.PLAYER_READY: {
-      const { duration } = action;
+      const { player } = action;
+      const duration = toMilliseconds(player.duration());
       return { ...state, duration, start: 0, end: duration };
     }
     case ActionType.UPDATE_START_END: {
       const { start, end } = action;
       return { ...state, start, end };
+    }
+    case ActionType.PLAYER_TIME_UPDATE: {
+      const { player } = action;
+      const { start, end } = state;
+      if (isNullable(start) || isNullable(end)) {
+        return state;
+      }
+      pauseIfOutsideClip(player, start, end);
+      return state;
     }
     default:
       return state;
@@ -55,17 +82,24 @@ export default function ClippingView() {
     DEFAULT_CLIP_STATE
   );
 
-  const handleVideoPlayerReady = useCallback<videojs.ReadyCallback>(function (
-    this: videojs.Player
-  ) {
-    this.on("loadedmetadata", () => {
-      dispatch({
-        type: ActionType.PLAYER_READY,
-        duration: toMilliseconds(this.duration()),
-      });
+  const onLoadedMetadata = useCallback(function (this: videojs.Player) {
+    dispatch({ type: ActionType.PLAYER_READY, player: this });
+  }, []);
+
+  const onTimeUpdate = useCallback(function (this: videojs.Player) {
+    dispatch({
+      type: ActionType.PLAYER_TIME_UPDATE,
+      player: this,
     });
-  },
-  []);
+  }, []);
+
+  const handleVideoPlayerReady = useCallback<videojs.ReadyCallback>(
+    function (this: videojs.Player) {
+      this.on("loadedmetadata", onLoadedMetadata);
+      this.on("timeupdate", onTimeUpdate);
+    },
+    [onLoadedMetadata, onTimeUpdate]
+  );
 
   const showClipStartEndTimesSlider =
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
