@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from "react";
 import videojs from "video.js";
-import isNonNullable, { isNullable } from "../../utils/isNonNullable";
-import { toMilliseconds, toSeconds } from "../../utils/timestamp";
+import isNonNullable from "../../utils/isNonNullable";
+import { toMilliseconds, toSecondsPrecise } from "../../utils/timestamp";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
@@ -43,10 +43,10 @@ function pauseIfOutsideClip(
 ) {
   const currentTime = toMilliseconds(player.currentTime());
   if (currentTime > end) {
-    player.currentTime(toSeconds(end));
+    player.currentTime(toSecondsPrecise(end));
     player.pause();
   } else if (currentTime < start) {
-    player.currentTime(toSeconds(start));
+    player.currentTime(toSecondsPrecise(start));
     player.pause();
   }
 }
@@ -65,10 +65,9 @@ function clipReducer(state: ClipState, action: ClipAction) {
     case ActionType.PLAYER_TIME_UPDATE: {
       const { player } = action;
       const { start, end } = state;
-      if (isNullable(start) || isNullable(end)) {
-        return state;
+      if (isNonNullable(start) && isNonNullable(end)) {
+        pauseIfOutsideClip(player, start, end);
       }
-      pauseIfOutsideClip(player, start, end);
       return state;
     }
     default:

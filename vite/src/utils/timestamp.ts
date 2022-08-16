@@ -3,9 +3,14 @@ export function toMilliseconds(seconds: number): number {
   return Math.floor(seconds * 1000);
 }
 
-/** Milliseconds to seconds */
+/** Milliseconds to seconds, no decimal */
 export function toSeconds(milliseconds: number): number {
   return Math.floor(milliseconds / 1000);
+}
+
+/** Milliseconds to seconds, with decimal */
+export function toSecondsPrecise(milliseconds: number): number {
+  return milliseconds / 1000;
 }
 
 export function convertSecondsToTimestamp(seconds: number) {
