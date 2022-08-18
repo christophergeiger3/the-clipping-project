@@ -1,3 +1,4 @@
+import { Box, Grid } from "@mui/material";
 import { useCallback, useReducer } from "react";
 import videojs from "video.js";
 import isNonNullable from "../../utils/isNonNullable";
@@ -105,7 +106,12 @@ export default function ClippingView() {
 
   return (
     <>
-      <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
+      <Grid container={true}>
+        <Grid item={true} xs={1} />
+        <Grid item={true} xs={10} paddingBottom={1}>
+          <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
+        </Grid>
+      </Grid>
       {showClipStartEndTimesSlider ? (
         <ClipStartEndTimesSlider
           start={start}

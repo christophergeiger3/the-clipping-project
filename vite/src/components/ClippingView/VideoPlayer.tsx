@@ -75,7 +75,7 @@ export default function VideoPlayer({
   const { videoRef } = useVideo(src, onVideoPlayerReady);
 
   return (
-    <Grid>
+    <Grid container={true}>
       <div data-vjs-player>
         <video ref={videoRef} className="video-js vjs-big-play-centered" />
       </div>
