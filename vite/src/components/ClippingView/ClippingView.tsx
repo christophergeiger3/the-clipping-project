@@ -1,8 +1,9 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useCallback, useReducer } from "react";
 import videojs from "video.js";
 import isNonNullable from "../../utils/isNonNullable";
-import { toMilliseconds, toSecondsPrecise } from "../../utils/timestamp";
+import { pauseIfOutsideClip } from "../../utils/player";
+import { toMilliseconds } from "../../utils/timestamp";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
@@ -36,21 +37,6 @@ const DEFAULT_CLIP_STATE: ClipState = {
   duration: undefined,
   src: DEFAULT_VIDEO_SRC,
 };
-
-function pauseIfOutsideClip(
-  player: videojs.Player,
-  start: number,
-  end: number
-) {
-  const currentTime = toMilliseconds(player.currentTime());
-  if (currentTime > end) {
-    player.currentTime(toSecondsPrecise(end));
-    player.pause();
-  } else if (currentTime < start) {
-    player.currentTime(toSecondsPrecise(start));
-    player.pause();
-  }
-}
 
 function clipReducer(state: ClipState, action: ClipAction) {
   switch (action.type) {
