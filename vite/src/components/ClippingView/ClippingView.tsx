@@ -91,30 +91,23 @@ export default function ClippingView() {
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
 
   return (
-    <>
-      <Grid container={true}>
-        <Grid item={true} lg={1} />
-        <Grid item={true} xs={12} lg={10} paddingBottom={1}>
-          <Grid item={true} paddingBottom={1}>
-            <VideoPlayer
-              src={src}
-              onVideoPlayerReady={handleVideoPlayerReady}
-            />
-          </Grid>
-          {showClipStartEndTimesSlider ? (
-            <ClipStartEndTimesSlider
-              start={start}
-              end={end}
-              duration={duration}
-              dispatch={dispatch}
-            />
-          ) : null}
-          <VideoControlPanel />
-          <ClippingControlPanel />
-          <ViewAllClipsButton />
-        </Grid>
-        <Grid item={true} lg={1} />
+    <Grid container={true} columns={100}>
+      <Grid item={true} xs={1} xl={5} />
+      <Grid item={true} xs={98} xl={90}>
+        <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
+        {showClipStartEndTimesSlider ? (
+          <ClipStartEndTimesSlider
+            start={start}
+            end={end}
+            duration={duration}
+            dispatch={dispatch}
+          />
+        ) : null}
+        <VideoControlPanel />
+        <ClippingControlPanel />
+        <ViewAllClipsButton />
       </Grid>
-    </>
+      <Grid item={true} xs={1} xl={5} />
+    </Grid>
   );
 }
