@@ -92,8 +92,8 @@ export default function ClippingView() {
 
   return (
     <Grid container={true} columns={100}>
-      <Grid item={true} xs={1} xl={5} />
-      <Grid item={true} xs={98} xl={90}>
+      <Grid item={true} xs={false} xl={5} />
+      <Grid item={true} xs={true} xl={90}>
         <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
         {showClipStartEndTimesSlider ? (
           <ClipStartEndTimesSlider
@@ -107,7 +107,7 @@ export default function ClippingView() {
         <ClippingControlPanel />
         <ViewAllClipsButton />
       </Grid>
-      <Grid item={true} xs={1} xl={5} />
+      <Grid item={true} xs={false} xl={5} />
     </Grid>
   );
 }
