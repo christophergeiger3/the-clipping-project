@@ -91,7 +91,7 @@ export default function ClippingView() {
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
 
   return (
-    <Grid container={true} columns={100}>
+    <Grid container={true} columns={100} pt={2}>
       <Grid item={true} xs={1} md={5} xl={10} />
       <Grid item={true} xs={98} md={90} xl={80}>
         <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
