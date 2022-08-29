@@ -15,3 +15,7 @@ export function pauseIfOutsideClip(
     player.pause();
   }
 }
+
+export function jumpToTime(player: videojs.Player, time: number) {
+  player.currentTime(toSecondsPrecise(time));
+}

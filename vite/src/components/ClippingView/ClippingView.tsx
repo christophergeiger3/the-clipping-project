@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
 import { useCallback, useReducer } from "react";
-import videojs from "video.js";
+import videojs, { VideoJsPlayer } from "video.js";
 import isNonNullable from "../../utils/isNonNullable";
-import { pauseIfOutsideClip } from "../../utils/player";
+import { jumpToTime, pauseIfOutsideClip } from "../../utils/player";
 import { toMilliseconds } from "../../utils/timestamp";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
@@ -18,24 +18,30 @@ type ClipState = {
   end?: number;
   duration?: number;
   src: string;
+  player?: VideoJsPlayer;
 };
 
 export enum ActionType {
   PLAYER_READY,
   UPDATE_START_END,
   PLAYER_TIME_UPDATE,
+  JUMP_TO_CLIP_START,
+  JUMP_TO_CLIP_END,
 }
 
 export type ClipAction =
   | { type: ActionType.PLAYER_READY; player: videojs.Player }
   | { type: ActionType.UPDATE_START_END; start: number; end: number }
-  | { type: ActionType.PLAYER_TIME_UPDATE; player: videojs.Player };
+  | { type: ActionType.PLAYER_TIME_UPDATE; player: videojs.Player }
+  | { type: ActionType.JUMP_TO_CLIP_START }
+  | { type: ActionType.JUMP_TO_CLIP_END };
 
 const DEFAULT_CLIP_STATE: ClipState = {
   start: undefined,
   end: undefined,
   duration: undefined,
   src: DEFAULT_VIDEO_SRC,
+  player: undefined,
 };
 
 function clipReducer(state: ClipState, action: ClipAction) {
@@ -43,7 +49,7 @@ function clipReducer(state: ClipState, action: ClipAction) {
     case ActionType.PLAYER_READY: {
       const { player } = action;
       const duration = toMilliseconds(player.duration());
-      return { ...state, duration, start: 0, end: duration };
+      return { ...state, duration, start: 0, end: duration, player };
     }
     case ActionType.UPDATE_START_END: {
       const { start, end } = action;
@@ -54,6 +60,20 @@ function clipReducer(state: ClipState, action: ClipAction) {
       const { start, end } = state;
       if (isNonNullable(start) && isNonNullable(end)) {
         pauseIfOutsideClip(player, start, end);
+      }
+      return state;
+    }
+    case ActionType.JUMP_TO_CLIP_START: {
+      const { player, start } = state;
+      if (isNonNullable(player) && isNonNullable(start)) {
+        jumpToTime(player, start);
+      }
+      return state;
+    }
+    case ActionType.JUMP_TO_CLIP_END: {
+      const { player, end } = state;
+      if (isNonNullable(player) && isNonNullable(end)) {
+        jumpToTime(player, end);
       }
       return state;
     }
@@ -103,7 +123,7 @@ export default function ClippingView() {
             dispatch={dispatch}
           />
         ) : null}
-        <VideoControlPanel />
+        <VideoControlPanel dispatch={dispatch} />
         <ClippingControlPanel />
         <ViewAllClipsButton />
       </Grid>
