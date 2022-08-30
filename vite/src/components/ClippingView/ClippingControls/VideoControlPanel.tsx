@@ -1,6 +1,6 @@
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import { Paper, Grid, IconButton } from "@mui/material";
+import { Paper, Grid, IconButton, Tooltip } from "@mui/material";
 import { Dispatch, useCallback } from "react";
 import { ActionType, ClipAction } from "../ClippingView";
 
@@ -14,23 +14,13 @@ function JumpToEndOfClipButton({ dispatch }: DispatchProp) {
   }, [dispatch]);
 
   return (
-    <IconButton onClick={handleClick}>
-      <SkipNextIcon />
-    </IconButton>
+    <Tooltip title="Jump to the end of the clip">
+      <IconButton onClick={handleClick}>
+        <SkipNextIcon />
+      </IconButton>
+    </Tooltip>
   );
 }
-
-// function PlayPauseButton({ dispatch }: DispatchProp) {
-//   const handleClick = useCallback(() => {
-//     dispatch({ type: ActionType.TOGGLE_PLAY_PAUSE });
-//   } , [dispatch]);
-
-//   return (
-//     <IconButton onClick={handleClick}>
-//       <SkipNextIcon />
-//     </IconButton>
-//   );
-// }
 
 function JumpToStartOfClipButton({ dispatch }: DispatchProp) {
   const handleClick = useCallback(() => {
@@ -38,9 +28,11 @@ function JumpToStartOfClipButton({ dispatch }: DispatchProp) {
   }, [dispatch]);
 
   return (
-    <IconButton onClick={handleClick}>
-      <SkipPreviousIcon />
-    </IconButton>
+    <Tooltip title="Jump to the start of the clip">
+      <IconButton onClick={handleClick}>
+        <SkipPreviousIcon />
+      </IconButton>
+    </Tooltip>
   );
 }
 
@@ -50,7 +42,6 @@ export default function VideoControlPanel({ dispatch }: DispatchProp) {
       <Paper elevation={1} sx={{ padding: 1 }}>
         <Grid container={true} justifyContent="space-around">
           <JumpToStartOfClipButton dispatch={dispatch} />
-          {/* <PlayPauseClipButton dispatch={dispatch} /> */}
           <JumpToEndOfClipButton dispatch={dispatch} />
         </Grid>
       </Paper>
