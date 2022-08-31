@@ -27,6 +27,8 @@ export enum ActionType {
   PLAYER_TIME_UPDATE,
   JUMP_TO_CLIP_START,
   JUMP_TO_CLIP_END,
+  ADD_TO_CLIP_START_TIME,
+  ADD_TO_CLIP_END_TIME,
 }
 
 export type ClipAction =
@@ -34,7 +36,9 @@ export type ClipAction =
   | { type: ActionType.UPDATE_START_END; start: number; end: number }
   | { type: ActionType.PLAYER_TIME_UPDATE; player: videojs.Player }
   | { type: ActionType.JUMP_TO_CLIP_START }
-  | { type: ActionType.JUMP_TO_CLIP_END };
+  | { type: ActionType.JUMP_TO_CLIP_END }
+  | { type: ActionType.ADD_TO_CLIP_START_TIME; amount: number }
+  | { type: ActionType.ADD_TO_CLIP_END_TIME; amount: number };
 
 const DEFAULT_CLIP_STATE: ClipState = {
   start: undefined,
@@ -74,6 +78,22 @@ function clipReducer(state: ClipState, action: ClipAction) {
       const { player, end } = state;
       if (isNonNullable(player) && isNonNullable(end)) {
         jumpToTime(player, end);
+      }
+      return state;
+    }
+    case ActionType.ADD_TO_CLIP_START_TIME: {
+      const { start } = state;
+      const { amount } = action;
+      if (isNonNullable(start)) {
+        return { ...state, start: start + amount };
+      }
+      return state;
+    }
+    case ActionType.ADD_TO_CLIP_END_TIME: {
+      const { end } = state;
+      const { amount } = action;
+      if (isNonNullable(end)) {
+        return { ...state, end: end + amount };
       }
       return state;
     }
