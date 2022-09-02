@@ -69,6 +69,36 @@ function IncreaseClipStartTime({ dispatch }: DispatchProp) {
   );
 }
 
+function DecreaseClipEndTime({ dispatch }: DispatchProp) {
+  const handleClick = useCallback(() => {
+    dispatch({
+      type: ActionType.ADD_TO_CLIP_END_TIME,
+      amount: -INCREMENT_AMOUNT_IMPRECISE,
+    });
+  }, [dispatch]);
+
+  return (
+    <Button variant="contained" onClick={handleClick}>
+      -{toSeconds(INCREMENT_AMOUNT_IMPRECISE)} SEC
+    </Button>
+  );
+}
+
+function IncreaseClipEndTime({ dispatch }: DispatchProp) {
+  const handleClick = useCallback(() => {
+    dispatch({
+      type: ActionType.ADD_TO_CLIP_END_TIME,
+      amount: INCREMENT_AMOUNT_IMPRECISE,
+    });
+  }, [dispatch]);
+
+  return (
+    <Button variant="contained" onClick={handleClick}>
+      +{toSeconds(INCREMENT_AMOUNT_IMPRECISE)} SEC
+    </Button>
+  );
+}
+
 export default function VideoControlPanel({ dispatch }: DispatchProp) {
   return (
     <Grid padding={2}>
@@ -77,7 +107,9 @@ export default function VideoControlPanel({ dispatch }: DispatchProp) {
           <DecreaseClipStartTime dispatch={dispatch} />
           <JumpToStartOfClipButton dispatch={dispatch} />
           <IncreaseClipStartTime dispatch={dispatch} />
+          <DecreaseClipEndTime dispatch={dispatch} />
           <JumpToEndOfClipButton dispatch={dispatch} />
+          <IncreaseClipEndTime dispatch={dispatch} />
         </Grid>
       </Paper>
     </Grid>
