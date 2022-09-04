@@ -130,19 +130,21 @@ export default function ClippingView() {
   const showClipStartEndTimesSlider =
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
 
+  const clipSlider = showClipStartEndTimesSlider ? (
+    <ClipStartEndTimesSlider
+      start={start}
+      end={end}
+      duration={duration}
+      dispatch={dispatch}
+    />
+  ) : null;
+
   return (
     <Grid container={true} columns={100} pt={2}>
       <Grid item={true} xs={1} md={5} xl={10} />
       <Grid item={true} xs={98} md={90} xl={80}>
         <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
-        {showClipStartEndTimesSlider ? (
-          <ClipStartEndTimesSlider
-            start={start}
-            end={end}
-            duration={duration}
-            dispatch={dispatch}
-          />
-        ) : null}
+        {clipSlider}
         <VideoControlPanel dispatch={dispatch} />
         <ClippingControlPanel />
         <ViewAllClipsButton />
