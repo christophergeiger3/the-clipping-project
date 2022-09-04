@@ -24,7 +24,6 @@ export default function ClippingView() {
     <Grid container={true} columns={100} pt={2}>
       <Grid item={true} xs={1} md={5} xl={10} />
       <Grid item={true} xs={98} md={90} xl={80}>
-        {/* fix me! (src) */}
         <VideoPlayer src={DEFAULT_CLIP_STATE.src} />
         {clipSlider}
         <VideoControlPanel />

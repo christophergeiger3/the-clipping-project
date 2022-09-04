@@ -5,12 +5,12 @@ import { useClipContext } from "../../providers/ClipProvider";
 
 export default function VideoPlayer({ src }: { src: string }) {
   const { handleVideoPlayerReady } = useClipContext();
-  const { videoRef } = useVideo(src, handleVideoPlayerReady);
+  const { ref } = useVideo(src, handleVideoPlayerReady);
 
   return (
     <Grid container={true}>
       <div data-vjs-player>
-        <video ref={videoRef} className="video-js vjs-big-play-centered" />
+        <video ref={ref} className="video-js vjs-big-play-centered" />
       </div>
     </Grid>
   );
