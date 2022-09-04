@@ -6,7 +6,7 @@ import { toMilliseconds } from "../timestamp";
 const DEFAULT_VIDEO_SRC =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
-type ClipState = {
+export type ClipState = {
   start?: number;
   end?: number;
   duration?: number;

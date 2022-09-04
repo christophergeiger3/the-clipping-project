@@ -1,6 +1,4 @@
 import { Paper, Grid } from "@mui/material";
-import { Dispatch } from "react";
-import { ClipAction } from "../ClippingView";
 import {
   DecreaseClipEndButton,
   DecreaseClipStartButton,
@@ -10,21 +8,17 @@ import {
   JumpToStartOfClipButton,
 } from "./ClipButtons";
 
-interface DispatchProp {
-  dispatch: Dispatch<ClipAction>;
-}
-
-export default function VideoControlPanel({ dispatch }: DispatchProp) {
+export default function VideoControlPanel() {
   return (
     <Grid padding={2}>
       <Paper elevation={1} sx={{ padding: 1 }}>
         <Grid container={true} justifyContent="space-around">
-          <DecreaseClipStartButton dispatch={dispatch} />
-          <JumpToStartOfClipButton dispatch={dispatch} />
-          <IncreaseClipStartButton dispatch={dispatch} />
-          <DecreaseClipEndButton dispatch={dispatch} />
-          <JumpToEndOfClipButton dispatch={dispatch} />
-          <IncreaseClipEndButton dispatch={dispatch} />
+          <DecreaseClipStartButton />
+          <JumpToStartOfClipButton />
+          <IncreaseClipStartButton />
+          <DecreaseClipEndButton />
+          <JumpToEndOfClipButton />
+          <IncreaseClipEndButton />
         </Grid>
       </Paper>
     </Grid>

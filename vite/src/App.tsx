@@ -1,5 +1,6 @@
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import ClippingView from "./components/ClippingView/ClippingView";
+import ClipProvider from "./providers/ClipProvider";
 
 const darkTheme = createTheme({
   palette: {
@@ -14,7 +15,9 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <ClippingView />
+      <ClipProvider>
+        <ClippingView />
+      </ClipProvider>
     </ThemeProvider>
   );
 }

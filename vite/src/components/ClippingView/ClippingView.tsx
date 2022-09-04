@@ -1,60 +1,33 @@
 import { Grid } from "@mui/material";
-import { useCallback, useReducer } from "react";
-import videojs from "video.js";
+import { useClipContext } from "../../providers/ClipProvider";
 import isNonNullable from "../../utils/isNonNullable";
-import clipReducer, {
-  ActionType,
-  DEFAULT_CLIP_STATE,
-} from "../../utils/reducers/clipReducer";
+import { DEFAULT_CLIP_STATE } from "../../utils/reducers/clipReducer";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
 import VideoPlayer from "./VideoPlayer";
 import ViewAllClipsButton from "./ViewAllClipsButton";
 
-const { PLAYER_READY, PLAYER_TIME_UPDATE } = ActionType;
-
 export default function ClippingView() {
-  const [{ start, end, duration, src }, dispatch] = useReducer(
-    clipReducer,
-    DEFAULT_CLIP_STATE
-  );
-
-  const onLoadedMetadata = useCallback(function (this: videojs.Player) {
-    dispatch({ type: PLAYER_READY, player: this });
-  }, []);
-
-  const onTimeUpdate = useCallback(function (this: videojs.Player) {
-    dispatch({ type: PLAYER_TIME_UPDATE, player: this });
-  }, []);
-
-  const handleVideoPlayerReady = useCallback<videojs.ReadyCallback>(
-    function (this: videojs.Player) {
-      this.on("loadedmetadata", onLoadedMetadata);
-      this.on("timeupdate", onTimeUpdate);
-    },
-    [onLoadedMetadata, onTimeUpdate]
-  );
+  const {
+    state: { start, end, duration },
+  } = useClipContext();
 
   const showClipStartEndTimesSlider =
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
 
   const clipSlider = showClipStartEndTimesSlider ? (
-    <ClipStartEndTimesSlider
-      start={start}
-      end={end}
-      duration={duration}
-      dispatch={dispatch}
-    />
+    <ClipStartEndTimesSlider />
   ) : null;
 
   return (
     <Grid container={true} columns={100} pt={2}>
       <Grid item={true} xs={1} md={5} xl={10} />
       <Grid item={true} xs={98} md={90} xl={80}>
-        <VideoPlayer src={src} onVideoPlayerReady={handleVideoPlayerReady} />
+        {/* fix me! (src) */}
+        <VideoPlayer src={DEFAULT_CLIP_STATE.src} />
         {clipSlider}
-        <VideoControlPanel dispatch={dispatch} />
+        <VideoControlPanel />
         <ClippingControlPanel />
         <ViewAllClipsButton />
       </Grid>

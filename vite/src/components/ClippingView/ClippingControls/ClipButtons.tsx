@@ -4,9 +4,10 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import Tooltip from "@mui/material/Tooltip";
-import { Dispatch, useCallback } from "react";
-import { ActionType, ClipAction } from "../ClippingView";
+import { useCallback } from "react";
 import { toSeconds } from "../../../utils/timestamp";
+import { ActionType } from "../../../utils/reducers/clipReducer";
+import { useClipContext } from "../../../providers/ClipProvider";
 
 // see: https://www.typescriptlang.org/play#example/nominal-typing
 type milliseconds = number & { __brand: "milliseconds" };
@@ -14,11 +15,7 @@ type milliseconds = number & { __brand: "milliseconds" };
 const INCREMENT_AMOUNT_IMPRECISE = 1000 as milliseconds;
 const DECREMENT_AMOUNT_IMPRECISE = -1000 as milliseconds;
 
-interface DispatchProp {
-  dispatch: Dispatch<ClipAction>;
-}
-
-interface IncrementClipByAmountProps extends DispatchProp {
+interface IncrementClipByAmountProps {
   amount: milliseconds;
 }
 
@@ -27,7 +24,8 @@ interface IncrementClipStartEndButtonProps extends IncrementClipByAmountProps {
   description: string;
 }
 
-export function JumpToEndOfClipButton({ dispatch }: DispatchProp) {
+export function JumpToEndOfClipButton() {
+  const { dispatch } = useClipContext();
   const handleClick = useCallback(() => {
     dispatch({ type: ActionType.JUMP_TO_CLIP_END });
   }, [dispatch]);
@@ -41,7 +39,8 @@ export function JumpToEndOfClipButton({ dispatch }: DispatchProp) {
   );
 }
 
-export function JumpToStartOfClipButton({ dispatch }: DispatchProp) {
+export function JumpToStartOfClipButton() {
+  const { dispatch } = useClipContext();
   const handleClick = useCallback(() => {
     dispatch({ type: ActionType.JUMP_TO_CLIP_START });
   }, [dispatch]);
@@ -56,11 +55,11 @@ export function JumpToStartOfClipButton({ dispatch }: DispatchProp) {
 }
 
 function IncrementClipStartEndButton({
-  dispatch,
   amount,
   type,
   description,
 }: IncrementClipStartEndButtonProps) {
+  const { dispatch } = useClipContext();
   const isIncreasing = amount > 0;
   const icon = isIncreasing ? <RedoIcon /> : <UndoIcon />;
 
@@ -75,10 +74,7 @@ function IncrementClipStartEndButton({
   );
 }
 
-function IncrementClipStartByAmount({
-  amount,
-  dispatch,
-}: IncrementClipByAmountProps) {
+function IncrementClipStartByAmount({ amount }: IncrementClipByAmountProps) {
   const type = ActionType.ADD_TO_CLIP_START_TIME;
   const increaseOrDecrease = amount > 0 ? "Increase" : "Decrease";
   const description = `${increaseOrDecrease} the start of the clip by ${toSeconds(
@@ -86,7 +82,6 @@ function IncrementClipStartByAmount({
   )}`;
   return (
     <IncrementClipStartEndButton
-      dispatch={dispatch}
       amount={amount}
       type={type}
       description={description}
@@ -94,10 +89,7 @@ function IncrementClipStartByAmount({
   );
 }
 
-function IncrementClipEndByAmount({
-  amount,
-  dispatch,
-}: IncrementClipByAmountProps) {
+function IncrementClipEndByAmount({ amount }: IncrementClipByAmountProps) {
   const type = ActionType.ADD_TO_CLIP_END_TIME;
   const increaseOrDecrease = amount > 0 ? "Increase" : "Decrease";
   const description = `${increaseOrDecrease} the end of the clip by ${toSeconds(
@@ -105,7 +97,6 @@ function IncrementClipEndByAmount({
   )}`;
   return (
     <IncrementClipStartEndButton
-      dispatch={dispatch}
       amount={amount}
       type={type}
       description={description}
@@ -113,22 +104,22 @@ function IncrementClipEndByAmount({
   );
 }
 
-export function IncreaseClipStartButton({ dispatch }: DispatchProp) {
+export function IncreaseClipStartButton() {
   const amount = INCREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipStartByAmount dispatch={dispatch} amount={amount} />;
+  return <IncrementClipStartByAmount amount={amount} />;
 }
 
-export function DecreaseClipStartButton({ dispatch }: DispatchProp) {
+export function DecreaseClipStartButton() {
   const amount = DECREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipStartByAmount dispatch={dispatch} amount={amount} />;
+  return <IncrementClipStartByAmount amount={amount} />;
 }
 
-export function IncreaseClipEndButton({ dispatch }: DispatchProp) {
+export function IncreaseClipEndButton() {
   const amount = INCREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipEndByAmount dispatch={dispatch} amount={amount} />;
+  return <IncrementClipEndByAmount amount={amount} />;
 }
 
-export function DecreaseClipEndButton({ dispatch }: DispatchProp) {
+export function DecreaseClipEndButton() {
   const amount = DECREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipEndByAmount dispatch={dispatch} amount={amount} />;
+  return <IncrementClipEndByAmount amount={amount} />;
 }

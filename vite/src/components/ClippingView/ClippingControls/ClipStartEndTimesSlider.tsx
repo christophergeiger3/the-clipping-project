@@ -1,31 +1,30 @@
 import { Slider } from "@mui/material";
 import { useCallback } from "react";
+import { useClipContext } from "../../../providers/ClipProvider";
+import { isNullable } from "../../../utils/isNonNullable";
+import { ActionType } from "../../../utils/reducers/clipReducer";
 import { convertMillisecondsToTimestamp } from "../../../utils/timestamp";
-import { ActionType, ClipAction } from "../ClippingView";
 
-export type ClipStartEndTimes = [number, number];
+const { UPDATE_START_END } = ActionType;
 
-interface ClipStartEndTimesSliderProps {
-  start: number;
-  end: number;
-  duration: number;
-  dispatch: React.Dispatch<ClipAction>;
-}
+export default function ClipStartEndTimeSlider() {
+  const {
+    state: { start, end, duration },
+    dispatch,
+  } = useClipContext();
 
-export default function ClipStartEndTimeSlider({
-  start,
-  end,
-  duration,
-  dispatch,
-}: ClipStartEndTimesSliderProps) {
   const handleChange = useCallback(
     (_event: Event, value: number | number[]) => {
       if (!Array.isArray(value)) return;
       const [start, end] = value;
-      dispatch({ type: ActionType.UPDATE_START_END, start, end });
+      dispatch({ type: UPDATE_START_END, start, end });
     },
     [dispatch]
   );
+
+  if (isNullable(start) || isNullable(end) || isNullable(duration)) {
+    return null;
+  }
 
   return (
     <Slider
