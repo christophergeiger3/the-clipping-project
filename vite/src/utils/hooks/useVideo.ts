@@ -1,6 +1,5 @@
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import { useRef, useEffect, useReducer } from "react";
-import { useClipContext } from "../../providers/ClipProvider";
 
 type VideoReducerState = { player: VideoJsPlayer | null };
 enum VideoReducerActionType {
@@ -34,9 +33,10 @@ function initializeVideoPlayer({
   return videojs(videoElement, options, readyCallback);
 }
 
-export default function useVideo(src: string) {
-  const { handleVideoPlayerReady: readyCallback } = useClipContext();
-
+export default function useVideo(
+  src: string,
+  readyCallback?: videojs.ReadyCallback
+) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [video, dispatch] = useReducer<VideoReducer>(
