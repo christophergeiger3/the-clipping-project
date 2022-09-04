@@ -41,7 +41,8 @@ export const DEFAULT_CLIP_STATE: ClipState = {
   player: undefined,
 };
 
-export function clipReducer(state: ClipState, action: ClipAction) {
+/** Controls the clip player */
+export default function clipReducer(state: ClipState, action: ClipAction) {
   switch (action.type) {
     case ActionType.PLAYER_READY: {
       const { player } = action;

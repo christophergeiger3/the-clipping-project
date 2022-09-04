@@ -2,11 +2,10 @@ import { Grid } from "@mui/material";
 import { useCallback, useReducer } from "react";
 import videojs from "video.js";
 import isNonNullable from "../../utils/isNonNullable";
-import {
+import clipReducer, {
   ActionType,
-  clipReducer,
   DEFAULT_CLIP_STATE,
-} from "../../utils/reducers/ClipReducer";
+} from "../../utils/reducers/clipReducer";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
