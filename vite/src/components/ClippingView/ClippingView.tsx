@@ -13,6 +13,8 @@ import VideoControlPanel from "./ClippingControls/VideoControlPanel";
 import VideoPlayer from "./VideoPlayer";
 import ViewAllClipsButton from "./ViewAllClipsButton";
 
+const { PLAYER_READY, PLAYER_TIME_UPDATE } = ActionType;
+
 export default function ClippingView() {
   const [{ start, end, duration, src }, dispatch] = useReducer(
     clipReducer,
@@ -20,14 +22,11 @@ export default function ClippingView() {
   );
 
   const onLoadedMetadata = useCallback(function (this: videojs.Player) {
-    dispatch({ type: ActionType.PLAYER_READY, player: this });
+    dispatch({ type: PLAYER_READY, player: this });
   }, []);
 
   const onTimeUpdate = useCallback(function (this: videojs.Player) {
-    dispatch({
-      type: ActionType.PLAYER_TIME_UPDATE,
-      player: this,
-    });
+    dispatch({ type: PLAYER_TIME_UPDATE, player: this });
   }, []);
 
   const handleVideoPlayerReady = useCallback<videojs.ReadyCallback>(
