@@ -1,4 +1,5 @@
-import { Paper, Grid } from "@mui/material";
+import { Paper, Grid, SxProps } from "@mui/material";
+import { Theme } from "@mui/system";
 import {
   DecreaseClipEndButton,
   DecreaseClipStartButton,
@@ -8,10 +9,12 @@ import {
   JumpToStartOfClipButton,
 } from "./ClipButtons";
 
+const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
+
 export default function VideoControlPanel() {
   return (
     <Grid padding={2}>
-      <Paper elevation={1} sx={{ padding: 1 }}>
+      <Paper elevation={1} sx={PAPER_STYLE}>
         <Grid container={true} justifyContent="center">
           <Grid container={true} xs={6} justifyContent="center" spacing={3}>
             <DecreaseClipStartButton />
