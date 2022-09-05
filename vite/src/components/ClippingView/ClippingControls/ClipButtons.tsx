@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { toSeconds } from "../../../utils/timestamp";
 import { ActionType } from "../../../utils/reducers/clipReducer";
 import { useClipContext } from "../../../providers/ClipProvider";
+import { Grid } from "@mui/material";
 
 // see: https://www.typescriptlang.org/play#example/nominal-typing
 type milliseconds = number & { __brand: "milliseconds" };
@@ -31,11 +32,13 @@ export function JumpToEndOfClipButton() {
   }, [dispatch]);
 
   return (
-    <Tooltip title="Jump to the end of the clip">
-      <IconButton onClick={handleClick}>
-        <SkipNextIcon />
-      </IconButton>
-    </Tooltip>
+    <Grid item={true}>
+      <Tooltip title="Jump to the end of the clip">
+        <IconButton onClick={handleClick}>
+          <SkipNextIcon />
+        </IconButton>
+      </Tooltip>
+    </Grid>
   );
 }
 
@@ -46,11 +49,13 @@ export function JumpToStartOfClipButton() {
   }, [dispatch]);
 
   return (
-    <Tooltip title="Jump to the start of the clip">
-      <IconButton onClick={handleClick}>
-        <SkipPreviousIcon />
-      </IconButton>
-    </Tooltip>
+    <Grid item={true}>
+      <Tooltip title="Jump to the start of the clip">
+        <IconButton onClick={handleClick}>
+          <SkipPreviousIcon />
+        </IconButton>
+      </Tooltip>
+    </Grid>
   );
 }
 
@@ -68,9 +73,11 @@ function IncrementClipStartEndButton({
   }, [dispatch, amount, type]);
 
   return (
-    <Tooltip title={description}>
-      <IconButton onClick={handleClick}>{icon}</IconButton>
-    </Tooltip>
+    <Grid item={true}>
+      <Tooltip title={description}>
+        <IconButton onClick={handleClick}>{icon}</IconButton>
+      </Tooltip>
+    </Grid>
   );
 }
 
