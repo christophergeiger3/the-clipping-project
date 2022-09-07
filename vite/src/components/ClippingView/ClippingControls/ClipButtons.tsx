@@ -20,7 +20,7 @@ interface IncrementClipByAmountProps {
   amount: milliseconds;
 }
 
-interface IncrementClipStartEndButtonProps extends IncrementClipByAmountProps {
+interface IncrementClipStartOrClipEnd extends IncrementClipByAmountProps {
   type: ActionType.ADD_TO_CLIP_START_TIME | ActionType.ADD_TO_CLIP_END_TIME;
   description: string;
 }
@@ -59,11 +59,11 @@ export function JumpToStartOfClipButton() {
   );
 }
 
-function IncrementClipStartEndButton({
+function IncrementClipStartOrClipEnd({
   amount,
   type,
   description,
-}: IncrementClipStartEndButtonProps) {
+}: IncrementClipStartOrClipEnd) {
   const { dispatch } = useClipContext();
   const isIncreasing = amount > 0;
   const icon = isIncreasing ? <RedoIcon /> : <UndoIcon />;
@@ -88,7 +88,7 @@ function IncrementClipStartByAmount({ amount }: IncrementClipByAmountProps) {
     Math.abs(amount)
   )}`;
   return (
-    <IncrementClipStartEndButton
+    <IncrementClipStartOrClipEnd
       amount={amount}
       type={type}
       description={description}
@@ -103,7 +103,7 @@ function IncrementClipEndByAmount({ amount }: IncrementClipByAmountProps) {
     Math.abs(amount)
   )}`;
   return (
-    <IncrementClipStartEndButton
+    <IncrementClipStartOrClipEnd
       amount={amount}
       type={type}
       description={description}
