@@ -1,6 +1,6 @@
 import { Slider } from "@mui/material";
 import { useCallback } from "react";
-import { useClipContext } from "../../../providers/ClipProvider";
+import { useClipDispatch, useClipState } from "../../../providers/ClipProvider";
 import { isNullable } from "../../../utils/isNonNullable";
 import { ActionType } from "../../../utils/reducers/clipReducer";
 import { convertMillisecondsToTimestamp } from "../../../utils/timestamp";
@@ -8,10 +8,8 @@ import { convertMillisecondsToTimestamp } from "../../../utils/timestamp";
 const { UPDATE_START_END } = ActionType;
 
 export default function ClipStartEndTimeSlider() {
-  const {
-    state: { start, end, duration },
-    dispatch,
-  } = useClipContext();
+  const { start, end, duration } = useClipState();
+  const dispatch = useClipDispatch();
 
   const handleChange = useCallback(
     (_event: Event, value: number | number[]) => {

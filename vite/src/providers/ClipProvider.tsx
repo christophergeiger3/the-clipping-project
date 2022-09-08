@@ -27,10 +27,20 @@ export function useClipContext() {
   const context = useContext(ClipContext);
 
   if (!context) {
-    throw new Error("useClipContext must be used within a ClipProvider");
+    throw new Error("Hook must be used within a ClipProvider");
   }
 
   return context;
+}
+
+export function useClipDispatch() {
+  const { dispatch } = useClipContext();
+  return dispatch;
+}
+
+export function useClipState() {
+  const { state } = useClipContext();
+  return state;
 }
 
 export default function ClipProvider({

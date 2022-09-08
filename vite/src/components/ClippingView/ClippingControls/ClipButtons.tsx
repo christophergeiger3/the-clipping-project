@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useCallback } from "react";
 import { toSeconds } from "../../../utils/timestamp";
 import { ActionType } from "../../../utils/reducers/clipReducer";
-import { useClipContext } from "../../../providers/ClipProvider";
+import { useClipDispatch } from "../../../providers/ClipProvider";
 import { Grid } from "@mui/material";
 
 // see: https://www.typescriptlang.org/play#example/nominal-typing
@@ -26,7 +26,7 @@ interface IncrementClipStartOrClipEnd extends IncrementClipByAmountProps {
 }
 
 export function JumpToEndOfClipButton() {
-  const { dispatch } = useClipContext();
+  const dispatch = useClipDispatch();
   const handleClick = useCallback(() => {
     dispatch({ type: ActionType.JUMP_TO_CLIP_END });
   }, [dispatch]);
@@ -43,7 +43,7 @@ export function JumpToEndOfClipButton() {
 }
 
 export function JumpToStartOfClipButton() {
-  const { dispatch } = useClipContext();
+  const dispatch = useClipDispatch();
   const handleClick = useCallback(() => {
     dispatch({ type: ActionType.JUMP_TO_CLIP_START });
   }, [dispatch]);
@@ -64,7 +64,7 @@ function IncrementClipStartOrClipEnd({
   type,
   description,
 }: IncrementClipStartOrClipEnd) {
-  const { dispatch } = useClipContext();
+  const dispatch = useClipDispatch();
   const isIncreasing = amount > 0;
   const icon = isIncreasing ? <RedoIcon /> : <UndoIcon />;
 
