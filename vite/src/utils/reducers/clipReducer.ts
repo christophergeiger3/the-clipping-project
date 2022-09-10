@@ -1,4 +1,5 @@
 import videojs, { VideoJsPlayer } from "video.js";
+import clamp from "../clamp";
 import isNonNullable from "../isNonNullable";
 import { jumpToTime, pauseIfOutsideClip } from "../player";
 import { toMilliseconds } from "../timestamp";
@@ -76,18 +77,20 @@ export default function clipReducer(state: ClipState, action: ClipAction) {
       return state;
     }
     case ActionType.ADD_TO_CLIP_START_TIME: {
-      const { start } = state;
+      const { start, duration } = state;
       const { amount } = action;
-      if (isNonNullable(start)) {
-        return { ...state, start: start + amount };
+      if (isNonNullable(start) && isNonNullable(duration)) {
+        const newStart = clamp(start + amount, 0, duration);
+        return { ...state, start: newStart };
       }
       return state;
     }
     case ActionType.ADD_TO_CLIP_END_TIME: {
-      const { end } = state;
+      const { end, duration } = state;
       const { amount } = action;
-      if (isNonNullable(end)) {
-        return { ...state, end: end + amount };
+      if (isNonNullable(end) && isNonNullable(duration)) {
+        const newEnd = clamp(end + amount, 0, duration);
+        return { ...state, end: newEnd };
       }
       return state;
     }
