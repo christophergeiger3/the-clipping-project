@@ -23,6 +23,8 @@ export enum ActionType {
   JUMP_TO_CLIP_END,
   ADD_TO_CLIP_START_TIME,
   ADD_TO_CLIP_END_TIME,
+  SET_START_TO_CURRENT_TIME,
+  SET_END_TO_CURRENT_TIME,
 }
 
 export type ClipAction =
@@ -32,7 +34,9 @@ export type ClipAction =
   | { type: ActionType.JUMP_TO_CLIP_START }
   | { type: ActionType.JUMP_TO_CLIP_END }
   | { type: ActionType.ADD_TO_CLIP_START_TIME; amount: number }
-  | { type: ActionType.ADD_TO_CLIP_END_TIME; amount: number };
+  | { type: ActionType.ADD_TO_CLIP_END_TIME; amount: number }
+  | { type: ActionType.SET_START_TO_CURRENT_TIME }
+  | { type: ActionType.SET_END_TO_CURRENT_TIME };
 
 export const DEFAULT_CLIP_STATE: ClipState = {
   start: undefined,
@@ -91,6 +95,22 @@ export default function clipReducer(state: ClipState, action: ClipAction) {
       if (isNonNullable(end) && isNonNullable(duration)) {
         const newEnd = clamp(end + amount, 0, duration);
         return { ...state, end: newEnd };
+      }
+      return state;
+    }
+    case ActionType.SET_START_TO_CURRENT_TIME: {
+      const { player } = state;
+      if (isNonNullable(player)) {
+        const start = toMilliseconds(player.currentTime());
+        return { ...state, start };
+      }
+      return state;
+    }
+    case ActionType.SET_END_TO_CURRENT_TIME: {
+      const { player } = state;
+      if (isNonNullable(player)) {
+        const end = toMilliseconds(player.currentTime());
+        return { ...state, end };
       }
       return state;
     }
