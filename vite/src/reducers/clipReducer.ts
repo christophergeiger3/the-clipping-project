@@ -1,8 +1,8 @@
 import videojs, { VideoJsPlayer } from "video.js";
-import clamp from "../utils/clamp";
-import isNonNullable from "../utils/isNonNullable";
-import { jumpToTime, pauseIfOutsideClip } from "../utils/player";
-import { toMilliseconds } from "../utils/timestamp";
+import clamp from "@utils/clamp";
+import isNonNullable from "@utils/isNonNullable";
+import { jumpToTime, pauseIfOutsideClip } from "@utils/player";
+import { toMilliseconds } from "@utils/timestamp";
 
 const DEFAULT_VIDEO_SRC =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";

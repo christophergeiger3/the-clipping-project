@@ -3,9 +3,9 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import { useClipDispatch } from "../../../../providers/ClipProvider";
+import { useClipDispatch } from "@providers/ClipProvider";
 import { useCallback } from "react";
-import { ActionType } from "../../../../reducers/clipReducer";
+import { ActionType } from "@reducers/clipReducer";
 
 export function JumpToEndOfClipButton() {
   const dispatch = useClipDispatch();

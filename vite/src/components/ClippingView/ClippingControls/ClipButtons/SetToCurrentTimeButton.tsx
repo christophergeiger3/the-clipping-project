@@ -3,8 +3,8 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { Grid } from "@mui/material";
 import { useCallback } from "react";
-import { ActionType } from "../../../../reducers/clipReducer";
-import { useClipDispatch } from "../../../../providers/ClipProvider";
+import { ActionType } from "@reducers/clipReducer";
+import { useClipDispatch } from "@providers/ClipProvider";
 
 export function SetClipStartToCurrentTimeButton() {
   const dispatch = useClipDispatch();

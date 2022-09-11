@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
-import { useClipState } from "../../providers/ClipProvider";
-import isNonNullable from "../../utils/isNonNullable";
-import { DEFAULT_CLIP_STATE } from "../../reducers/clipReducer";
+import { useClipState } from "@providers/ClipProvider";
+import isNonNullable from "@utils/isNonNullable";
+import { DEFAULT_CLIP_STATE } from "@reducers/clipReducer";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";

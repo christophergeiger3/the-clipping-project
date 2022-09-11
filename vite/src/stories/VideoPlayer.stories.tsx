@@ -1,5 +1,5 @@
 import { ComponentStory } from "@storybook/react";
-import VideoPlayer from "../components/ClippingView/VideoPlayer";
+import VideoPlayer from "@components/ClippingView/VideoPlayer";
 
 export default {
   component: VideoPlayer,

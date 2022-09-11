@@ -9,9 +9,9 @@ import {
   INCREMENT_AMOUNT_IMPRECISE,
   DECREMENT_AMOUNT_IMPRECISE,
 } from "./constants";
-import { toSeconds } from "../../../../utils/timestamp";
-import { ActionType } from "../../../../reducers/clipReducer";
-import { useClipDispatch } from "../../../../providers/ClipProvider";
+import { toSeconds } from "@utils/timestamp";
+import { ActionType } from "@reducers/clipReducer";
+import { useClipDispatch } from "@providers/ClipProvider";
 
 interface IncrementClipByAmountProps {
   amount: milliseconds;
