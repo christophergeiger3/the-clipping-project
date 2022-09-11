@@ -5,11 +5,15 @@ import {
   DecreaseClipStartButton,
   IncreaseClipEndButton,
   IncreaseClipStartButton,
+} from "./ClipButtons/IncrementClipButton";
+import {
   JumpToEndOfClipButton,
   JumpToStartOfClipButton,
+} from "./ClipButtons/JumpToButton";
+import {
   SetClipEndToCurrentTimeButton,
   SetClipStartToCurrentTimeButton,
-} from "./ClipButtons";
+} from "./ClipButtons/SetToCurrentTimeButton";
 
 const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
 
