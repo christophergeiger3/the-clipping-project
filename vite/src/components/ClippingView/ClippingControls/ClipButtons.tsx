@@ -3,6 +3,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
+import AdjustIcon from "@mui/icons-material/Adjust";
 import Tooltip from "@mui/material/Tooltip";
 import { useCallback } from "react";
 import { toSeconds } from "../../../utils/timestamp";
@@ -53,6 +54,44 @@ export function JumpToStartOfClipButton() {
       <Tooltip title="Jump to the start of the clip">
         <IconButton onClick={handleClick}>
           <SkipPreviousIcon />
+        </IconButton>
+      </Tooltip>
+    </Grid>
+  );
+}
+
+export function SetClipStartToCurrentTimeButton() {
+  const dispatch = useClipDispatch();
+  const type = ActionType.SET_START_TO_CURRENT_TIME;
+
+  const handleClick = useCallback(() => {
+    dispatch({ type });
+  }, [dispatch, type]);
+
+  return (
+    <Grid item={true}>
+      <Tooltip title="Set the start of the clip to the current time">
+        <IconButton onClick={handleClick}>
+          <AdjustIcon />
+        </IconButton>
+      </Tooltip>
+    </Grid>
+  );
+}
+
+export function SetClipEndToCurrentTimeButton() {
+  const dispatch = useClipDispatch();
+  const type = ActionType.SET_END_TO_CURRENT_TIME;
+
+  const handleClick = useCallback(() => {
+    dispatch({ type });
+  }, [dispatch, type]);
+
+  return (
+    <Grid item={true}>
+      <Tooltip title="Set the end of the clip to the current time">
+        <IconButton onClick={handleClick}>
+          <AdjustIcon />
         </IconButton>
       </Tooltip>
     </Grid>

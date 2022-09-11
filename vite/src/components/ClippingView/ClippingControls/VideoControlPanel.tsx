@@ -7,6 +7,8 @@ import {
   IncreaseClipStartButton,
   JumpToEndOfClipButton,
   JumpToStartOfClipButton,
+  SetClipEndToCurrentTimeButton,
+  SetClipStartToCurrentTimeButton,
 } from "./ClipButtons";
 
 const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
@@ -17,6 +19,7 @@ export default function VideoControlPanel() {
       <Paper elevation={1} sx={PAPER_STYLE}>
         <Grid container={true} justifyContent="center">
           <Grid container={true} xs={6} justifyContent="center" spacing={3}>
+            <SetClipStartToCurrentTimeButton />
             <DecreaseClipStartButton />
             <JumpToStartOfClipButton />
             <IncreaseClipStartButton />
@@ -25,6 +28,7 @@ export default function VideoControlPanel() {
             <DecreaseClipEndButton />
             <JumpToEndOfClipButton />
             <IncreaseClipEndButton />
+            <SetClipEndToCurrentTimeButton />
           </Grid>
         </Grid>
       </Paper>
