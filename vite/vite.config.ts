@@ -7,4 +7,14 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT) || 4191,
   },
+  resolve: {
+    alias: {
+      "@": "/src",
+      "@utils": "/src/utils",
+      "@components": "/src/components",
+      "@hooks": "/src/hooks",
+      "@providers": "/src/providers",
+      "@reducers": "src/reducers",
+    },
+  },
 });
