@@ -1,6 +1,6 @@
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
 import { useRef, useEffect, useReducer } from "react";
-import { isNullable } from "../isNonNullable";
+import { isNullable } from "../utils/isNonNullable";
 
 type VideoReducerState = {
   player: VideoJsPlayer | null;

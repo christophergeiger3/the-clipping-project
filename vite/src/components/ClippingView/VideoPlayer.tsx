@@ -1,6 +1,6 @@
 import "video.js/dist/video-js.css";
 import { Grid } from "@mui/material";
-import useVideo from "../../utils/hooks/useVideo";
+import useVideo from "../../hooks/useVideo";
 import { useClipContext } from "../../providers/ClipProvider";
 
 export default function VideoPlayer({ src }: { src: string }) {
