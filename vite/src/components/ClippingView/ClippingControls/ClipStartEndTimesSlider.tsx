@@ -2,7 +2,7 @@ import { Slider } from "@mui/material";
 import { useCallback } from "react";
 import { useClipDispatch, useClipState } from "../../../providers/ClipProvider";
 import { isNullable } from "../../../utils/isNonNullable";
-import { ActionType } from "../../../utils/reducers/clipReducer";
+import { ActionType } from "../../../reducers/clipReducer";
 import { convertMillisecondsToTimestamp } from "../../../utils/timestamp";
 
 const { UPDATE_START_END } = ActionType;

@@ -11,7 +11,7 @@ import clipReducer, {
   ClipAction,
   ClipState,
   DEFAULT_CLIP_STATE,
-} from "../utils/reducers/clipReducer";
+} from "../reducers/clipReducer";
 
 interface ClipContext {
   dispatch: React.Dispatch<ClipAction>;

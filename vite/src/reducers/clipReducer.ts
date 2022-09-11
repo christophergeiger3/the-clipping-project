@@ -1,8 +1,8 @@
 import videojs, { VideoJsPlayer } from "video.js";
-import clamp from "../clamp";
-import isNonNullable from "../isNonNullable";
-import { jumpToTime, pauseIfOutsideClip } from "../player";
-import { toMilliseconds } from "../timestamp";
+import clamp from "../utils/clamp";
+import isNonNullable from "../utils/isNonNullable";
+import { jumpToTime, pauseIfOutsideClip } from "../utils/player";
+import { toMilliseconds } from "../utils/timestamp";
 
 const DEFAULT_VIDEO_SRC =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
@@ -11,6 +11,8 @@ export type ClipState = {
   start?: number;
   end?: number;
   duration?: number;
+  sliderMin?: number;
+  sliderMax?: number;
   src: string;
   player?: VideoJsPlayer;
 };
@@ -25,6 +27,7 @@ export enum ActionType {
   ADD_TO_CLIP_END_TIME,
   SET_START_TO_CURRENT_TIME,
   SET_END_TO_CURRENT_TIME,
+  ZOOM_SLIDER_TO_RANGE,
 }
 
 export type ClipAction =
@@ -36,12 +39,15 @@ export type ClipAction =
   | { type: ActionType.ADD_TO_CLIP_START_TIME; amount: number }
   | { type: ActionType.ADD_TO_CLIP_END_TIME; amount: number }
   | { type: ActionType.SET_START_TO_CURRENT_TIME }
-  | { type: ActionType.SET_END_TO_CURRENT_TIME };
+  | { type: ActionType.SET_END_TO_CURRENT_TIME }
+  | { type: ActionType.ZOOM_SLIDER_TO_RANGE; start: number; end: number };
 
 export const DEFAULT_CLIP_STATE: ClipState = {
   start: undefined,
   end: undefined,
   duration: undefined,
+  sliderMin: undefined,
+  sliderMax: undefined,
   src: DEFAULT_VIDEO_SRC,
   player: undefined,
 };
@@ -52,7 +58,15 @@ export default function clipReducer(state: ClipState, action: ClipAction) {
     case ActionType.PLAYER_READY: {
       const { player } = action;
       const duration = toMilliseconds(player.duration());
-      return { ...state, duration, start: 0, end: duration, player };
+      return {
+        ...state,
+        duration,
+        start: 0,
+        end: duration,
+        sliderMin: 0,
+        sliderMax: duration,
+        player,
+      };
     }
     case ActionType.UPDATE_START_END: {
       const { start, end } = action;
@@ -113,6 +127,10 @@ export default function clipReducer(state: ClipState, action: ClipAction) {
         return { ...state, end };
       }
       return state;
+    }
+    case ActionType.ZOOM_SLIDER_TO_RANGE: {
+      const { start, end } = action;
+      return { ...state, sliderMin: start, sliderMax: end };
     }
     default:
       return state;
