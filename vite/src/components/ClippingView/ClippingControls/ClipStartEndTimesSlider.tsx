@@ -5,7 +5,7 @@ import { isNullable } from "@utils/isNonNullable";
 import { ActionType } from "@reducers/clipReducer";
 import { convertMillisecondsToTimestamp } from "@utils/timestamp";
 
-const { UPDATE_START_END, ZOOM_SLIDER_TO_RANGE } = ActionType;
+const { UPDATE_START_END } = ActionType;
 
 export default function ClipStartEndTimeSlider() {
   const { start, end, duration, sliderMin, sliderMax } = useClipState();
@@ -25,14 +25,16 @@ export default function ClipStartEndTimeSlider() {
   }
 
   return (
-    <Slider
-      getAriaLabel={() => "Video range"}
-      value={[start, end]}
-      onChange={handleChange}
-      min={0}
-      max={duration}
-      valueLabelFormat={convertMillisecondsToTimestamp}
-      valueLabelDisplay="auto"
-    />
+    <>
+      <Slider
+        getAriaLabel={() => "Video range"}
+        value={[start, end]}
+        onChange={handleChange}
+        min={sliderMin}
+        max={sliderMax}
+        valueLabelFormat={convertMillisecondsToTimestamp}
+        valueLabelDisplay="auto"
+      />
+    </>
   );
 }
