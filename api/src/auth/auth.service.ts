@@ -4,6 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { JwtPayload } from './jwt.strategy';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,7 @@ export class AuthService {
 
   /** @returns the signed JWT token for the user */
   async createToken(user: User) {
-    const payload = { username: user.username, sub: user._id };
+    const payload: JwtPayload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
     };
