@@ -5,6 +5,12 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { JwtPayload } from './jwt.strategy';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class TokenResponse {
+  @ApiProperty()
+  access_token: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -41,7 +47,7 @@ export class AuthService {
   }
 
   /** @returns the signed JWT token for the user */
-  async createToken(user: User) {
+  async createToken(user: User): Promise<TokenResponse> {
     const payload: JwtPayload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
