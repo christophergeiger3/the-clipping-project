@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Required for orval client requests (api.ts):
 Axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+Axios.defaults.headers.common["Content-Type"] = "application/json";
+Axios.defaults.headers.common["Accept"] = "application/json";
 
 // Required client for react-query:
 const queryClient = new QueryClient({
@@ -26,9 +28,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <ClipProvider>
-          <ClippingView />
-        </ClipProvider>
+        <AuthProvider>
+          <ClipProvider>
+            <ClippingView />
+          </ClipProvider>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
