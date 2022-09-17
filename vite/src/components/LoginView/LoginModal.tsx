@@ -7,6 +7,7 @@ import {
   Input,
   CardContent,
   CardActions,
+  CardHeader,
 } from "@mui/material";
 import { useCallback, useState } from "react";
 
@@ -21,7 +22,6 @@ function useModal() {
 export default function LoginModal() {
   const { open, handleOpen, handleClose } = useModal();
 
-  // TODO: fix styling
   return (
     <>
       <Button onClick={handleOpen}>Open Modal</Button>
@@ -33,17 +33,28 @@ export default function LoginModal() {
           sx={{ height: "100vh", width: "100vw" }}
         >
           <Card sx={{ px: 5, py: 1, borderRadius: 1 }}>
-            <Typography fontFamily="sans-serif" variant="h5">
-              Login Required
-            </Typography>
             <CardContent>
-              <Grid container={true} direction="column" rowGap={2}>
-                <Input placeholder="Username" />
-                <Input placeholder="Password" type="password" />
+              <Grid
+                container={true}
+                justifyContent="center"
+                alignItems="center"
+                rowGap={2}
+              >
+                <Typography fontFamily="sans-serif" variant="h5">
+                  Login Required
+                </Typography>
+                <Grid container={true} direction="column" rowGap={2}>
+                  <Input placeholder="Username" />
+                  <Input placeholder="Password" type="password" />
+                </Grid>
               </Grid>
             </CardContent>
             <CardActions>
-              <Button variant="contained" onClick={handleClose}>
+              <Button
+                fullWidth={true}
+                variant="contained"
+                onClick={handleClose}
+              >
                 Login
               </Button>
             </CardActions>
