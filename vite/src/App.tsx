@@ -3,6 +3,7 @@ import ClippingView from "@components/ClippingView/ClippingView";
 import ClipProvider from "@providers/ClipProvider";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AuthProvider from "./providers/AuthProvider";
 
 // Required for orval client requests (api.ts):
 Axios.defaults.baseURL = import.meta.env.VITE_API_URL;
