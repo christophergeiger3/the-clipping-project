@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: JwtPayload) {
     const { sub: userId } = payload;
 
-    // Any access gating (e.g. revoking tokens) should be done here
+    // Any access gating (e.g. revoking tokens / banning users) should be done here
 
     return this.userService.findOne(userId);
   }
