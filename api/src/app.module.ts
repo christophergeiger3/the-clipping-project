@@ -15,6 +15,7 @@ import {
   API_URL,
   DATABASE_URL,
   ENV,
+  JWT_TOKEN_EXPIRATION,
   PORT,
   TEST_DATABASE_URL,
 } from './env.default';
@@ -25,6 +26,7 @@ const environmentValidationSchema = Joi.object({
   API_URL: Joi.string().default(API_URL),
   DATABASE_URL: Joi.string().default(DATABASE_URL),
   TEST_DATABASE_URL: Joi.string().default(TEST_DATABASE_URL),
+  JWT_TOKEN_EXPIRATION: Joi.number().default(JWT_TOKEN_EXPIRATION), // seconds
 });
 
 @Module({

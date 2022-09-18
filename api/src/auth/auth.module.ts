@@ -7,16 +7,17 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JWT_SECRET } from './constants';
 import { JwtStrategy } from './jwt.strategy';
-
-const ONE_DAY = '3600s';
+import { JWT_TOKEN_EXPIRATION } from 'src/env.default';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    ConfigModule,
     JwtModule.register({
       secret: JWT_SECRET,
-      signOptions: { expiresIn: ONE_DAY },
+      signOptions: { expiresIn: `${JWT_TOKEN_EXPIRATION}s` },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
