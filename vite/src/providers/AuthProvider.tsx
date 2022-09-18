@@ -1,9 +1,13 @@
 import { authControllerLogin, authControllerRegister } from "@/api";
+import LoginModal from "@/components/LoginView/LoginModal";
+import useModal from "@/hooks/useModal";
+import { toMilliseconds } from "@/utils/timestamp";
 import Axios from "axios";
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -31,56 +35,76 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
+  const {
+    open,
+    handleOpen: openLoginModal,
+    handleClose: closeLoginModal,
+  } = useModal();
+
+  const storedToken = localStorage.getItem("token");
+  const storedTokenExpiry = localStorage.getItem("tokenExpiry");
+
+  const [token, setToken] = useState<string | null>(storedToken);
+  const [tokenExpiry, setTokenExpiry] = useState<Date | null>(
+    storedTokenExpiry ? new Date(storedTokenExpiry) : null
+  );
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(
+    token && tokenExpiry ? tokenExpiry > new Date() : false
   );
 
-  const login = useCallback(async (username: string, password: string) => {
-    let response: Awaited<ReturnType<typeof authControllerLogin>>;
-    let newToken: string;
+  const storeToken = useCallback((token: string, expiry: Date) => {
+    Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-    try {
-      response = await authControllerLogin({ username, password });
-      newToken = response.data.access_token;
-    } catch (err) {
-      // TODO: throw login error as snackbar
-      console.error(err);
-      return;
-    }
+    localStorage.setItem("token", token);
+    localStorage.setItem("tokenExpiry", expiry.toISOString());
 
-    Axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
+    setToken(token);
+    setTokenExpiry(expiry);
 
-    // return response;
-    return;
+    setIsAuthorized(true);
   }, []);
 
-  const register = useCallback(async (username: string, password: string) => {
-    let response: Awaited<ReturnType<typeof authControllerRegister>>;
-    let newToken: string;
+  const login = useCallback(
+    async (username: string, password: string) => {
+      const response = await authControllerLogin({ username, password });
+      const { access_token: newToken, expires_in } = response.data;
 
-    try {
-      response = await authControllerRegister({ username, password });
-      newToken = response.data.access_token;
-    } catch (err) {
-      // TODO: throw login error as snackbar
-      console.error(err);
-      return;
-    }
+      const newTokenExpiry = new Date(Date.now() + toMilliseconds(expires_in));
+      storeToken(newToken, newTokenExpiry);
+    },
+    [storeToken]
+  );
 
-    Axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
+  const register = useCallback(
+    async (username: string, password: string) => {
+      const response = await authControllerRegister({ username, password });
+      const { access_token: newToken, expires_in } = response.data;
 
-    // return response;
-    return;
-  }, []);
+      const newTokenExpiry = new Date(Date.now() + toMilliseconds(expires_in));
+      storeToken(newToken, newTokenExpiry);
+    },
+    [storeToken]
+  );
 
-  const value = useMemo(
+  // TODO: implement token refresh
+  // TODO: set isAuthorized to false if the token expires during a session
+
+  const value: AuthContext = useMemo(
     () => ({ login, register, token }),
     [login, register, token]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    if (isAuthorized) {
+      return;
+    }
+    openLoginModal();
+  }, [isAuthorized, openLoginModal]);
+
+  return (
+    <AuthContext.Provider value={value}>
+      <LoginModal open={open} onClose={closeLoginModal} />
+      {children}
+    </AuthContext.Provider>
+  );
 }
