@@ -11,6 +11,7 @@ import {
   ZoomInButton,
   ZoomResetButton,
 } from "./ClippingControls/ClipButtons/ZoomButton";
+import { useCallback } from "react";
 
 export default function ClippingView() {
   const { start, end, duration } = useClipState();
@@ -18,29 +19,34 @@ export default function ClippingView() {
   const showClipStartEndTimesSlider =
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
 
-  const clipSlider = showClipStartEndTimesSlider ? (
-    <ClipStartEndTimesSlider />
-  ) : null;
+  const ClipSlider = useCallback(
+    () => (showClipStartEndTimesSlider ? <ClipStartEndTimesSlider /> : null),
+    [showClipStartEndTimesSlider]
+  );
 
-  const zoomButtons = showClipStartEndTimesSlider ? (
-    <Grid container={true} spacing={2}>
-      <ZoomInButton />
-      <ZoomResetButton />
-    </Grid>
-  ) : null;
+  const ZoomButtons = useCallback(
+    () =>
+      showClipStartEndTimesSlider ? (
+        <Grid container={true} spacing={2}>
+          <ZoomInButton />
+          <ZoomResetButton />
+        </Grid>
+      ) : null,
+    [showClipStartEndTimesSlider]
+  );
 
   return (
     <Grid container={true} columns={100} mt={2} mb={2}>
-      <Grid item={true} xs={1} md={5} xl={10} />
-      <Grid item={true} xs={98} md={90} xl={80}>
+      <Grid item={true} xs={2} md={5} xl={10} />
+      <Grid item={true} xs={96} md={90} xl={80}>
         <VideoPlayer src={DEFAULT_CLIP_STATE.src} />
-        {clipSlider}
-        {zoomButtons}
+        <ClipSlider />
+        <ZoomButtons />
         <VideoControlPanel />
         <ClippingControlPanel />
         <ViewAllClipsButton />
       </Grid>
-      <Grid item={true} xs={1} md={5} xl={10} />
+      <Grid item={true} xs={2} md={5} xl={10} />
     </Grid>
   );
 }

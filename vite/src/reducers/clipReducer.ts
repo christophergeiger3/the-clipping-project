@@ -21,6 +21,7 @@ export enum ActionType {
   PLAYER_READY,
   UPDATE_START_END,
   PLAYER_TIME_UPDATE,
+  PLAYER_SET_SRC,
   JUMP_TO_CLIP_START,
   JUMP_TO_CLIP_END,
   ADD_TO_CLIP_START_TIME,
@@ -34,6 +35,7 @@ export type ClipAction =
   | { type: ActionType.PLAYER_READY; player: videojs.Player }
   | { type: ActionType.UPDATE_START_END; start: number; end: number }
   | { type: ActionType.PLAYER_TIME_UPDATE; player: videojs.Player }
+  | { type: ActionType.PLAYER_SET_SRC; src: string }
   | { type: ActionType.JUMP_TO_CLIP_START }
   | { type: ActionType.JUMP_TO_CLIP_END }
   | { type: ActionType.ADD_TO_CLIP_START_TIME; amount: number }
@@ -79,6 +81,13 @@ export default function clipReducer(state: ClipState, action: ClipAction) {
         pauseIfOutsideClip(player, start, end);
       }
       return state;
+    }
+    case ActionType.PLAYER_SET_SRC: {
+      const { src } = action;
+      const { player } = state;
+
+      player?.src(src);
+      return { ...state, src };
     }
     case ActionType.JUMP_TO_CLIP_START: {
       const { player, start } = state;
