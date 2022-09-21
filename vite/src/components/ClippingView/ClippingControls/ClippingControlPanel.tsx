@@ -58,7 +58,7 @@ function PreviewVideoInput() {
     }, [dispatch, url]);
 
   return (
-    <Grid container={true} item={true} alignItems="center" columns={100}>
+    <Grid container={true} item={true} alignItems="center" columns={100} p={1}>
       <Grid item={true} xs={90} sm={94} lg={96}>
         <TextField
           fullWidth={true}
@@ -85,7 +85,7 @@ function ClipTitleInput() {
   );
 
   return (
-    <Grid container={true} item={true} alignItems="center" columns={100}>
+    <Grid container={true} item={true} alignItems="center" columns={100} p={1}>
       <Grid item={true} xs={90} sm={94} lg={96}>
         <TextField
           fullWidth={true}
