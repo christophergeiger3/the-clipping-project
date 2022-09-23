@@ -35,6 +35,11 @@ const shakeReverse: SxProps = {
   animation: `${shakeKeyframes} 0.5s reverse`,
 };
 
+const paddingCardActions: SxProps = {
+  pt: 1,
+  pb: 2,
+};
+
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
@@ -123,7 +128,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                 </Grid>
               </Grid>
             </CardContent>
-            <CardActions>
+            <CardActions sx={paddingCardActions}>
               <Button
                 fullWidth={true}
                 variant="contained"
