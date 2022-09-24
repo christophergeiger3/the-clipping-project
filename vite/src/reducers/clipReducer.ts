@@ -13,7 +13,10 @@ export type ClipState = {
   duration?: number;
   sliderMin?: number;
   sliderMax?: number;
+  /** Raw video source for the video player -- the result from analyzing the original url */
   src: string;
+  /** The URL of the current clip before its analyzed into a raw video source for the player */
+  originalUrl: string;
   player?: VideoJsPlayer;
 };
 
@@ -35,7 +38,7 @@ export type ClipAction =
   | { type: ActionType.PLAYER_READY; player: videojs.Player }
   | { type: ActionType.UPDATE_START_END; start: number; end: number }
   | { type: ActionType.PLAYER_TIME_UPDATE; player: videojs.Player }
-  | { type: ActionType.PLAYER_SET_SRC; src: string }
+  | { type: ActionType.PLAYER_SET_SRC; src: string; originalUrl: string }
   | { type: ActionType.JUMP_TO_CLIP_START }
   | { type: ActionType.JUMP_TO_CLIP_END }
   | { type: ActionType.ADD_TO_CLIP_START_TIME; amount: number }
@@ -51,6 +54,7 @@ export const DEFAULT_CLIP_STATE: ClipState = {
   sliderMin: undefined,
   sliderMax: undefined,
   src: DEFAULT_VIDEO_SRC,
+  originalUrl: DEFAULT_VIDEO_SRC,
   player: undefined,
 };
 
@@ -83,11 +87,11 @@ export default function clipReducer(state: ClipState, action: ClipAction) {
       return state;
     }
     case ActionType.PLAYER_SET_SRC: {
-      const { src } = action;
+      const { src, originalUrl } = action;
       const { player } = state;
 
-      player?.src(src);
-      return { ...state, src };
+      player?.src({ src, type: "video/mp4" });
+      return { ...state, src, originalUrl };
     }
     case ActionType.JUMP_TO_CLIP_START: {
       const { player, start } = state;

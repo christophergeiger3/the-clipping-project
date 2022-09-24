@@ -13,6 +13,8 @@ import {
 import React, { useCallback, useState } from "react";
 import { ActionType } from "@/reducers/clipReducer";
 import { randomNDigitNumber } from "@/utils/random";
+import { analyzeControllerAnalyze, clipsControllerCreate } from "@/api";
+import { isNullable } from "@/utils/isNonNullable";
 
 const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
 
@@ -53,8 +55,11 @@ function PreviewVideoInput() {
   );
 
   const handlePreview: React.MouseEventHandler<HTMLButtonElement> =
-    useCallback(() => {
-      dispatch({ type: PLAYER_SET_SRC, src: url });
+    useCallback(async () => {
+      const response = await analyzeControllerAnalyze({ url });
+      const analyzedUrl = response.data[0];
+
+      dispatch({ type: PLAYER_SET_SRC, src: analyzedUrl, originalUrl: url });
     }, [dispatch, url]);
 
   return (
