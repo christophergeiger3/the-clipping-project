@@ -49,9 +49,15 @@ curl https://get.volta.sh | bash
 ```
 
 Install the nestjs CLI:
-```
+```bash
 npm install -g @nestjs/cli
 ```
+
+```bash
+npm install
+npm start
+```
+
 #### Running a production build
 Install volta:
 ```bash
