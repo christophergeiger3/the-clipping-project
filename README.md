@@ -53,11 +53,6 @@ Install the nestjs CLI:
 npm install -g @nestjs/cli
 ```
 
-```bash
-npm install
-npm start
-```
-
 #### Running a production build
 Install volta:
 ```bash
