@@ -43,6 +43,11 @@ wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/lo
 chmod a+rx /usr/local/bin/yt-dlp
 ```
 
+Install volta:
+```bash
+curl https://get.volta.sh | bash
+```
+
 Install npm and nodejs:
 ```bash
 sudo apt-get install -y npm nodejs
@@ -58,6 +63,11 @@ Install the nestjs CLI:
 npm install -g @nestjs/cli
 ```
 #### Running a production build
+Install volta:
+```bash
+curl https://get.volta.sh | bash
+```
+
 Build the app api:
 ```bash
 cd api
