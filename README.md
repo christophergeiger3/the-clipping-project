@@ -70,7 +70,6 @@ Launch the app api:
 ```bash
 npm run start:prod
 ```
-
 Open a new terminal and build the web front-end:
 ```bash
 cd web
