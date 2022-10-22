@@ -48,16 +48,6 @@ Install volta:
 curl https://get.volta.sh | bash
 ```
 
-Install npm and nodejs:
-```bash
-sudo apt-get install -y npm nodejs
-```
-
-Install yarn:
-```bash
-sudo npm install --global yarn
-```
-
 Install the nestjs CLI:
 ```
 npm install -g @nestjs/cli
