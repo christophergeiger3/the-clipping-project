@@ -5,8 +5,7 @@ import { toSecondsPrecise } from "@/utils/timestamp";
 import { VideoJsPlayer } from "video.js";
 import ClipState from "./clip.state";
 
-// NTS: use 'static' to define a class method
-interface ClipAction {
+export interface ClipAction {
   /** Fires the clip-related action */
   dispatch(state: ClipState): ClipState;
 }
