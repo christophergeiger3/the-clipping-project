@@ -7,13 +7,13 @@ import ClipState from "./clip.state";
 
 export interface ClipAction {
   /** Fires the clip-related action */
-  dispatch(state: ClipState): ClipState;
+  execute(state: ClipState): ClipState;
 }
 
 export class PlayerReadyAction implements ClipAction {
   public constructor(public player: VideoJsPlayer) {}
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     const { player } = this;
     const duration = toSecondsPrecise(player.duration());
 
@@ -27,13 +27,13 @@ export class PlayerReadyAction implements ClipAction {
 export class UpdateStartEnd implements ClipAction {
   public constructor(public start: number, public end: number) {}
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     return { ...state, start: this.start, end: this.end };
   }
 }
 
 export class PlayerTimeUpdate implements ClipAction {
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     const { player, start, end } = state;
 
     if (isNullable(player) || isNullable(start) || isNullable(end)) {
@@ -53,7 +53,7 @@ export class SetPlayerSource implements ClipAction {
     this.originalUrl = originalUrl;
   }
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     const { src, originalUrl } = this;
     const { player } = state;
 
@@ -73,7 +73,7 @@ export class JumpToClipTime implements ClipAction {
     this.time = toSecondsPrecise(time);
   }
 
-  public dispatch(state: ClipState) {
+  public execute(state: ClipState) {
     if (isNullable(state.player)) throw new Error("No player");
 
     state.player.currentTime(this.time);
@@ -86,9 +86,9 @@ export class JumpToClipStart extends JumpToClipTime {
     super({ time: 0 });
   }
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     this.time = state.start;
-    return super.dispatch(state);
+    return super.execute(state);
   }
 }
 
@@ -97,9 +97,9 @@ export class JumpToClipEnd extends JumpToClipTime {
     super({ time: 0 });
   }
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     this.time = state.end;
-    return super.dispatch(state);
+    return super.execute(state);
   }
 }
 
@@ -110,13 +110,13 @@ class AddAmount implements ClipAction {
     this.amount = amount;
   }
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     return state;
   }
 }
 
 export class AddAmountToClipStart extends AddAmount {
-  public dispatch(state: ClipState) {
+  public execute(state: ClipState) {
     if (isNullable(state.start) || isNullable(state.duration)) {
       throw new Error("No player");
     }
@@ -129,7 +129,7 @@ export class AddAmountToClipStart extends AddAmount {
 }
 
 export class AddAmountToClipEnd extends AddAmount {
-  public dispatch(state: ClipState) {
+  public execute(state: ClipState) {
     if (isNullable(state.end) || isNullable(state.duration)) {
       throw new Error("No player");
     }
@@ -142,14 +142,14 @@ export class AddAmountToClipEnd extends AddAmount {
 }
 
 export class SetStartToCurrentTime implements ClipAction {
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     if (isNullable(state.player)) throw new Error("No player");
     return { ...state, start: state.player.currentTime() };
   }
 }
 
 export class SetEndToCurrentTime implements ClipAction {
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     if (isNullable(state.player)) throw new Error("No player");
     return { ...state, end: state.player.currentTime() };
   }
@@ -164,7 +164,7 @@ export class ZoomSliderToRange implements ClipAction {
     this.end = options.end;
   }
 
-  public dispatch(state: ClipState): ClipState {
+  public execute(state: ClipState): ClipState {
     return { ...state, sliderMin: this.start, sliderMax: this.end };
   }
 }
