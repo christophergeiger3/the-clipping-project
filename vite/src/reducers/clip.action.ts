@@ -28,7 +28,7 @@ export class UpdateStartEnd implements ClipAction {
   public constructor(public start: number, public end: number) {}
 
   public execute(state: ClipState): ClipState {
-    return { ...state, start: this.start, end: this.end };
+    return new ClipState({ ...state, start: this.start, end: this.end });
   }
 }
 
@@ -62,7 +62,7 @@ export class SetPlayerSource implements ClipAction {
     }
 
     player.src({ src, type: "video/mp4" });
-    return { ...state, src, originalUrl };
+    return new ClipState({ ...state, src, originalUrl });
   }
 }
 
@@ -121,10 +121,10 @@ export class AddAmountToClipStart extends AddAmount {
       throw new Error("No player");
     }
 
-    return {
+    return new ClipState({
       ...state,
       start: clamp(state.start + this.amount, 0, state.duration),
-    };
+    });
   }
 }
 
@@ -134,24 +134,24 @@ export class AddAmountToClipEnd extends AddAmount {
       throw new Error("No player");
     }
 
-    return {
+    return new ClipState({
       ...state,
       end: clamp(state.end + this.amount, 0, state.duration),
-    };
+    });
   }
 }
 
 export class SetStartToCurrentTime implements ClipAction {
   public execute(state: ClipState): ClipState {
     if (isNullable(state.player)) throw new Error("No player");
-    return { ...state, start: state.player.currentTime() };
+    return new ClipState({ ...state, start: state.player.currentTime() });
   }
 }
 
 export class SetEndToCurrentTime implements ClipAction {
   public execute(state: ClipState): ClipState {
     if (isNullable(state.player)) throw new Error("No player");
-    return { ...state, end: state.player.currentTime() };
+    return new ClipState({ ...state, end: state.player.currentTime() });
   }
 }
 
@@ -165,6 +165,10 @@ export class ZoomSliderToRange implements ClipAction {
   }
 
   public execute(state: ClipState): ClipState {
-    return { ...state, sliderMin: this.start, sliderMax: this.end };
+    return new ClipState({
+      ...state,
+      sliderMin: this.start,
+      sliderMax: this.end,
+    });
   }
 }
