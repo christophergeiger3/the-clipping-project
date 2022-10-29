@@ -4,9 +4,10 @@ import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthProvider from "./providers/AuthProvider";
 import AppRoutes from "./Routes";
+import { API_URL } from "./env.default";
 
 // Required for orval client requests (api.ts):
-Axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+Axios.defaults.baseURL = import.meta.env.VITE_API_URL || API_URL;
 Axios.defaults.headers.common["Content-Type"] = "application/json";
 Axios.defaults.headers.common["Accept"] = "application/json";
 // Axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
