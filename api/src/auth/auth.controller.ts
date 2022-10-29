@@ -6,7 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { Request as RequestType } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from 'src/users/schema/user.schema';
@@ -18,6 +18,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Login' })
   @ApiBody({ type: CreateUserDto })
   @ApiOkResponse({ type: TokenResponse })
   @UseGuards(LocalAuthGuard)
@@ -26,12 +27,14 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @ApiOperation({ summary: 'Register' })
   @ApiBody({ type: CreateUserDto })
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
   }
 
+  @ApiOperation({ summary: 'Get user details from JWT' })
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
   getStatus(@Request() req: RequestType & { user: User }) {
