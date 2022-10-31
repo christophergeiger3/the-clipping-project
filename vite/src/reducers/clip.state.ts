@@ -1,5 +1,8 @@
 import { VideoJsPlayer } from "video.js";
 
+export const DEFAULT_VIDEO_SRC =
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
 export default class ClipState {
   start: number;
   end: number;
@@ -12,13 +15,13 @@ export default class ClipState {
   originalUrl: string;
   player?: VideoJsPlayer;
 
-  constructor(initialState: ClipState) {
-    this.duration = initialState.duration ?? 0;
-    this.start = initialState.start ?? 0;
-    this.end = initialState.end ?? this.duration;
-    this.sliderMin = initialState.sliderMin ?? 0;
-    this.sliderMax = initialState.sliderMax ?? this.duration;
-    this.src = initialState.src;
-    this.originalUrl = initialState.originalUrl;
+  constructor(initialState?: ClipState) {
+    this.duration = initialState?.duration ?? 0;
+    this.start = initialState?.start ?? 0;
+    this.end = initialState?.end ?? this.duration;
+    this.sliderMin = initialState?.sliderMin ?? 0;
+    this.sliderMax = initialState?.sliderMax ?? this.duration;
+    this.src = initialState?.src || DEFAULT_VIDEO_SRC;
+    this.originalUrl = initialState?.originalUrl || this.src;
   }
 }
