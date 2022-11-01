@@ -6,12 +6,13 @@ import {
   useMemo,
   useReducer,
 } from "react";
-import clipReducer, {
-  ActionType,
+import ClipState from "@/reducers/clip.state";
+import {
   ClipAction,
-  ClipState,
-  DEFAULT_CLIP_STATE,
-} from "@reducers/clipReducer";
+  PlayerReadyAction,
+  PlayerTimeUpdate,
+} from "@/reducers/clip.action";
+import reducer from "@/reducers/clip.reducer";
 
 interface ClipContext {
   dispatch: React.Dispatch<ClipAction>;
@@ -20,8 +21,6 @@ interface ClipContext {
 }
 
 export const ClipContext = createContext<ClipContext | undefined>(undefined);
-
-const { PLAYER_READY, PLAYER_TIME_UPDATE } = ActionType;
 
 export function useClipContext() {
   const context = useContext(ClipContext);
@@ -48,18 +47,18 @@ export default function ClipProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [state, dispatch] = useReducer(clipReducer, DEFAULT_CLIP_STATE);
+  const [state, dispatch] = useReducer(reducer, new ClipState());
 
   const onLoadedMetadata = useCallback(
     function (this: videojs.Player) {
-      dispatch({ type: PLAYER_READY, player: this });
+      dispatch(new PlayerReadyAction(this));
     },
     [dispatch]
   );
 
   const onTimeUpdate = useCallback(
     function (this: videojs.Player) {
-      dispatch({ type: PLAYER_TIME_UPDATE, player: this });
+      dispatch(new PlayerTimeUpdate());
     },
     [dispatch]
   );

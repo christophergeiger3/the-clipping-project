@@ -1,12 +1,10 @@
 import { useClipDispatch, useClipState } from "@/providers/ClipProvider";
+import { ZoomSliderToRange } from "@/reducers/clip.action";
 import { isNullable } from "@/utils/isNonNullable";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Grid, IconButton, Tooltip } from "@mui/material";
-import { ActionType } from "@reducers/clipReducer";
 import { useCallback } from "react";
-
-const { ZOOM_SLIDER_TO_RANGE } = ActionType;
 
 export function ZoomInButton() {
   const { start, end } = useClipState();
@@ -14,7 +12,7 @@ export function ZoomInButton() {
 
   const handleZoom = useCallback(() => {
     if (isNullable(start) || isNullable(end)) return;
-    dispatch({ type: ZOOM_SLIDER_TO_RANGE, start, end });
+    dispatch(new ZoomSliderToRange({ start, end }));
   }, [dispatch, end, start]);
 
   return (
@@ -34,7 +32,7 @@ export function ZoomResetButton() {
 
   const handleZoomReset = useCallback(() => {
     if (isNullable(duration)) return;
-    dispatch({ type: ZOOM_SLIDER_TO_RANGE, start: 0, end: duration });
+    dispatch(new ZoomSliderToRange({ start: 0, end: duration }));
   }, [dispatch, duration]);
 
   return (

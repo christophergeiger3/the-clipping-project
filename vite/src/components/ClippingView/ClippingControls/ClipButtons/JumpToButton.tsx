@@ -5,12 +5,12 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import { useClipDispatch } from "@providers/ClipProvider";
 import { useCallback } from "react";
-import { ActionType } from "@reducers/clipReducer";
+import { JumpToClipEnd, JumpToClipStart } from "@/reducers/clip.action";
 
 export function JumpToEndOfClipButton() {
   const dispatch = useClipDispatch();
   const handleClick = useCallback(() => {
-    dispatch({ type: ActionType.JUMP_TO_CLIP_END });
+    dispatch(new JumpToClipEnd());
   }, [dispatch]);
 
   return (
@@ -27,7 +27,7 @@ export function JumpToEndOfClipButton() {
 export function JumpToStartOfClipButton() {
   const dispatch = useClipDispatch();
   const handleClick = useCallback(() => {
-    dispatch({ type: ActionType.JUMP_TO_CLIP_START });
+    dispatch(new JumpToClipStart());
   }, [dispatch]);
 
   return (

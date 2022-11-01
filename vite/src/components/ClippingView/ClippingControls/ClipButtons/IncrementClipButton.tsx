@@ -12,19 +12,23 @@ import {
 import { toSeconds } from "@utils/timestamp";
 import { ActionType } from "@reducers/clipReducer";
 import { useClipDispatch } from "@providers/ClipProvider";
+import {
+  AddAmountToClipEnd,
+  AddAmountToClipStart,
+} from "@/reducers/clip.action";
 
 interface IncrementClipByAmountProps {
   amount: milliseconds;
 }
 
 interface IncrementClipStartOrClipEnd extends IncrementClipByAmountProps {
-  type: ActionType.ADD_TO_CLIP_START_TIME | ActionType.ADD_TO_CLIP_END_TIME;
+  Action: typeof AddAmountToClipStart | typeof AddAmountToClipEnd;
   description: string;
 }
 
 function IncrementClipStartOrClipEnd({
+  Action,
   amount,
-  type,
   description,
 }: IncrementClipStartOrClipEnd) {
   const dispatch = useClipDispatch();
@@ -32,8 +36,8 @@ function IncrementClipStartOrClipEnd({
   const icon = isIncreasing ? <RedoIcon /> : <UndoIcon />;
 
   const handleClick = useCallback(() => {
-    dispatch({ type, amount });
-  }, [dispatch, amount, type]);
+    dispatch(new Action({ amount }));
+  }, [dispatch, Action, amount]);
 
   return (
     <Grid item={true}>
@@ -45,30 +49,28 @@ function IncrementClipStartOrClipEnd({
 }
 
 function IncrementClipStartByAmount({ amount }: IncrementClipByAmountProps) {
-  const type = ActionType.ADD_TO_CLIP_START_TIME;
   const increaseOrDecrease = amount > 0 ? "Increase" : "Decrease";
   const description = `${increaseOrDecrease} the start of the clip by ${toSeconds(
     Math.abs(amount)
   )}`;
   return (
     <IncrementClipStartOrClipEnd
+      Action={AddAmountToClipStart}
       amount={amount}
-      type={type}
       description={description}
     />
   );
 }
 
 function IncrementClipEndByAmount({ amount }: IncrementClipByAmountProps) {
-  const type = ActionType.ADD_TO_CLIP_END_TIME;
   const increaseOrDecrease = amount > 0 ? "Increase" : "Decrease";
   const description = `${increaseOrDecrease} the end of the clip by ${toSeconds(
     Math.abs(amount)
   )}`;
   return (
     <IncrementClipStartOrClipEnd
+      Action={AddAmountToClipEnd}
       amount={amount}
-      type={type}
       description={description}
     />
   );
