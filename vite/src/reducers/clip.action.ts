@@ -1,3 +1,4 @@
+import { toMilliseconds } from "@utils/timestamp";
 import { pauseIfOutsideClip } from "@utils/player";
 import clamp from "@/utils/clamp";
 import { isNullable } from "@/utils/isNonNullable";
@@ -15,11 +16,14 @@ export class PlayerReadyAction implements ClipAction {
 
   public execute(state: ClipState): ClipState {
     const { player } = this;
-    const duration = toSecondsPrecise(player.duration());
+    const duration = toMilliseconds(player.duration());
 
     return new ClipState({
       ...state,
+      player,
       duration,
+      sliderMin: 0,
+      sliderMax: duration,
     });
   }
 }
