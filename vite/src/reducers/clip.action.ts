@@ -21,6 +21,7 @@ export class PlayerReadyAction implements ClipAction {
     return new ClipState({
       ...state,
       player,
+      end: duration,
       duration,
       sliderMin: 0,
       sliderMax: duration,
