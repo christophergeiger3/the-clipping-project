@@ -11,7 +11,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { ActionType } from "@/reducers/clipReducer";
 import { randomNDigitNumber } from "@/utils/random";
 import { analyzeControllerAnalyze } from "@/api";
 import { SetPlayerSource } from "@/reducers/clip.action";
@@ -40,7 +39,6 @@ function SaveClipIcon({ ...props }: IconButtonProps) {
   );
 }
 
-const { PLAYER_SET_SRC } = ActionType;
 function PreviewVideoInput() {
   const { src } = useClipState();
   const dispatch = useClipDispatch();

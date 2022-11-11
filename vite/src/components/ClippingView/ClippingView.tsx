@@ -1,7 +1,6 @@
 import { Grid } from "@mui/material";
 import { useClipState } from "@providers/ClipProvider";
 import isNonNullable from "@utils/isNonNullable";
-import { DEFAULT_CLIP_STATE } from "@reducers/clipReducer";
 import ClippingControlPanel from "./ClippingControls/ClippingControlPanel";
 import ClipStartEndTimesSlider from "./ClippingControls/ClipStartEndTimesSlider";
 import VideoControlPanel from "./ClippingControls/VideoControlPanel";
@@ -14,7 +13,7 @@ import {
 import { useCallback } from "react";
 
 export default function ClippingView() {
-  const { start, end, duration } = useClipState();
+  const { src, start, end, duration } = useClipState();
 
   const showClipStartEndTimesSlider =
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
@@ -39,7 +38,7 @@ export default function ClippingView() {
     <Grid container={true} columns={100} mt={2} mb={2}>
       <Grid item={true} xs={2} md={5} xl={10} />
       <Grid item={true} xs={96} md={90} xl={80}>
-        <VideoPlayer src={DEFAULT_CLIP_STATE.src} />
+        <VideoPlayer src={src} />
         <ClipSlider />
         <ZoomButtons />
         <VideoControlPanel />
