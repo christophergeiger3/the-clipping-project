@@ -5,6 +5,7 @@ import { isNullable } from "@/utils/isNonNullable";
 import { toSecondsPrecise } from "@/utils/timestamp";
 import { VideoJsPlayer } from "video.js";
 import ClipState from "./clip.state";
+import { milliseconds } from "@/types";
 
 export interface ClipAction {
   /** Fires the clip-related action */
@@ -23,14 +24,14 @@ export class PlayerReadyAction implements ClipAction {
       player,
       end: duration,
       duration,
-      sliderMin: 0,
+      sliderMin: 0 as milliseconds,
       sliderMax: duration,
     });
   }
 }
 
 export class UpdateStartEnd implements ClipAction {
-  public constructor(public start: number, public end: number) {}
+  public constructor(public start: milliseconds, public end: milliseconds) {}
 
   public execute(state: ClipState): ClipState {
     return new ClipState({ ...state, start: this.start, end: this.end });
@@ -92,7 +93,7 @@ export class JumpToClipStart extends JumpToClipTime {
   }
 
   public execute(state: ClipState): ClipState {
-    this.time = state.start;
+    this.time = toSecondsPrecise(state.start);
     return super.execute(state);
   }
 }
@@ -103,7 +104,7 @@ export class JumpToClipEnd extends JumpToClipTime {
   }
 
   public execute(state: ClipState): ClipState {
-    this.time = state.end;
+    this.time = toSecondsPrecise(state.end);
     return super.execute(state);
   }
 }
@@ -126,9 +127,11 @@ export class AddAmountToClipStart extends AddAmount {
       throw new Error("No player");
     }
 
+    const start = clamp(state.start + this.amount, 0, state.duration);
+
     return new ClipState({
       ...state,
-      start: clamp(state.start + this.amount, 0, state.duration),
+      start: start as milliseconds,
     });
   }
 }
@@ -139,9 +142,11 @@ export class AddAmountToClipEnd extends AddAmount {
       throw new Error("No player");
     }
 
+    const end = clamp(state.end + this.amount, 0, state.duration);
+
     return new ClipState({
       ...state,
-      end: clamp(state.end + this.amount, 0, state.duration),
+      end: end as milliseconds,
     });
   }
 }
@@ -149,22 +154,28 @@ export class AddAmountToClipEnd extends AddAmount {
 export class SetStartToCurrentTime implements ClipAction {
   public execute(state: ClipState): ClipState {
     if (isNullable(state.player)) throw new Error("No player");
-    return new ClipState({ ...state, start: state.player.currentTime() });
+    return new ClipState({
+      ...state,
+      start: toMilliseconds(state.player.currentTime()),
+    });
   }
 }
 
 export class SetEndToCurrentTime implements ClipAction {
   public execute(state: ClipState): ClipState {
     if (isNullable(state.player)) throw new Error("No player");
-    return new ClipState({ ...state, end: state.player.currentTime() });
+    return new ClipState({
+      ...state,
+      end: toMilliseconds(state.player.currentTime()),
+    });
   }
 }
 
 export class ZoomSliderToRange implements ClipAction {
-  public start: number;
-  public end: number;
+  public start: milliseconds;
+  public end: milliseconds;
 
-  constructor(options: { start: number; end: number }) {
+  constructor(options: { start: milliseconds; end: milliseconds }) {
     this.start = options.start;
     this.end = options.end;
   }

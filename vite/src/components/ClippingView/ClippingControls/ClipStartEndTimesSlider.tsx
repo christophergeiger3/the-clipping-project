@@ -4,6 +4,7 @@ import { useClipDispatch, useClipState } from "@providers/ClipProvider";
 import { isNullable } from "@utils/isNonNullable";
 import { convertMillisecondsToTimestamp } from "@utils/timestamp";
 import { UpdateStartEnd } from "@/reducers/clip.action";
+import { milliseconds } from "@/types";
 
 export default function ClipStartEndTimeSlider() {
   const { start, end, duration, sliderMin, sliderMax } = useClipState();
@@ -12,7 +13,7 @@ export default function ClipStartEndTimeSlider() {
   const handleChange = useCallback(
     (_event: Event, value: number | number[]) => {
       if (!Array.isArray(value)) return;
-      const [start, end] = value;
+      const [start, end] = value as [milliseconds, milliseconds];
       dispatch(new UpdateStartEnd(start, end));
     },
     [dispatch]

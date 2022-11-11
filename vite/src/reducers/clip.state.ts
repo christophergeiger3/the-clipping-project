@@ -1,14 +1,15 @@
+import { milliseconds } from "@/types";
 import { VideoJsPlayer } from "video.js";
 
 export const DEFAULT_VIDEO_SRC =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
 export default class ClipState {
-  start = 0;
-  end = 0;
-  duration = 0;
-  sliderMin = 0;
-  sliderMax = this.duration;
+  start = 0 as milliseconds;
+  end = 0 as milliseconds;
+  duration = 0 as milliseconds;
+  sliderMin = 0 as milliseconds;
+  sliderMax = this.duration as milliseconds;
   /** Raw video source for the video player -- the result from analyzing the original url */
   src = DEFAULT_VIDEO_SRC;
   /** The URL of the current clip before its analyzed into a raw video source for the player */

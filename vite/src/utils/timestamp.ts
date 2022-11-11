@@ -1,6 +1,8 @@
+import { milliseconds } from "@/types";
+
 /** Seconds to milliseconds */
-export function toMilliseconds(seconds: number): number {
-  return Math.floor(seconds * 1000);
+export function toMilliseconds(seconds: number): milliseconds {
+  return Math.floor(seconds * 1000) as milliseconds;
 }
 
 /** Milliseconds to seconds, no decimal */

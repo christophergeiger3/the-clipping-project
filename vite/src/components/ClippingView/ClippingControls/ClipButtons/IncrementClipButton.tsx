@@ -5,7 +5,6 @@ import Tooltip from "@mui/material/Tooltip";
 import { Grid } from "@mui/material";
 import { useCallback } from "react";
 import {
-  milliseconds,
   INCREMENT_AMOUNT_IMPRECISE,
   DECREMENT_AMOUNT_IMPRECISE,
 } from "./constants";
@@ -15,6 +14,7 @@ import {
   AddAmountToClipEnd,
   AddAmountToClipStart,
 } from "@/reducers/clip.action";
+import { milliseconds } from "@/types";
 
 interface IncrementClipByAmountProps {
   amount: milliseconds;

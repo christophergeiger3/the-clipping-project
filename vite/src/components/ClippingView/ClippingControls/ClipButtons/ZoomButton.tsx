@@ -1,5 +1,6 @@
 import { useClipDispatch, useClipState } from "@/providers/ClipProvider";
 import { ZoomSliderToRange } from "@/reducers/clip.action";
+import { milliseconds } from "@/types";
 import { isNullable } from "@/utils/isNonNullable";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
@@ -32,7 +33,9 @@ export function ZoomResetButton() {
 
   const handleZoomReset = useCallback(() => {
     if (isNullable(duration)) return;
-    dispatch(new ZoomSliderToRange({ start: 0, end: duration }));
+    dispatch(
+      new ZoomSliderToRange({ start: 0 as milliseconds, end: duration })
+    );
   }, [dispatch, duration]);
 
   return (
