@@ -96,7 +96,7 @@ cd web
 yarn
 yarn start
 ```
-⚠️ The web front-end is being rebuild in vite -- see the `/vite` directory.
+⚠️ The web front-end is being rebuilt in vite -- see the `/vite` directory.
 
 ## 🌲 Environment
 TCP ships with a `.env.example` file which gives an example of some configuration options you can tweak, such as the port the API that TCP's API will run on (`API_PORT`) and the port that TCP's web client will run on (`WEB_PORT`).
