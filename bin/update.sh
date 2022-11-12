@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+## TODO:
+## would be nice to be able to install directly from the command line
+## e.g. curl this script and pipe it to bash instead of git clone
+## then this script could also take care of installing other dependencies
+## or giving install options to the user
+
 PRE_RELEASE_URL="https://api.github.com/repos/christophergeiger3/the-clipping-project/releases/71234724"
 # RELEASE_URL="https://api.github.com/repos/christophergeiger3/the-clipping-project/releases/latest"
 
@@ -35,7 +41,7 @@ remove_latest_release_tarball() {
     rm latest.tar.gz
 }
 
-navigate_to_root
+#navigate_to_root
 download_latest_release_tarball
 untar_latest_release_tarball
 remove_latest_release_tarball
