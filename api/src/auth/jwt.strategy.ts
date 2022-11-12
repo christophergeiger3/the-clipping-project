@@ -1,9 +1,9 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { JWT_SECRET } from './constants';
 import { ObjectId } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
+import { JWT_SECRET } from 'src/env.default';
 
 /** Payload that is signed server-side then stored by the user */
 export type JwtPayload = {
