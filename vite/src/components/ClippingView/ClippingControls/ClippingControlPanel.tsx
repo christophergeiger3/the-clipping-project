@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { randomNDigitNumber } from "@/utils/random";
-import { analyzeControllerAnalyze } from "@/api";
+import { analyzeControllerAnalyze, clipsControllerCreate } from "@/api";
 import { SetPlayerSource } from "@/reducers/clip.action";
 
 const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
@@ -78,6 +78,7 @@ function PreviewVideoInput() {
 }
 
 function ClipTitleInput() {
+  const { start, end, originalUrl } = useClipState();
   const [title, setTitle] = useState(randomNDigitNumber(15).toString());
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -86,6 +87,19 @@ function ClipTitleInput() {
     },
     []
   );
+
+  const handleSaveClip = useCallback(async () => {
+    await clipsControllerCreate({
+      name: title,
+      url: originalUrl,
+      start,
+      end,
+    });
+
+    setTitle(randomNDigitNumber(15).toString());
+    // TODO: Add a toast to show that the clip was saved
+    // TODO: Add error toast if clip creation fails
+  }, [end, originalUrl, start, title]);
 
   return (
     <Grid container={true} item={true} alignItems="center" columns={100} p={1}>
@@ -98,7 +112,7 @@ function ClipTitleInput() {
         />
       </Grid>
       <Grid item={true} xs={10} sm={6} lg={4} textAlign="center">
-        <SaveClipIcon />
+        <SaveClipIcon onClick={handleSaveClip} />
       </Grid>
     </Grid>
   );
