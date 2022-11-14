@@ -5,6 +5,8 @@ export default function ViewAllClipsButton() {
   return (
     <Grid item={true} mt={1}>
       <Button
+        href="/clips"
+        target="_blank"
         startIcon={<OpenInNewIcon />}
         variant="contained"
         fullWidth={true}
