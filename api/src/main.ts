@@ -13,6 +13,7 @@ async function bootstrap() {
     .setDescription('An API for creating clips from video URLs')
     .setVersion('1.0')
     .addTag('clips')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

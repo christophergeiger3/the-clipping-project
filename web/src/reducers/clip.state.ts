@@ -4,6 +4,10 @@ import { VideoJsPlayer } from "video.js";
 export const DEFAULT_VIDEO_SRC =
   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
+export class ClipOptions {
+  seekOnSliderChange = true;
+}
+
 export default class ClipState {
   start = 0 as milliseconds;
   end = 0 as milliseconds;
@@ -15,6 +19,7 @@ export default class ClipState {
   /** The URL of the current clip before its analyzed into a raw video source for the player */
   originalUrl = this.src;
   player?: VideoJsPlayer;
+  options = new ClipOptions();
 
   constructor(initialState?: ClipState) {
     if (!initialState) {

@@ -4,7 +4,7 @@ import clamp from "@/utils/clamp";
 import { isNullable } from "@/utils/isNonNullable";
 import { toSecondsPrecise } from "@/utils/timestamp";
 import { VideoJsPlayer } from "video.js";
-import ClipState from "./clip.state";
+import ClipState, { ClipOptions } from "./clip.state";
 import { milliseconds } from "@/types";
 
 export interface ClipAction {
@@ -30,11 +30,27 @@ export class PlayerReadyAction implements ClipAction {
   }
 }
 
-export class UpdateStartEnd implements ClipAction {
-  public constructor(public start: milliseconds, public end: milliseconds) {}
+export class UpdateClipStart implements ClipAction {
+  public constructor(public start: milliseconds) {}
 
   public execute(state: ClipState): ClipState {
-    return new ClipState({ ...state, start: this.start, end: this.end });
+    if (state.options.seekOnSliderChange) {
+      state.player?.currentTime(toSecondsPrecise(this.start));
+    }
+
+    return new ClipState({ ...state, start: this.start });
+  }
+}
+
+export class UpdateClipEnd implements ClipAction {
+  public constructor(public end: milliseconds) {}
+
+  public execute(state: ClipState): ClipState {
+    if (state.options.seekOnSliderChange) {
+      state.player?.currentTime(toSecondsPrecise(this.end));
+    }
+
+    return new ClipState({ ...state, end: this.end });
   }
 }
 
@@ -185,6 +201,21 @@ export class ZoomSliderToRange implements ClipAction {
       ...state,
       sliderMin: this.start,
       sliderMax: this.end,
+    });
+  }
+}
+
+export class UpdateOptions implements ClipAction {
+  public options: ClipOptions;
+
+  constructor(options: ClipOptions) {
+    this.options = options;
+  }
+
+  public execute(state: ClipState): ClipState {
+    return new ClipState({
+      ...state,
+      options: this.options,
     });
   }
 }

@@ -22,13 +22,15 @@ export class ClipsService {
   ) {}
 
   async create(createClipDto: CreateClipDto): Promise<Clip> {
+    const { url } = createClipDto;
+
     const createdClip = await this.clipModel.create({
       ...createClipDto,
       // Call the analyze service here to grab actual URL from youtube-dl
-      analyzedUrl: (await this.analyzeService.analyze(createClipDto.url))[0],
+      analyzedUrl: (await this.analyzeService.analyze(url))[0],
     });
 
-    Logger.log(`Emitting event clip.created for ${createdClip.url}`);
+    Logger.log(`Emitting event clip.created for ${url}`);
     this.eventEmitter.emit('clip.created', new ClipCreatedEvent(createdClip));
 
     return createdClip;
@@ -108,6 +110,11 @@ export class ClipsService {
   progress(id: ObjectId | string): number {
     const clip = this.findActiveClipById(id);
     return clip ? clip.percentDone : -1;
+  }
+
+  async isAnyClipWithName(name: string) {
+    const clips = await this.clipModel.find({ name });
+    return clips.length > 0;
   }
 
   /** @returns Index or -1 if clip not found */

@@ -10,10 +10,17 @@ import {
   ZoomInButton,
   ZoomResetButton,
 } from "./ClippingControls/ClipButtons/ZoomButton";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { SettingsButton } from "./ClippingControls/ClipButtons/SettingsButton";
+import Settings from "./Settings";
 
 export default function ClippingView() {
   const { src, start, end, duration } = useClipState();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const handleToggleSettings = useCallback(() => {
+    setIsSettingsOpen((prev) => !prev);
+  }, []);
 
   const showClipStartEndTimesSlider =
     isNonNullable(start) && isNonNullable(end) && isNonNullable(duration);
@@ -23,15 +30,16 @@ export default function ClippingView() {
     [showClipStartEndTimesSlider]
   );
 
-  const ZoomButtons = useCallback(
+  const PlayerButtons = useCallback(
     () =>
       showClipStartEndTimesSlider ? (
         <Grid container={true} spacing={2}>
           <ZoomInButton />
           <ZoomResetButton />
+          <SettingsButton onClick={handleToggleSettings} />
         </Grid>
       ) : null,
-    [showClipStartEndTimesSlider]
+    [handleToggleSettings, showClipStartEndTimesSlider]
   );
 
   return (
@@ -40,7 +48,8 @@ export default function ClippingView() {
       <Grid item={true} xs={96} md={90} xl={80}>
         <VideoPlayer src={src} />
         <ClipSlider />
-        <ZoomButtons />
+        <PlayerButtons />
+        <Settings open={isSettingsOpen} />
         <VideoControlPanel />
         <ClippingControlPanel />
         <ViewAllClipsButton />

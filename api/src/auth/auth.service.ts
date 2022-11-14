@@ -1,4 +1,5 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { ADMIN_USERNAME, ADMIN_PASSWORD } from './../env.default';
+import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { User } from 'src/users/schema/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { compare } from 'bcrypt';
@@ -22,12 +23,32 @@ export class TokenResponse {
 }
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
+
+  /** Handle first time admin registration */
+  async onModuleInit() {
+    const isAdminRegistered = Boolean(await this.getAdmin());
+
+    if (!isAdminRegistered) {
+      this.registerAdmin();
+    }
+  }
+
+  getAdmin() {
+    return this.usersService.findOneByUsername(ADMIN_USERNAME);
+  }
+
+  registerAdmin() {
+    const username = ADMIN_USERNAME;
+    const password = ADMIN_PASSWORD;
+
+    return this.register({ username, password });
+  }
 
   /** @returns The user if the username and password are valid, otherwise null */
   async validateUser(username: string, password: string): Promise<User | null> {
@@ -48,6 +69,7 @@ export class AuthService {
       throw new HttpException(`Username already exists`, 409);
     }
 
+    console.log('Creating user', createUserDto);
     const newUser = await this.usersService.create(createUserDto);
     return this.createToken(newUser);
   }
