@@ -32,3 +32,29 @@ export function convertMillisecondsToTimestamp(milliseconds: number): string {
   const secondsTimestamp = convertSecondsToTimestamp(toSeconds(milliseconds));
   return `${secondsTimestamp}.${milliseconds % 1000}`;
 }
+
+export function convertDurationToHumanReadable(milliseconds: number): string {
+  const seconds = toSeconds(milliseconds) % 60;
+  const minutes = Math.floor(toSeconds(milliseconds) / 60) % 60;
+  const hours = Math.floor(toSeconds(milliseconds) / 60 / 60);
+
+  let humanReadable = "";
+
+  if (hours > 0) {
+    humanReadable += `${hours} hour${hours > 1 ? "s" : ""}`;
+  }
+
+  if (minutes > 0) {
+    humanReadable += `${humanReadable ? ", " : ""}${minutes} minute${
+      minutes > 1 ? "s" : ""
+    }`;
+  }
+
+  if (seconds > 0) {
+    humanReadable += `${humanReadable ? ", " : ""}${seconds} second${
+      seconds > 1 ? "s" : ""
+    }`;
+  }
+
+  return humanReadable;
+}
