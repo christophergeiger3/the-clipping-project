@@ -1,8 +1,8 @@
 import { authControllerLogin, authControllerRegister } from "@/api";
 import LoginModal from "@/components/LoginView/LoginModal";
 import useModal from "@/hooks/useModal";
+import { checkIsAuthorized, saveTokenInRequestHeader } from "@/utils/auth";
 import { toMilliseconds } from "@/utils/timestamp";
-import Axios from "axios";
 import {
   createContext,
   useCallback,
@@ -48,20 +48,15 @@ export default function AuthProvider({
   const [tokenExpiry, setTokenExpiry] = useState<Date | null>(
     storedTokenExpiry ? new Date(storedTokenExpiry) : null
   );
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(
-    token && tokenExpiry ? tokenExpiry > new Date() : false
-  );
 
   const storeToken = useCallback((token: string, expiry: Date) => {
-    Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    saveTokenInRequestHeader(token);
 
     localStorage.setItem("token", token);
     localStorage.setItem("tokenExpiry", expiry.toISOString());
 
     setToken(token);
     setTokenExpiry(expiry);
-
-    setIsAuthorized(true);
   }, []);
 
   const login = useCallback(
@@ -86,6 +81,16 @@ export default function AuthProvider({
     [storeToken]
   );
 
+  const openLoginModalIfNotAuthorized = useCallback(async () => {
+    const isAuthorized = await checkIsAuthorized(token, tokenExpiry);
+    if (isAuthorized) {
+      closeLoginModal();
+      return;
+    }
+
+    openLoginModal();
+  }, [closeLoginModal, openLoginModal, token, tokenExpiry]);
+
   // TODO: implement token refresh
   // TODO: set isAuthorized to false if the token expires during a session
 
@@ -95,11 +100,15 @@ export default function AuthProvider({
   );
 
   useEffect(() => {
-    if (isAuthorized) {
+    if (token === null) {
       return;
     }
-    openLoginModal();
-  }, [isAuthorized, openLoginModal]);
+    saveTokenInRequestHeader(token);
+  }, [token]);
+
+  useEffect(() => {
+    openLoginModalIfNotAuthorized();
+  }, [openLoginModalIfNotAuthorized]);
 
   return (
     <AuthContext.Provider value={value}>
