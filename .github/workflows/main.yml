@@ -48,7 +48,7 @@ jobs:
           script: |
             cd ${{ secrets.TCP_WEB_PATH }}
             git pull
-            yarn
-            yarn build
+            npm install
+            npm run build
             pm2 restart tcp-web
 
