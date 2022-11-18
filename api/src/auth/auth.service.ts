@@ -37,8 +37,8 @@ export class AuthService implements OnModuleInit {
 
   /** Register the owner using the data stored in the .env config, and delete any predecessors */
   async registerOwner() {
-    const username = OWNER_USERNAME;
-    const password = OWNER_PASSWORD;
+    const username = this.configService.get('OWNER_USERNAME', OWNER_USERNAME);
+    const password = this.configService.get('OWNER_PASSWORD', OWNER_PASSWORD);
     const role = UserRole.owner;
 
     // side effect: there may only be one owner at any time, so delete all previous owners
