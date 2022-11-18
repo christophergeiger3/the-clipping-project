@@ -36,7 +36,7 @@ restart_services() {
 
 download_latest_commits() {
     navigate_to_root
-    git pull
+    git fetch
     git reset --hard origin/main
 }
 
