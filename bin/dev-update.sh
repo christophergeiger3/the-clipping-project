@@ -34,6 +34,11 @@ restart_services() {
     pm2 restart tcp-web
 }
 
+download_latest_commits() {
+    git pull
+    git reset --hard origin/main
+}
+
 # In the future when npm packages are used, this script should essentially be:
 # navigate_to_root
 # npm install
@@ -41,7 +46,8 @@ restart_services() {
 # pm2 restart tcp-api
 # pm2 restart tcp-web
 
-git reset --hard origin/main
+download_latest_commits
+
 build_api
 build_web
 
