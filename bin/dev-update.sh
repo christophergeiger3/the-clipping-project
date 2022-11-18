@@ -41,6 +41,7 @@ restart_services() {
 # pm2 restart tcp-api
 # pm2 restart tcp-web
 
+git reset --hard origin/main
 build_api
 build_web
 
