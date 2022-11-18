@@ -13,42 +13,14 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-api:
-    name: Build api
+  build:
+    name: Build app
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Re-build api via SSH
+      - name: Re-build via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: |
-            cd ${{ secrets.TCP_API_PATH }}
-            git restore package-lock.json  # package-lock.json may be unique; restore so that git pull does not fail
-            git pull
-            npm install
-            npm run build
-            pm2 restart tcp-api
-  
-  build-web:
-    name: Build web
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Runs a set of commands using the runners shell
-      - name: Re-build web via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script: |
-            cd ${{ secrets.TCP_WEB_PATH }}
-            git pull
-            npm install
-            npm run build
-            pm2 restart tcp-web
-
+          script: ./bin/update-dev.sh
