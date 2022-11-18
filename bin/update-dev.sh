@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
 navigate_to_script_directory() {
     cd "$(dirname "$0")"
 }
@@ -21,14 +24,14 @@ navigate_to_api() {
 
 build_web() {
     navigate_to_web
-    volta run npm install
-    volta run npm run build
+    npm install
+    npm run build
 }
 
 build_api() {
     navigate_to_api
-    volta run npm install
-    volta run npm run build
+    npm install
+    npm run build
 }
 
 restart_services() {
