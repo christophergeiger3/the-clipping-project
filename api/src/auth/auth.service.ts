@@ -1,6 +1,6 @@
-import { ADMIN_USERNAME, ADMIN_PASSWORD } from './../env.default';
+import { OWNER_USERNAME, OWNER_PASSWORD } from './../env.default';
 import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
-import { User } from 'src/users/schema/user.schema';
+import { User, UserRole } from 'src/users/schema/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -32,22 +32,23 @@ export class AuthService implements OnModuleInit {
 
   /** Handle first time admin registration */
   async onModuleInit() {
-    const isAdminRegistered = Boolean(await this.getAdmin());
-
-    if (!isAdminRegistered) {
-      this.registerAdmin();
-    }
+    await this.registerOwner();
   }
 
-  getAdmin() {
-    return this.usersService.findOneByUsername(ADMIN_USERNAME);
-  }
+  /** Register the owner using the data stored in the .env config, and delete any predecessors */
+  async registerOwner() {
+    const username = OWNER_USERNAME;
+    const password = OWNER_PASSWORD;
+    const role = UserRole.owner;
 
-  registerAdmin() {
-    const username = ADMIN_USERNAME;
-    const password = ADMIN_PASSWORD;
+    // side effect: there may only be one owner at any time, so delete all previous owners
+    await this.usersService.deleteManyByRole(role);
 
-    return this.register({ username, password });
+    // side effect: the owner gets dibs on a username of their choice,
+    // delete any previous users who dared to take it
+    await this.usersService.deleteManyByUsername(username);
+
+    return this.register({ username, password, role });
   }
 
   /** @returns The user if the username and password are valid, otherwise null */
@@ -69,7 +70,7 @@ export class AuthService implements OnModuleInit {
       throw new HttpException(`Username already exists`, 409);
     }
 
-    console.log('Creating user', createUserDto);
+    // console.log('Creating user', createUserDto);
     const newUser = await this.usersService.create(createUserDto);
     return this.createToken(newUser);
   }

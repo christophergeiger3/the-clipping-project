@@ -12,8 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import * as Joi from 'joi';
 import {
-  ADMIN_PASSWORD,
-  ADMIN_USERNAME,
+  OWNER_PASSWORD,
+  OWNER_USERNAME,
   API_URL,
   DATABASE_URL,
   ENV,
@@ -31,8 +31,8 @@ const environmentValidationSchema = Joi.object({
   TEST_DATABASE_URL: Joi.string().default(TEST_DATABASE_URL),
   JWT_TOKEN_EXPIRATION: Joi.number().default(JWT_TOKEN_EXPIRATION), // seconds
   JWT_SECRET: Joi.string().default(JWT_SECRET),
-  ADMIN_USERNAME: Joi.string().default(ADMIN_USERNAME),
-  ADMIN_PASSWORD: Joi.string().default(ADMIN_PASSWORD),
+  OWNER_USERNAME: Joi.string().default(OWNER_USERNAME),
+  OWNER_PASSWORD: Joi.string().default(OWNER_PASSWORD),
 });
 
 @Module({

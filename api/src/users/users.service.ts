@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { hash } from 'bcrypt';
 import { Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './schema/user.schema';
+import { User, UserRole } from './schema/user.schema';
 
 @Injectable()
 export class UsersService {
@@ -28,5 +28,13 @@ export class UsersService {
 
   async findOneByUsername(username: string): Promise<User | null> {
     return this.userModel.findOne({ username });
+  }
+
+  async deleteManyByRole(role: UserRole) {
+    return this.userModel.deleteMany({ role });
+  }
+
+  async deleteManyByUsername(username: string) {
+    return this.userModel.deleteMany({ username });
   }
 }
