@@ -23,4 +23,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: ./bin/update-dev.sh
+          script: ${{ secrets.TCP_PATH }}/bin/update-dev.sh
