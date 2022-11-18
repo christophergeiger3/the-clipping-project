@@ -1,3 +1,5 @@
+#!/bin/bash
+
 navigate_to_script_directory() {
     cd "$(dirname "$0")"
 }
@@ -19,14 +21,14 @@ navigate_to_api() {
 
 build_web() {
     navigate_to_web
-    npm install
-    npm run build
+    volta run npm install
+    volta run npm run build
 }
 
 build_api() {
     navigate_to_api
-    npm install
-    npm run build
+    volta run npm install
+    volta run npm run build
 }
 
 restart_services() {
