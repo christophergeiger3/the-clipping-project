@@ -1,10 +1,10 @@
 FROM node:lts-alpine
 
-ARG PORT
-ARG DATABASE_URL
-ARG TEST_DATABASE_URL
-ARG API_URL
-ARG NODE_ENV
+ARG PORT=4190
+ARG DATABASE_URL=mongodb://mongo/the-clipping-project
+ARG TEST_DATABASE_URL=mongodb://mongo/the-clipping-project-test
+ARG API_URL=http://localhost:4190
+ARG NODE_ENV=production
 
 ENV PORT $PORT
 ENV DATABASE_URL $DATABASE_URL

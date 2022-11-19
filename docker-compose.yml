@@ -7,16 +7,14 @@ services:
     build:
       context: ./web
       args:
-        NODE_ENV: ${ENV:-production}
         PORT: ${WEB_PORT:-4191}
-        REACT_APP_API_URL: ${API_URL:-http://localhost:4190}
-        REACT_APP_WEB_URL: ${WEB_URL:-http://localhost:4191}
+        VITE_APP_API_URL: ${API_URL:-http://localhost:4190}
     depends_on:
       - api
     volumes:
       - ./web:/app/web
       - /app/web/node_modules
-      - /app/web/build
+      - /app/web/dist
     ports:
       - ${WEB_PORT:-4191}:${WEB_PORT:-4191}
 

@@ -20,11 +20,14 @@ RUN npm run build
 ### ~~~
 FROM mongo:latest as api
 
-COPY --from=web /web/dist /web/dist
+COPY --from=web /web/dist /app/web/dist
+
+# Copy package.json for volta version
+COPY --from=web /web/package.json /app/web/package.json
 
 ARG PORT=4190
-ARG DATABASE_URL=mongodb://mongo/the-clipping-project
-ARG TEST_DATABASE_URL=mongodb://mongo/the-clipping-project-test
+ARG DATABASE_URL=mongodb://localhost/the-clipping-project
+ARG TEST_DATABASE_URL=mongodb://localhost/the-clipping-project-test
 ARG API_URL=http://localhost:4190
 ARG NODE_ENV=production
 
@@ -56,21 +59,24 @@ EXPOSE 27017
 # RUN mkdir -p /data/db
 # RUN mongod --dpath=/data &
 
-WORKDIR /api
-COPY ./api /api/
+WORKDIR /app/api
+COPY ./api /app/api/
 
+RUN /app/api/bin/install.sh
 
-RUN npm install -g @nestjs/cli
-RUN npm install
-RUN npm run build
+# RUN curl https://get.volta.sh | bash
 
-WORKDIR /web
+# RUN npm install -g @nestjs/cli
+# RUN npm install
+# RUN npm run build
+
+WORKDIR /app/web
 RUN npm install -g serve
 EXPOSE 4190 4191
 
-WORKDIR /
-COPY ./bin /bin
-CMD ["start.sh"]
+WORKDIR /app
+COPY ./bin /app/bin
+CMD ["/app/bin/start.sh"]
 
 # start app
 # CMD ["npm", "run", "start:prod"]
