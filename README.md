@@ -25,12 +25,15 @@ https://user-images.githubusercontent.com/20095580/177235158-803647bb-de6b-4e37-
 
 ## ⚙️ Installation
 The Clipping Project may be installed either via Docker or by running each service independently (local).
+
 ### 🐋 Docker
 Make sure [Docker is installed](https://docs.docker.com/get-docker/) and the Docker service is running.
+
 ```bash
-docker compose build
-docker compose up
+docker run -t -i -p 4190:4190 -p 4191:4191 christophergeiger3/the-clipping-project:latest
 ```
+Then navigate to http://localhost:4191.
+
 ### 🏠 Local
 [Install mongodb](https://www.mongodb.com/docs/manual/administration/install-community/), then start the mongod service:
 ```bash
