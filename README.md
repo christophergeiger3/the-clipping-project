@@ -32,7 +32,7 @@ Make sure [Docker is installed](https://docs.docker.com/get-docker/) and the Doc
 ```bash
 docker run -t -i -p 4190:4190 -p 4191:4191 christophergeiger3/the-clipping-project:latest
 ```
-Then navigate to http://localhost:4191. By default the owner username is `admin` and the owner password is `admin` (this can be changed).
+Then navigate to http://localhost:4191. By default the owner username is `admin` and the owner password is `admin` (this can be changed). Environment variables may also be passed through the `docker run` command.
 
 ### 🏠 Local
 [Install mongodb](https://www.mongodb.com/docs/manual/administration/install-community/), then start the mongod service:
