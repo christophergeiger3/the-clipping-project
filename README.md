@@ -128,7 +128,7 @@ To access the docs for TCP's API, navigate to the `/api` route of your API's URL
 TCP's API is self-documented by Swagger/OpenAPI through NestJS, and comes with a built-in tool for building HTTP queries quickly and easily.
 
 ## 💻 Technologies
-TCP is built off of NestJS, MUI, Vite, and React.
+TCP is built with [NestJS](https://nestjs.com/), [MUI](https://mui.com/), [Vite](https://vitejs.dev/), and [React](https://reactjs.org/). [YT-DLP](https://github.com/yt-dlp/yt-dlp) is the special sauce TCP uses to download and save video clips.
 
 ## 🐛 Bugs, feedback, contributions
 Leave no question unasked! Feel free to drop any feedback or thoughts under the [issues tab](https://github.com/christophergeiger3/the-clipping-project/issues).
