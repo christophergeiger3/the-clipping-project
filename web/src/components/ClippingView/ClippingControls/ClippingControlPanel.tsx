@@ -14,6 +14,7 @@ import React, { useCallback, useState } from "react";
 import { randomNDigitNumber } from "@/utils/random";
 import { analyzeControllerAnalyze, clipsControllerCreate } from "@/api";
 import { SetPlayerSource } from "@/reducers/clip.action";
+import { LoadingButton } from "@mui/lab";
 
 const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
 
@@ -80,6 +81,7 @@ function PreviewVideoInput() {
 function ClipTitleInput() {
   const { start, end, originalUrl } = useClipState();
   const [title, setTitle] = useState(randomNDigitNumber(15).toString());
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     ({ target: { value } }) => {
@@ -89,12 +91,14 @@ function ClipTitleInput() {
   );
 
   const handleSaveClip = useCallback(async () => {
+    setIsLoading(true);
     await clipsControllerCreate({
       name: title,
       url: originalUrl,
       start,
       end,
     });
+    setIsLoading(false);
 
     setTitle(randomNDigitNumber(15).toString());
     // TODO: Add a toast to show that the clip was saved
@@ -112,7 +116,12 @@ function ClipTitleInput() {
         />
       </Grid>
       <Grid item={true} xs={10} sm={6} lg={4} textAlign="center">
-        <SaveClipIcon onClick={handleSaveClip} />
+        {/* <SaveClipIcon onClick={handleSaveClip} /> */}
+        <LoadingButton
+          startIcon={<SaveClipIcon />}
+          onClick={handleSaveClip}
+          loading={isLoading}
+        />
       </Grid>
     </Grid>
   );
