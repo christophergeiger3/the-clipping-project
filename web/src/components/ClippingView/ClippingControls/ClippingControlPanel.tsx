@@ -44,6 +44,7 @@ function PreviewVideoInput() {
   const { src } = useClipState();
   const dispatch = useClipDispatch();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [url, setUrl] = useState(src);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -55,10 +56,12 @@ function PreviewVideoInput() {
 
   const handlePreview: React.MouseEventHandler<HTMLButtonElement> =
     useCallback(async () => {
+      setIsLoading(true);
       const response = await analyzeControllerAnalyze({ url });
       const analyzedUrl = response.data[0];
 
       dispatch(new SetPlayerSource({ src: analyzedUrl, originalUrl: url }));
+      setIsLoading(false);
     }, [dispatch, url]);
 
   return (
@@ -72,7 +75,12 @@ function PreviewVideoInput() {
         />
       </Grid>
       <Grid item={true} xs={10} sm={6} lg={4} textAlign="center">
-        <PreviewVideoIcon onClick={handlePreview} />
+        {/* <PreviewVideoIcon onClick={handlePreview} /> */}
+        <LoadingButton
+          startIcon={<PreviewVideoIcon />}
+          onClick={handlePreview}
+          loading={isLoading}
+        />
       </Grid>
     </Grid>
   );
