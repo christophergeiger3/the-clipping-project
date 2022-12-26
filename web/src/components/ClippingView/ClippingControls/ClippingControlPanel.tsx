@@ -64,6 +64,11 @@ function PreviewVideoInput() {
       setIsLoading(false);
     }, [dispatch, url]);
 
+  const StartIcon = useCallback(
+    () => (isLoading ? null : <PreviewVideoIcon />),
+    [isLoading]
+  );
+
   return (
     <Grid container={true} item={true} alignItems="center" columns={100} p={1}>
       <Grid item={true} xs={90} sm={94} lg={96}>
@@ -75,11 +80,11 @@ function PreviewVideoInput() {
         />
       </Grid>
       <Grid item={true} xs={10} sm={6} lg={4} textAlign="center">
-        {/* <PreviewVideoIcon onClick={handlePreview} /> */}
         <LoadingButton
-          startIcon={<PreviewVideoIcon />}
+          startIcon={<StartIcon />}
           onClick={handlePreview}
           loading={isLoading}
+          loadingPosition="center"
         />
       </Grid>
     </Grid>
@@ -113,6 +118,11 @@ function ClipTitleInput() {
     // TODO: Add error toast if clip creation fails
   }, [end, originalUrl, start, title]);
 
+  const StartIcon = useCallback(
+    () => (isLoading ? null : <SaveClipIcon />),
+    [isLoading]
+  );
+
   return (
     <Grid container={true} item={true} alignItems="center" columns={100} p={1}>
       <Grid item={true} xs={90} sm={94} lg={96}>
@@ -124,11 +134,11 @@ function ClipTitleInput() {
         />
       </Grid>
       <Grid item={true} xs={10} sm={6} lg={4} textAlign="center">
-        {/* <SaveClipIcon onClick={handleSaveClip} /> */}
         <LoadingButton
-          startIcon={<SaveClipIcon />}
+          startIcon={<StartIcon />}
           onClick={handleSaveClip}
           loading={isLoading}
+          loadingPosition="center"
         />
       </Grid>
     </Grid>
