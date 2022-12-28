@@ -15,6 +15,7 @@ import { randomNDigitNumber } from "@/utils/random";
 import { analyzeControllerAnalyze, clipsControllerCreate } from "@/api";
 import { SetPlayerSource } from "@/reducers/clip.action";
 import { LoadingButton } from "@mui/lab";
+import { useSnackbar } from "notistack";
 
 const PAPER_STYLE: SxProps<Theme> = { padding: 1 };
 
@@ -92,6 +93,7 @@ function PreviewVideoInput() {
 }
 
 function ClipTitleInput() {
+  const { enqueueSnackbar } = useSnackbar();
   const { start, end, originalUrl } = useClipState();
   const [title, setTitle] = useState(randomNDigitNumber(15).toString());
   const [isLoading, setIsLoading] = useState(false);
@@ -105,18 +107,23 @@ function ClipTitleInput() {
 
   const handleSaveClip = useCallback(async () => {
     setIsLoading(true);
-    await clipsControllerCreate({
-      name: title,
-      url: originalUrl,
-      start,
-      end,
-    });
+    try {
+      await clipsControllerCreate({
+        name: title,
+        url: originalUrl,
+        start,
+        end,
+      });
+    } catch (e) {
+      enqueueSnackbar("Clip creation failed", {
+        variant: "error",
+      });
+    }
     setIsLoading(false);
+    enqueueSnackbar("Clip download in progress...", { variant: "success" });
 
     setTitle(randomNDigitNumber(15).toString());
-    // TODO: Add a toast to show that the clip was saved
-    // TODO: Add error toast if clip creation fails
-  }, [end, originalUrl, start, title]);
+  }, [end, enqueueSnackbar, originalUrl, start, title]);
 
   const StartIcon = useCallback(
     () => (isLoading ? null : <SaveClipIcon />),
