@@ -1,43 +1,52 @@
 #!/bin/bash
 
-# TODO: this is a hack, need to figure out a better way...
-curl https://get.volta.sh | bash
+SCRIPT_DIR=$(dirname "$0")
+APP_DIR="$SCRIPT_DIR/.."
+APP_BIN="$APP_DIR/bin"
+WEB_DIR="$APP_DIR/web"
+API_DIR="$APP_DIR/api"
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
-navigate_to_script_directory() {
-    cd "$(dirname "$0")"
-}
-
-navigate_to_web() {
-    navigate_to_script_directory
-    cd ../web
-}
-
-navigate_to_api() {
-    navigate_to_script_directory
-    cd ../api
-}
+export VOLTA_HOME=$VOLTA_HOME
+export PATH=$VOLTA_HOME/bin:$PATH
 
 start_web() {
-    navigate_to_web
+    echo volta:
+    echo $VOLTA_HOME
 
-    echo web node version
-    node --version
+    export VOLTA_HOME=$VOLTA_HOME
+    export PATH=$VOLTA_HOME/bin:$PATH
+
+    cd $WEB_DIR
+
+    # echo npm:
+    # npm --version
+
+    # if [[ -x "$(command -v npm)" ]] || [[ -x "$(command -v serve)" ]]; then
+    #     # volta install node
+    #     # volta install npm
+    #     # npm install -g serve
+    #     # echo serve:
+    #     volta install serve
+    #     serve --version
+    # fi
 
     serve -s dist -l 4191
 }
 
 start_api() {
-    navigate_to_api
-
-    echo web node version
-    node --version
-
+    cd $API_DIR
     npm run start:prod
 }
 
-start_web &
-mongod &
-start_api
+main() {
+    start_web &
+
+    # Send logs to /dev/null to avoid cluttering the terminal
+    mongod &>/dev/null &
+
+    start_api
+}
+
+if [[ "${#BASH_SOURCE[@]}" -eq 1 ]]; then
+    main "$@"
+fi
