@@ -13,7 +13,17 @@ COPY ./web /app/web
 
 RUN apt-get update && apt-get install -y curl
 
-ENV VOLTA_HOME=/app/bin/volta
+# VOLTA ---
+SHELL [ "/bin/bash", "-c" ]
+RUN touch /app/bin/bashrc
+ENV PROFILE /app/bin/bashrc
+ENV BASH_ENV /app/bin/bashrc
+ENV VOLTA_HOME /app/bin/volta
+ENV PATH $VOLTA_HOME/bin:$PATH
+# ---
+
+RUN curl https://get.volta.sh | bash
+
 RUN /app/web/bin/build.sh
 
 FROM mongo:latest as api
@@ -35,7 +45,15 @@ ENV DATABASE_URL $DATABASE_URL
 ENV TEST_DATABASE_URL $TEST_DATABASE_URL
 ENV API_URL $API_URL
 ENV NODE_ENV $NODE_ENV
-ENV VOLTA_HOME=/app/bin/volta
+
+# VOLTA ---
+SHELL [ "/bin/bash", "-c" ]
+RUN touch /app/bin/bashrc
+ENV PROFILE /app/bin/bashrc
+ENV BASH_ENV /app/bin/bashrc
+ENV VOLTA_HOME /app/bin/volta
+ENV PATH $VOLTA_HOME/bin:$PATH
+# ---
 
 RUN apt-get update && apt-get install -y ffmpeg python3 curl wget
 
@@ -49,7 +67,8 @@ WORKDIR /app/api
 RUN /app/api/bin/build.sh
 
 WORKDIR /app/web
-RUN /app/web/bin/serve.sh
+RUN volta install node@14
+RUN volta install serve
 EXPOSE 4190 4191
 
 WORKDIR /app
