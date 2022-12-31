@@ -7,7 +7,8 @@ APP_BIN="$WEB_DIR/../bin"
 
 install_npm_dependencies() {
     cd $WEB_DIR
-    npm install
+    # npm install alternative
+    npm ci && npm cache clean --force
 }
 
 install_web_dependencies() {

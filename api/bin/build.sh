@@ -6,9 +6,10 @@ APP_BIN="$API_DIR/../bin"
 
 install_api_dependencies() {
     cd $API_DIR
-
     npm install -g @nestjs/cli
-    npm install
+
+    # npm install alternative
+    npm ci && npm cache clean --force
 }
 
 build_api() {

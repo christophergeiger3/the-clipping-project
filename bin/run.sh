@@ -9,8 +9,8 @@ read -p "Please press enter to continue..."
 echo
 
 echo "Clips will be hosted on localhost:$API_PORT"
-echo "Web app will be hosted on localhost:$WEB_PORT"
-echo "Clips will be saved to $HOST_CLIP_DIR"
+echo "The web app will be hosted on localhost:$WEB_PORT"
+echo "Clip files will be saved to $HOST_CLIP_DIR"
 
 echo
 read -p "Press enter to launch the app..."
