@@ -4,24 +4,21 @@
 <p align="center">An easy to use self-hosted clipping tool.</p>
 <p align="center">Clip videos from popular websites like YouTube, then share with friends!</p>
 
-## ⚠️🚨🚧🔥🚩 The Clipping Project is in Pre-Alpha! ⚠️🚨🚧🔥🚩
-
-The Clipping Project isn't really ready for production use yet, as there are still underlying security concerns with the video hosting portion of the app.
+## 🤔 Why would I use this software?
+- Download videos from [a very broad range](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) of sources to your own personal website.
+- Sharing a URL from The Clipping Project bypasses upload size limits on sites like Discord.
+- Self-hosted -- no one else can remove or delete the videos you clip.
+- No frills -- share only the portion of the video you choose without any additional UI. No need to link your friends to someone else's website.
+- Authentication -- clipping utilities are available to just you, but clips you save can be shared with anyone who has a link.
+- Various tools for creating and previewing video clips
 
 ## 📽️ Demo
 
+https://user-images.githubusercontent.com/20095580/210183833-eaed72d3-00d8-4d25-9de9-b879dabb6308.mp4
 
-https://user-images.githubusercontent.com/20095580/177227209-0a8de752-16d3-48cd-b8ec-6654aadcfad1.mp4
+https://user-images.githubusercontent.com/20095580/210183839-a976afc7-8ce4-44a5-a522-c5d6304937aa.mp4
 
-
-
-https://user-images.githubusercontent.com/20095580/177227295-b658e424-282d-4e99-89e8-862bad40aeb8.mp4
-
-
-
-https://user-images.githubusercontent.com/20095580/177235158-803647bb-de6b-4e37-93bc-fbc63310cced.mp4
-
-
+https://user-images.githubusercontent.com/20095580/210183491-346219da-4744-451d-92c5-b22e693cdf5c.mp4
 
 ## ⚙️ Installation
 The Clipping Project may be installed either via Docker or by running each service independently (local).
