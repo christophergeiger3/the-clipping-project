@@ -5,7 +5,7 @@
 <p align="center">Clip videos from popular websites like YouTube, then share with friends!</p>
 
 ## 🤔 Why would I use this software?
-- Download videos from [a very broad range](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) of sources to your own personal website.
+- Download videos from [a very broad range](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) of websites to your own personal website.
 - Sharing a URL from The Clipping Project bypasses upload size limits on sites like Discord.
 - Self-hosted -- no one else can remove or delete the videos you clip.
 - No frills -- share only the portion of the video you choose without any additional UI. No need to link your friends to someone else's website.
