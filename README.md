@@ -31,8 +31,10 @@ Simply run the following command:
 docker run -t -i -p 4190:4190 -p 4191:4191 -v ~/Videos:/app/api/videos christophergeiger3/the-clipping-project:latest
 ```
 Then navigate to http://localhost:4191.
+By default the owner username is `admin` and the owner password is `admin` (this can be changed).
 
-The `-v ~/Videos:/app/api/videos` saves clips to the `~/Videos` directory on your PC -- you can change `~/Videos` to whatever folder you'd like. By default the owner username is `admin` and the owner password is `admin` (this can be changed). Environment variables may also be passed through the `docker run` command, e.g.
+The `-v ~/Videos:/app/api/videos` saves clips to the `~/Videos` directory on your PC -- you can change `~/Videos` to whatever folder you'd like.
+Environment variables may also be passed through the `docker run` command, e.g.
 ```bash
 docker run -t -i -e OWNER_PASSWORD='hunter2' -p 4190:4190 -p 4191:4191 christophergeiger3/the-clipping-project:latest
 ```
