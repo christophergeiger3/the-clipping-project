@@ -14,10 +14,13 @@
 
 ## 📽️ Demo
 
+### Download and clip videos from a website:
 https://user-images.githubusercontent.com/20095580/210183833-eaed72d3-00d8-4d25-9de9-b879dabb6308.mp4
 
+### View all downloaded clips:
 https://user-images.githubusercontent.com/20095580/210183839-a976afc7-8ce4-44a5-a522-c5d6304937aa.mp4
 
+### Share clips easily with friends:
 https://user-images.githubusercontent.com/20095580/210183491-346219da-4744-451d-92c5-b22e693cdf5c.mp4
 
 ## ⚙️ Installation
