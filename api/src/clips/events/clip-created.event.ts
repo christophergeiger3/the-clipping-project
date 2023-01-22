@@ -5,6 +5,8 @@ import { ObjectId } from 'mongoose';
 import { join } from 'path';
 import convertToSeconds from '../utils/convertToSeconds';
 
+const CLIP_DESTINATION = 'videos';
+
 @Injectable()
 class ClipCreatedEvent extends Clip {
   _id: ObjectId;
@@ -31,7 +33,7 @@ class ClipCreatedEvent extends Clip {
       'ffmpeg:-progress pipe:1', // pipe ffmpeg's progress to stdout (file descriptor 1)
       this.url,
       '-o',
-      `${join('videos', `${clip.name}.%(ext)s`)}`,
+      `${join(CLIP_DESTINATION, `${clip.name}.%(ext)s`)}`,
     ];
   }
 }
