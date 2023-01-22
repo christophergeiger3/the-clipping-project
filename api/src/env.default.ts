@@ -9,3 +9,4 @@ export const JWT_TOKEN_EXPIRATION = 3600; // seconds
 export const JWT_SECRET = randomUUID();
 export const OWNER_USERNAME = 'admin';
 export const OWNER_PASSWORD = 'admin';
+export const CLIP_DESTINATION = 'videos';

@@ -4,8 +4,7 @@ import { ChildProcess } from 'child_process';
 import { ObjectId } from 'mongoose';
 import { join } from 'path';
 import convertToSeconds from '../utils/convertToSeconds';
-
-const CLIP_DESTINATION = 'videos';
+import { CLIP_DESTINATION } from 'src/env.default';
 
 @Injectable()
 class ClipCreatedEvent extends Clip {
