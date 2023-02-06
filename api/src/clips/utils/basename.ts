@@ -5,7 +5,7 @@ export default function basename(filename: string): string {
   return filename.split('.').slice(0, -1).join('.');
 }
 
-/** @example parseExtension('video.webm')  // webm */
+/** @example parseExtension('video.webm')  // returns 'webm' */
 export function parseExtension(filename: string): string {
   return filename.split('.').pop() || '';
 }
