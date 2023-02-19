@@ -76,21 +76,17 @@ function IncrementClipEndByAmount({ amount }: IncrementClipByAmountProps) {
 }
 
 export function IncreaseClipStartButton() {
-  const amount = INCREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipStartByAmount amount={amount} />;
+  return <IncrementClipStartByAmount amount={INCREMENT_AMOUNT_IMPRECISE} />;
 }
 
 export function DecreaseClipStartButton() {
-  const amount = DECREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipStartByAmount amount={amount} />;
+  return <IncrementClipStartByAmount amount={DECREMENT_AMOUNT_IMPRECISE} />;
 }
 
 export function IncreaseClipEndButton() {
-  const amount = INCREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipEndByAmount amount={amount} />;
+  return <IncrementClipEndByAmount amount={INCREMENT_AMOUNT_IMPRECISE} />;
 }
 
 export function DecreaseClipEndButton() {
-  const amount = DECREMENT_AMOUNT_IMPRECISE;
-  return <IncrementClipEndByAmount amount={amount} />;
+  return <IncrementClipEndByAmount amount={DECREMENT_AMOUNT_IMPRECISE} />;
 }
